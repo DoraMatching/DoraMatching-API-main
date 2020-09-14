@@ -16,7 +16,7 @@ async function bootstrap() {
 
     const options = new DocumentBuilder()
       .setTitle(`Senior project`)
-      .setDescription('Music player API')
+      .setDescription('Dora-matching API')
       .setVersion('1.0')
       .addBearerAuth()
       .addServer('http://localhost:4000')
