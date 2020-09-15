@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
 import { UserDTO, UserRO } from './user.dto';
@@ -13,10 +13,15 @@ export class UserService {
         private userRepository: Repository<UserEntity>,
     ) { }
 
-    async showAll(pOptions: PaginateParams): Promise<Pagination<UserEntity>> {
+    async showAll({ limit, page, order, route }: PaginateParams): Promise<Pagination<UserEntity>> {
         // const users = await this.userRepository.find({});
         // return users.map(user => user.toResponseObject(false));
-        return paginate<UserEntity>(this.userRepository, pOptions, { order: { id: pOptions.order } });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { id: order } });
+
+        return {
+            items: items.map(user => user.toResponseObject(false)),
+            meta, links
+        }
     }
 
     async findByUsername(username: string): Promise<UserRO> {

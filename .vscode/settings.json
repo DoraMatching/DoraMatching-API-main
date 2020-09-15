@@ -1,6 +1,10 @@
 {
     "git.ignoreLimitWarning": true,
     "cSpell.words": [
-        "nestjs"
+        "doramatching",
+        "nestjs",
+        "postgres",
+        "toor",
+        "typeorm"
     ]
 }

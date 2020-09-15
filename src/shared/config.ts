@@ -10,7 +10,7 @@ export interface DatabaseConfig {
 export interface AppConfig {
     apiUrl: string;
     appPort: number;
-    enviroment: string;
+    environment: string;
     database: DatabaseConfig;
     jwtSecretKey: string;
     jwtExpiresIn: string;
@@ -28,7 +28,7 @@ export const dbConfig: DatabaseConfig = {
 export const config: AppConfig = {
     apiUrl: process.env.API_URL,
     appPort: parseInt(process.env.PORT),
-    enviroment: process.env.ENVIROMENT,
+    environment: process.env.ENVIRONMENT,
     database: dbConfig,
     jwtSecretKey: process.env.JWT_SECRET_KEY,
     jwtExpiresIn: process.env.JWT_EXPIRES_IN

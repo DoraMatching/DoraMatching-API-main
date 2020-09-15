@@ -1,7 +1,6 @@
-import { IsIn, IsInt, IsNumberString, IsString, Min } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsNumberString, IsString, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { apiUrl } from '../config/app.config';
 
 export type Order = 'ASC' | 'DESC' | 1 | -1;
 
@@ -13,21 +12,24 @@ export class FindOneParams {
 
 export class PaginateParams {
     @ApiProperty()
+    @IsNotEmpty()
     @IsInt()
     @Min(0)
     @Type(() => Number)
-    page: number;
+    page?: number = 1;
 
     @ApiProperty()
+    @IsNotEmpty()
     @IsInt()
     @Min(1)
     @Type(() => Number)
-    limit: number;
+    limit?: number = 20;
 
     @ApiProperty()
+    @IsNotEmpty()
     @IsString()
     @IsIn(['DESC', 'ASC'])
-    order: Order;
+    order?: Order = 'DESC';
 
     route: string;
 }

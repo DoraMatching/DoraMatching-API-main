@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { AuthGuard } from 'src/shared/auth.gaurd';
+import { apiUrl } from 'src/config';
+import { AuthGuard } from 'src/shared/auth.guard';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { UserDTO, UserRO } from './user.dto';
 import { UserEntity } from './user.entity';
@@ -17,8 +18,9 @@ export class UserController {
     @Get('users')
     @UseGuards(new AuthGuard())
     @UsePipes(ValidationPipe)
-    index(@Query() pag: PaginateParams): Promise<Pagination<UserEntity>> {
-        return this.userService.showAll(pag);
+    index(@Query() { limit, page, order }: PaginateParams): Promise<Pagination<UserEntity>> {
+        const route = `${apiUrl}/user`;
+        return this.userService.showAll({ page: page || 1, limit: limit || 20, order: order || 'DESC', route });
     }
 
     @ApiOperation({ summary: 'User login' })
