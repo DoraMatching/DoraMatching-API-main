@@ -2,16 +2,15 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { appConfig } from './config/app.config';
+import { environment } from './config/app.config';
 import { Logger } from '@nestjs/common';
 
 const port = process.env.PORT || 8080;
-const { enviroment } = appConfig;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  if (enviroment === 'development') {
+  if (environment === 'development') {
     app.enableCors();
 
     const options = new DocumentBuilder()
