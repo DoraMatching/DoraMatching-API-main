@@ -1,13 +1,10 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { apiUrl } from 'src/config';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { PaginateParams } from 'src/shared/pipes.params';
-import { UserDTO, UserRO } from './user.dto';
-import { UserEntity } from './user.entity';
+import { UserDTO, UserRO, GithubUser, GithubToken } from './user.dto';
 import { IPagination, UserService } from './user.service';
-import {AuthGuard as PassportAuthGuard} from '@nestjs/passport';
 
 @Controller()
 export class UserController {
@@ -39,9 +36,13 @@ export class UserController {
         return this.userService.register(data);
     }
 
-    @Get('auth/github')
-    @UseGuards(PassportAuthGuard('github'))
-    githubCallback(@Req() req) {
-        console.log(console.log(req));
+    @Post('github')
+    @UsePipes(ValidationPipe)
+    githubLogin(
+        @Body('user') githubUser: GithubUser,
+        @Body('accessToken') githubToken: string
+    ) {
+        // console.log({ githubUser, githubToken });
+        return this.userService.githubLogin(githubUser, githubToken);
     }
 }

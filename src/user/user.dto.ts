@@ -1,10 +1,20 @@
-import { IsNotEmpty, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsNotEmpty, MinLength, MaxLength, Matches, IsEmail, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDTO {
     @ApiProperty()
     @IsNotEmpty()
     username: string;
+
+    @ApiProperty()
+    @IsEmail()
+    email: string;
+
+    @ApiProperty()
+    name?: string = "DoraMatching user";
+
+    @ApiProperty()
+    photoURL: string;
 
     @ApiProperty()
     @IsNotEmpty()
@@ -21,6 +31,7 @@ export class UserDTO {
 
 export class UserLoginRegister {
     username: string;
+    email: string;
     password: string;
 }
 
@@ -32,8 +43,37 @@ export class UserRO {
     username: string;
 
     @ApiProperty()
+    email: string;
+
+    @ApiProperty()
+    photoURL: string;
+
+    @ApiProperty()
     createdAt: Date;
-    
+
     @ApiProperty()
     token?: string;
+}
+
+export class GithubUser {
+    @IsString()
+    displayName: string;
+
+    @IsEmail()
+    email: string;
+
+    @IsUrl()
+    photoURL: string;
+}
+
+export class GithubToken {
+    accessToken: string;
+}
+
+export interface IViewer {
+    login: string;
+}
+
+export interface IGithubSchema {
+    viewer?: IViewer;
 }

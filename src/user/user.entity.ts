@@ -9,6 +9,15 @@ export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column('text')
+    email: string;
+
+    @Column('text')
+    photoURL: string;
+
+    @Column('text')
+    name: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
