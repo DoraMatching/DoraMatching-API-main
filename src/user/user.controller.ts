@@ -7,6 +7,7 @@ import { PaginateParams } from 'src/shared/pipes.params';
 import { UserDTO, UserRO } from './user.dto';
 import { UserEntity } from './user.entity';
 import { IPagination, UserService } from './user.service';
+import {AuthGuard as PassportAuthGuard} from '@nestjs/passport';
 
 @Controller()
 export class UserController {
@@ -39,6 +40,7 @@ export class UserController {
     }
 
     @Get('auth/github')
+    @UseGuards(PassportAuthGuard('github'))
     githubCallback(@Req() req) {
         console.log(console.log(req));
     }
