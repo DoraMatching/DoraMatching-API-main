@@ -27,10 +27,13 @@ export class UserLoginRegister {
 export class UserRO {
     @ApiProperty()
     id: string;
+
     @ApiProperty()
     username: string;
+
     @ApiProperty()
     createdAt: Date;
+    
     @ApiProperty()
     token?: string;
 }
