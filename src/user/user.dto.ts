@@ -56,24 +56,36 @@ export class UserRO {
 }
 
 export class GithubUser {
+    @ApiProperty()
     @IsString()
     displayName: string;
 
+    @ApiProperty()
     @IsEmail()
     email: string;
 
+    @ApiProperty()
     @IsUrl()
     photoURL: string;
 }
 
 export class GithubToken {
+    @ApiProperty()
     accessToken: string;
 }
 
-export interface IViewer {
+export interface IViewer { // for Graphql
     login: string;
 }
 
-export interface IGithubSchema {
+export interface IGithubSchema { // for Graphql
     viewer?: IViewer;
+}
+
+export class GithubUserLogin {
+    @ApiProperty()
+    user: GithubUser;
+
+    @ApiProperty()
+    accessToken: string;
 }

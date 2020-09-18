@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { apiUrl } from 'src/config';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { PaginateParams } from 'src/shared/pipes.params';
-import { UserDTO, UserRO, GithubUser, GithubToken } from './user.dto';
+import { UserDTO, UserRO, GithubUser, GithubToken, GithubUserLogin } from './user.dto';
 import { IPagination, UserService } from './user.service';
 
 @Controller()
@@ -36,13 +36,12 @@ export class UserController {
         return this.userService.register(data);
     }
 
+    @ApiOperation({ summary: 'User Github login' })
+    @ApiResponse({ type: UserRO, status: 200 })
     @Post('github')
     @UsePipes(ValidationPipe)
-    githubLogin(
-        @Body('user') githubUser: GithubUser,
-        @Body('accessToken') githubToken: string
-    ) {
+    githubLogin(@Body() { user, accessToken }: GithubUserLogin) {
         // console.log({ githubUser, githubToken });
-        return this.userService.githubLogin(githubUser, githubToken);
+        return this.userService.githubLogin(user, accessToken);
     }
 }
