@@ -39,8 +39,8 @@ export class UserEntity {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, createdAt, username, token } = this;
-        const responseObject: any = { id, createdAt, username };
+        const { id, createdAt, username, token, email, photoURL } = this;
+        const responseObject: any = { id, createdAt, username, email, photoURL };
         if (showToken) {
             responseObject.token = token;
         }
