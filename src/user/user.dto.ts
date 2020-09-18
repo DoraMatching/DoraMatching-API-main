@@ -83,3 +83,13 @@ export class GithubUserLogin {
     @ApiProperty()
     accessToken: string;
 }
+
+export interface IGithubLang {
+    name: string;
+    size: number;
+}
+
+export interface IGithubUserLangs {
+    langs: any;
+    name: string;
+}

@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsNotEmpty, IsNumberString, IsString, Min } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsNumberString, IsString, Min, Max } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -22,6 +22,7 @@ export class PaginateParams {
     @IsNotEmpty()
     @IsInt()
     @Min(1)
+    @Max(50)
     @Type(() => Number)
     limit?: number = 20;
 

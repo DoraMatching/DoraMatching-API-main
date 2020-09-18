@@ -44,4 +44,10 @@ export class UserController {
         // console.log({ githubUser, githubToken });
         return this.userService.githubLogin(user, accessToken);
     }
+
+    @ApiOperation({summary: `Get repos of current user`})
+    @Post('github/langs')
+    githubLangs(@Body() {accessToken}: GithubUserLogin) {
+        return this.userService.githubLangs(accessToken);
+    }
 }

@@ -6,9 +6,11 @@ import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
 import { UserDTO, UserRO, GithubUser } from './user.dto';
 import { UserEntity } from './user.entity';
-import { GraphQLClient, gql } from 'graphql-request';
+import { gql } from 'graphql-request';
 import { IGithubSchema } from './user.dto';
 import * as pwGenerator from 'generate-password'
+import { ghQuery } from 'src/shared/github.graphql';
+import { IGithubUserLangs, IGithubLang } from './user.dto';
 export interface IPagination<T> {
     items: T[];
     meta: any;
@@ -61,12 +63,6 @@ export class UserService {
     }
 
     async getGithubUsername(accessToken: string): Promise<string> {
-        const endpoint = 'https://api.github.com/graphql';
-
-        const client = new GraphQLClient(endpoint);
-
-        client.setHeader('authorization', `Bearer ${accessToken}`);
-
         const query = gql`
         query { 
             viewer { 
@@ -75,7 +71,7 @@ export class UserService {
           }
         `;
 
-        const { viewer } = await client.request<IGithubSchema, null>(query);
+        const { viewer } = await ghQuery<IGithubSchema>(accessToken, query);
         return viewer.login;
     }
 
@@ -96,5 +92,45 @@ export class UserService {
         } else {
             return user.toResponseObject(true);
         }
+    }
+
+    async githubLangs(accessToken: string) {
+        const query = gql`
+        {
+            viewer {
+              repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
+                nodes {
+                  name
+                  languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
+                    edges {
+                      size
+                      node {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+              name
+            }
+        }`;
+
+        const result: IGithubUserLangs = { langs: {}, name: '' };
+        const { viewer } = await ghQuery<any>(accessToken, query);
+        const { repositories, name } = viewer;
+        result.name = name;
+        repositories.nodes.map(({ languages }) => {
+            const langs = languages.edges;
+            langs.map(({ size, node }) => {
+                const langName = node.name;
+                if (!result.langs[langName]) {
+                    result.langs[langName] = size;
+                } else {
+                    result.langs[langName] += size;
+                }
+            })
+        });
+
+        return result;
     }
 }
