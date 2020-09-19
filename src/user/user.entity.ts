@@ -13,7 +13,7 @@ export class UserEntity {
     email: string;
 
     @Column('text')
-    photoURL: string;
+    avatarUrl: string;
 
     @Column('text')
     name: string;
@@ -39,8 +39,8 @@ export class UserEntity {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, createdAt, username, token, email, photoURL } = this;
-        const responseObject: any = { id, createdAt, username, email, photoURL };
+        const { id, createdAt, username, token, email, avatarUrl } = this;
+        const responseObject: UserRO = { id, createdAt, username, email, avatarUrl };
         if (showToken) {
             responseObject.token = token;
         }

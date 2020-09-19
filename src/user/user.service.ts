@@ -4,13 +4,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
-import { UserDTO, UserRO, GithubUser } from './user.dto';
+import { UserDTO, UserRO, IViewer } from './user.dto';
 import { UserEntity } from './user.entity';
 import { gql } from 'graphql-request';
 import { IGithubSchema } from './user.dto';
 import * as pwGenerator from 'generate-password'
 import { ghQuery } from 'src/shared/github.graphql';
-import { IGithubUserLangs, IGithubLang } from './user.dto';
+import { IGithubUserLangs } from './user.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { mailAddress, feUrl } from '../config';
 export interface IPagination<T> {
     items: T[];
     meta: any;
@@ -21,7 +23,8 @@ export interface IPagination<T> {
 export class UserService {
     constructor(
         @InjectRepository(UserEntity)
-        private userRepository: Repository<UserEntity>,
+        private readonly userRepository: Repository<UserEntity>,
+        private readonly mailerServive: MailerService
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
@@ -43,8 +46,8 @@ export class UserService {
     }
 
     async login(data: UserDTO): Promise<UserRO> {
-        const { username, password } = data;
-        const user = await this.userRepository.findOne({ where: { username } });
+        const { username, password, email } = data;
+        const user = await this.userRepository.findOne({ where: [{ username }, { email }] });
         if (!user || !(await user.comparePassword(password))) {
             throw new HttpException('Invalid username/password', HttpStatus.FORBIDDEN);
         }
@@ -62,31 +65,45 @@ export class UserService {
         return user.toResponseObject();
     }
 
-    async getGithubUsername(accessToken: string): Promise<string> {
+    async getGithubProfile(accessToken: string): Promise<IViewer> {
         const query = gql`
         query { 
             viewer { 
-              login
+                login
+                email
+                avatarUrl
+                name
             }
           }
         `;
 
         const { viewer } = await ghQuery<IGithubSchema>(accessToken, query);
-        return viewer.login;
+        return viewer;
     }
 
-    async githubLogin(githubUser: GithubUser, githubToken: string) {
-        const githubUsername = await this.getGithubUsername(githubToken);
+    async githubLogin(githubToken: string) {
+        const { login, email, avatarUrl, name } = await this.getGithubProfile(githubToken);
         let user = await this.userRepository.findOne({
-            where: [{ username: githubUsername }, { email: githubUser.email }]
+            where: [{ username: login }, { email: email }]
         });
         if (!user) {
-            const { photoURL, displayName, email } = githubUser;
-
-            const pw = pwGenerator.generate({ length: 10, strict: true });
-            user = await this.userRepository.create({ photoURL, email, username: githubUsername, name: displayName, password: pw });
+            const password = pwGenerator.generate({ length: 10, strict: true });
+            user = await this.userRepository.create({ avatarUrl, email, username: login, name, password });
 
             await this.userRepository.save(user);
+
+            this.mailerServive.sendMail({
+                to: email,
+                from: mailAddress,
+                subject: 'You have successfully registered an account on DoraMatching',
+                template: 'welcome',
+                context: {
+                    name,
+                    email,
+                    password,
+                    feLoginUrl: `${feUrl}/login`
+                }
+            });
 
             return user.toResponseObject(true);
         } else {

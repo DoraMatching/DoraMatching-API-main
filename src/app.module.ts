@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './config';
 
 @Module({
   imports: [
@@ -12,7 +14,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       context: ({ req }) => ({ headers: req.headers })
     }),
     TypeOrmModule.forRoot(),
-    UserModule],
+    MailerModule.forRoot(mailerConfig),
+    UserModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

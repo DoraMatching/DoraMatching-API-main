@@ -14,7 +14,7 @@ export class UserDTO {
     name?: string = "DoraMatching user";
 
     @ApiProperty()
-    photoURL: string;
+    avatarUrl: string;
 
     @ApiProperty()
     @IsNotEmpty()
@@ -40,7 +40,7 @@ export class UserRO {
     email: string;
 
     @ApiProperty()
-    photoURL: string;
+    avatarUrl: string;
 
     @ApiProperty()
     createdAt: Date;
@@ -70,6 +70,9 @@ export class GithubToken {
 
 export interface IViewer { // for Graphql
     login: string;
+    email: string;
+    avatarUrl: string;
+    name: string;
 }
 
 export interface IGithubSchema { // for Graphql

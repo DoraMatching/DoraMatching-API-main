@@ -40,9 +40,9 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @Post('github')
     @UsePipes(ValidationPipe)
-    githubLogin(@Body() { user, accessToken }: GithubUserLogin) {
+    githubLogin(@Body() { accessToken }: GithubUserLogin) {
         // console.log({ githubUser, githubToken });
-        return this.userService.githubLogin(user, accessToken);
+        return this.userService.githubLogin(accessToken);
     }
 
     @ApiOperation({summary: `Get repos of current user`})
