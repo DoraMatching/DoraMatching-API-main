@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { apiUrl } from 'src/config';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { PaginateParams } from 'src/shared/pipes.params';
-import { UserDTO, UserRO, GithubUser, GithubToken, GithubUserLogin } from './user.dto';
+import { UserDTO, UserRO, GithubUserLogin } from './user.dto';
 import { IPagination, UserService } from './user.service';
 
 @Controller()
@@ -45,9 +45,9 @@ export class UserController {
         return this.userService.githubLogin(accessToken);
     }
 
-    @ApiOperation({summary: `Get repos of current user`})
+    @ApiOperation({ summary: `Get repos of current user` })
     @Post('github/langs')
-    githubLangs(@Body() {accessToken}: GithubUserLogin) {
+    githubLangs(@Body() { accessToken }: GithubUserLogin) {
         return this.userService.githubLangs(accessToken);
     }
 }
