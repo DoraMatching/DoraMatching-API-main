@@ -1,22 +1,32 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, UpdateDateColumn, BeforeUpdate } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { config } from '../shared/config';
+import { config } from '@/shared/config';
 import { UserRO } from './user.dto';
+import { AppRoles } from '../app.roles';
 
 @Entity('user')
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('text')
+    @Column({ type: 'text', nullable: true, unique: true })
     email: string;
 
-    @Column('text')
+    @Column({ type: 'text', nullable: true })
     avatarUrl: string;
 
-    @Column('text')
+    @Column({ type: 'text', default: 'Dora User' })
     name: string;
+
+    @Column({ type: 'text', unique: true })
+    username: string;
+
+    @Column('text')
+    password: string;
+
+    @Column({ type: 'simple-array', default: AppRoles.TRAINEE })
+    roles: string[];
 
     @CreateDateColumn()
     createdAt: Date;
@@ -24,23 +34,15 @@ export class UserEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @Column({
-        type: 'text',
-        unique: true
-    })
-    username: string;
-
-    @Column('text')
-    password: string;
-
     @BeforeInsert()
+    @BeforeUpdate()
     async hashPassword(): Promise<void> {
         this.password = await bcrypt.hash(this.password, 10);
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, createdAt, username, token, email, avatarUrl } = this;
-        const responseObject: UserRO = { id, createdAt, username, email, avatarUrl };
+        const { id, createdAt, username, token, roles, email, avatarUrl } = this;
+        const responseObject: UserRO = { id, createdAt, username, email, roles, avatarUrl };
         if (showToken) {
             responseObject.token = token;
         }

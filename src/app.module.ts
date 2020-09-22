@@ -6,6 +6,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailerConfig } from './config';
+import { AccessControlModule } from 'nest-access-control';
+import { roles } from './app.roles';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { mailerConfig } from './config';
       context: ({ req }) => ({ headers: req.headers })
     }),
     TypeOrmModule.forRoot(),
+    AccessControlModule.forRoles(roles),
     MailerModule.forRoot(mailerConfig),
     UserModule
   ],

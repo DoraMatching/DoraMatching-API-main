@@ -12,7 +12,7 @@ import * as pwGenerator from 'generate-password'
 import { ghQuery } from 'src/shared/github.graphql';
 import { IGithubUserLangs } from './user.dto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { mailAddress, feUrl } from '../config';
+import { mailAddress, feUrl } from '@/config';
 export interface IPagination<T> {
     items: T[];
     meta: any;

@@ -1,5 +1,7 @@
-import { IsNotEmpty, MinLength, MaxLength, Matches, IsEmail, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, MinLength, MaxLength, Matches, IsEmail, IsString, IsUrl, IsOptional, Validate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { AppRoles } from '../app.roles';
+import { RolesValidator } from '../shared/roles.validate';
 
 export class UserDTO {
     @ApiProperty()
@@ -7,6 +9,7 @@ export class UserDTO {
     username: string;
 
     @ApiProperty()
+    @IsOptional()
     @IsEmail()
     email: string;
 
@@ -15,6 +18,10 @@ export class UserDTO {
 
     @ApiProperty()
     avatarUrl: string;
+
+    @ApiProperty()
+    @Validate(RolesValidator)
+    roles: AppRoles[] = [];
 
     @ApiProperty()
     @IsNotEmpty()
@@ -41,6 +48,9 @@ export class UserRO {
 
     @ApiProperty()
     avatarUrl: string;
+
+    @ApiProperty()
+    roles: string[];
 
     @ApiProperty()
     createdAt: Date;
