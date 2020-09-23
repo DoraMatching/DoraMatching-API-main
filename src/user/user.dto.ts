@@ -91,7 +91,7 @@ export interface IGithubSchema { // for Graphql
 
 export class GithubUserLogin {
     @ApiProperty()
-    user: GithubUser;
+    user?: GithubUser;
 
     @ApiProperty()
     accessToken: string;

@@ -24,7 +24,7 @@ export class UserService {
     constructor(
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
-        private readonly mailerServive: MailerService
+        private readonly mailerService: MailerService
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
@@ -82,7 +82,12 @@ export class UserService {
     }
 
     async githubLogin(githubToken: string) {
-        const { login, email, avatarUrl, name } = await this.getGithubProfile(githubToken);
+        const viewer = await this.getGithubProfile(githubToken);
+        const { login, avatarUrl, name } = viewer;
+        let { email } = viewer;
+
+        email = email || `${login}@doramatching.tk`;
+
         let user = await this.userRepository.findOne({
             where: [{ username: login }, { email: email }]
         });
@@ -92,7 +97,7 @@ export class UserService {
 
             await this.userRepository.save(user);
 
-            this.mailerServive.sendMail({
+            this.mailerService.sendMail({
                 to: email,
                 from: mailAddress,
                 subject: 'You have successfully registered an account on DoraMatching',

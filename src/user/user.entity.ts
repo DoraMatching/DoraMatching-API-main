@@ -55,10 +55,10 @@ export class UserEntity {
     }
 
     private get token() {
-        const { id, username } = this;
+        const { id, username, roles, email } = this;
         const { jwtSecretKey, jwtExpiresIn } = config;
         return jwt.sign(
-            { id, username },
+            { id, username, roles, email: email ? email : undefined },
             jwtSecretKey,
             { expiresIn: jwtExpiresIn });
     }

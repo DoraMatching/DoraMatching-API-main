@@ -2,24 +2,40 @@ import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } 
 import * as jwt from 'jsonwebtoken';
 import { config } from './config';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from '@/user/user.entity';
+import { Repository } from 'typeorm';
+import { AppRoles } from '@/app.roles';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+    constructor(
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>
+    ) { }
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
 
-        if (request) {
+        if (request) { // for JWT authen
             const { authorization } = request.headers;
 
-            if (!authorization) return false;
+            if (!authorization) {
+                request.user = this.userRepository.create({ roles: [AppRoles.GUEST] });
+            } else {
+                request.user = await this.validateToken(authorization);
+            }
 
-            request.user = await this.validateToken(authorization);
             return true;
-        } else {
+        } else { // for GraphQL authen
             const ctx: any = GqlExecutionContext.create(context).getContext();
             const { authorization } = ctx.headers;
 
-            if (!authorization) return false;
+            if (!authorization) {
+                request.user = this.userRepository.create({ roles: [AppRoles.GUEST] });
+            } else {
+                request.user = await this.validateToken(authorization);
+            }
 
             ctx.user = await this.validateToken(authorization);
             return true;
