@@ -14,33 +14,31 @@ export class AuthGuard implements CanActivate {
         private readonly userRepository: Repository<UserEntity>
     ) { }
 
+    async attachUser(authorization: string): Promise<any> {
+        if (!authorization) {
+            return this.userRepository.create({ roles: [AppRoles.GUEST] });
+        } else {
+            return await this.validateToken(authorization);
+        }
+    }
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
 
         if (request) { // for JWT authen
             const { authorization } = request.headers;
 
-            if (!authorization) {
-                request.user = this.userRepository.create({ roles: [AppRoles.GUEST] });
-            } else {
-                request.user = await this.validateToken(authorization);
-            }
+            request.user = await this.attachUser(authorization);
 
             return true;
         } else { // for GraphQL authen
             const ctx: any = GqlExecutionContext.create(context).getContext();
             const { authorization } = ctx.headers;
 
-            if (!authorization) {
-                request.user = this.userRepository.create({ roles: [AppRoles.GUEST] });
-            } else {
-                request.user = await this.validateToken(authorization);
-            }
+            ctx.user = await this.attachUser(authorization);
 
-            ctx.user = await this.validateToken(authorization);
             return true;
         }
-
     }
 
     async validateToken(auth: string): Promise<any> {
