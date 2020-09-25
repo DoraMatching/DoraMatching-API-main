@@ -14,7 +14,6 @@ import { LoginUserDTO } from './dto/login-user.dto';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { FindOneParams } from '../shared/pipes/find-one.params';
 import { grantPermission } from '../shared/access-control/grant-permission';
-import { UserModel } from './dto/user.model';
 import { JwtUser } from './dto/jwt-payload-user.dto';
 import { paginateFilter } from '@/shared/pagination/paginate-filter';
 import { IPagination } from '@/shared/pagination/paginate.interface';
@@ -35,14 +34,6 @@ export class UserController {
     @Get('users')
     @UsePipes(ValidationPipe)
     async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<UserRO>> {
-        // const permission = this.rolesBuilder.can(user.roles).readAny(AppResources.USER);
-        // if (permission.granted) {
-        //     const { items, ...res } = await this.userService.showAll(pagOpts);
-        //     const _items = permission.filter(items);
-        //     return { items: _items, ...res };
-        // } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
-
-
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
             const users = await this.userService.showAll(pagOpts);

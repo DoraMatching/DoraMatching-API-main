@@ -5,8 +5,15 @@ import { IJwtUser } from '@/user/dto/jwt-payload-user.dto';
 
 export type Action = 'read' | 'create' | 'update' | 'delete';
 export type Possion = 'Any' | 'Own';
-export type ReadAny = 'readAny';
 
+/**
+ * 
+ * @param rolesBuilder 
+ * @param resource 
+ * @param action 
+ * @param param3 Include `id`: string, `roles`: Role[] of `JwtUser`
+ * @param creatorId The resource creator
+ */
 export function grantPermission(rolesBuilder: RolesBuilder, resource: AppResources, action: Action, { id, roles }: IJwtUser, creatorId: any): Permission {
     let behavior;
 
