@@ -4,11 +4,14 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { environment } from './config/app.config';
 import { Logger } from '@nestjs/common';
+import helmet from 'helmet'
 
 const port = process.env.PORT || 8080;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet());
 
   if (environment === 'development') {
     app.enableCors();
