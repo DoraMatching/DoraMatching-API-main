@@ -1,12 +1,12 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { mailerConfig } from './config';
 import { AccessControlModule } from 'nest-access-control';
+import { AppController } from './app.controller';
 import { roles } from './app.roles';
+import { mailerConfig } from './config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

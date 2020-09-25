@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { AppRoles } from '@/app.roles';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import _ from 'lodash';
 
 export const rolesArray = Object.keys(AppRoles);
 

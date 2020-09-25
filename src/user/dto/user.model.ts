@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsEmail, MinLength, MaxLength, Matches } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from "class-validator";
 
 export interface IUserModel {
     id: string;

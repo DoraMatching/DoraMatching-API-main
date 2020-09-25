@@ -1,5 +1,5 @@
-import { IsEmail, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsString, IsUrl } from 'class-validator';
 
 export class GithubUser {
     @ApiProperty()

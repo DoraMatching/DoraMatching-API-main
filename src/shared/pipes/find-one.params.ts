@@ -1,5 +1,5 @@
-import { IsNumberString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumberString } from 'class-validator';
 
 export class FindOneParams {
     @ApiProperty()

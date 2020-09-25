@@ -1,23 +1,18 @@
-import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+import { feUrl, mailAddress } from '@/config';
+import { ghQuery } from '@/shared/graphql/github.graphql';
+import { IPagination } from '@/shared/pagination/paginate.interface';
+import { PaginateParams } from '@/shared/pagination/paginate.params';
+import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+import * as pwGenerator from 'generate-password';
+import { gql } from 'graphql-request';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { IViewer } from './dto/user.dto';
-import { UserEntity } from './entity/user.entity';
-import { gql } from 'graphql-request';
-import { IGithubSchema } from './dto/user.dto';
-import * as pwGenerator from 'generate-password'
-import { IGithubUserLangs } from './dto/user.dto';
-import { MailerService } from '@nestjs-modules/mailer';
-import { mailAddress, feUrl } from '@/config';
-import { UserRO } from './dto/response-user.dto';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { LoginUserDTO } from './dto/login-user.dto';
-import { PaginateParams } from '@/shared/pagination/paginate.params';
-import { ghQuery } from '@/shared/graphql/github.graphql';
+import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UserRO } from './dto';
 import { UserModel } from './dto/user.model';
-import { IPagination } from '@/shared/pagination/paginate.interface';
+import { UserEntity } from './entity/user.entity';
 
 
 @Injectable()

@@ -1,22 +1,18 @@
 import { AppResources } from '@/app.roles';
+import { grantPermission } from '@/shared/access-control/grant-permission';
 import { Auth } from '@/shared/auth/auth.decorator';
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, HttpStatus, Param } from '@nestjs/common';
+import { paginateFilter } from '@/shared/pagination/paginate-filter';
+import { PaginateSwagger } from '@/shared/pagination/paginate-swagger.decorator';
+import { Paginate } from '@/shared/pagination/paginate.decorator';
+import { IPagination } from '@/shared/pagination/paginate.interface';
+import { PaginateParams } from '@/shared/pagination/paginate.params';
+import { FindOneParams } from '@/shared/pipes/find-one.params';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { CreateUserDTO, GithubUserLogin, JwtUser, LoginUserDTO, UserRO } from './dto';
 import { User } from './user.decorator';
-import { GithubUserLogin } from './dto/user.dto';
-import { UserRO } from './dto/response-user.dto';
 import { UserService } from './user.service';
-import { Paginate } from '@/shared/pagination/paginate.decorator';
-import { PaginateSwagger } from '@/shared/pagination/paginate-swagger.decorator';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { LoginUserDTO } from './dto/login-user.dto';
-import { PaginateParams } from '@/shared/pagination/paginate.params';
-import { FindOneParams } from '../shared/pipes/find-one.params';
-import { grantPermission } from '../shared/access-control/grant-permission';
-import { JwtUser } from './dto/jwt-payload-user.dto';
-import { paginateFilter } from '@/shared/pagination/paginate-filter';
-import { IPagination } from '@/shared/pagination/paginate.interface';
 
 @Controller()
 @ApiTags('user')

@@ -1,12 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, UpdateDateColumn, BeforeUpdate } from 'typeorm';
+import { AppRoles } from '@/app.roles';
+import { jwtExpiresIn, jwtSecretKey } from '@/config';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { UserRO } from '../dto/response-user.dto';
-import { AppRoles } from '@/app.roles';
-import { IUserModel } from '../dto/user.model';
 import { AvatarGenerator } from 'random-avatar-generator';
-import { jwtExpiresIn, jwtSecretKey } from '@/config';
-import { JwtUser } from '../dto/jwt-payload-user.dto';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { IUserModel, UserRO, JwtUser } from '../dto';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
