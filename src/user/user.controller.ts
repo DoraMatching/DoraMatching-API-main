@@ -4,7 +4,7 @@ import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, H
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { User } from './user.decorator';
-import { UserDTO, GithubUserLogin } from './dto/user.dto';
+import { GithubUserLogin } from './dto/user.dto';
 import { UserRO } from './dto/response-user.dto';
 import { UserService } from './user.service';
 import { Paginate } from '@/shared/pagination/paginate.decorator';
@@ -85,7 +85,7 @@ export class UserController {
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
-        @User() user: UserDTO
+        @User() user: JwtUser
     ) {
         return user;
     }
