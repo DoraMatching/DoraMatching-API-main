@@ -1,6 +1,6 @@
 import { apiUrl } from '@/config';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { PaginateParams } from './pipes.params';
+import { PaginateParams } from './paginate.params';
 
 export type PaginateType = Pick<PaginateParams, 'route'>;
 

@@ -1,21 +1,21 @@
-import 'cross-fetch/polyfill';
+import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
 import { IViewer } from './dto/user.dto';
 import { UserEntity } from './entity/user.entity';
 import { gql } from 'graphql-request';
 import { IGithubSchema } from './dto/user.dto';
 import * as pwGenerator from 'generate-password'
-import { ghQuery } from 'src/shared/github.graphql';
 import { IGithubUserLangs } from './dto/user.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { mailAddress, feUrl } from '@/config';
 import { UserRO } from './dto/response-user.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { PaginateParams } from '@/shared/pagination/paginate.params';
+import { ghQuery } from '@/shared/graphql/github.graphql';
 export interface IPagination<T> {
     items: T[];
     meta: any;

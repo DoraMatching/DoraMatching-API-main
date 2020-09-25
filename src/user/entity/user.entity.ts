@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, UpdateDateColumn, BeforeUpdate } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { config } from '@/shared/config';
 import { UserRO } from '../dto/response-user.dto';
 import { AppRoles } from '@/app.roles';
 import { IUserModel } from '../dto/user.model';
 import { AvatarGenerator } from 'random-avatar-generator';
+import { jwtExpiresIn, jwtSecretKey } from '@/config';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -70,7 +70,6 @@ export class UserEntity implements IUserModel {
 
     private get token() {
         const { id, username, roles, email } = this;
-        const { jwtSecretKey, jwtExpiresIn } = config;
         return jwt.sign(
             { id, username, roles, email: email ? email : undefined },
             jwtSecretKey,

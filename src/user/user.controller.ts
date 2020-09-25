@@ -1,17 +1,17 @@
 import { AppResources } from '@/app.roles';
-import { Auth } from '@/shared/auth.decorator';
+import { Auth } from '@/shared/auth/auth.decorator';
 import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { PaginateParams } from 'src/shared/pipes.params';
 import { User } from './user.decorator';
 import { UserDTO, GithubUserLogin } from './dto/user.dto';
 import { UserRO } from './dto/response-user.dto';
 import { IPagination, UserService } from './user.service';
-import { Paginate } from '@/shared/paginate.decorator';
-import { PaginateSwagger } from '@/shared/paginate-swagger.decorator';
+import { Paginate } from '@/shared/pagination/paginate.decorator';
+import { PaginateSwagger } from '@/shared/pagination/paginate-swagger.decorator';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { PaginateParams } from '@/shared/pagination/paginate.params';
 
 @Controller()
 @ApiTags('user')
