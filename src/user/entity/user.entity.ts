@@ -2,11 +2,12 @@ import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert,
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { config } from '@/shared/config';
-import { UserRO } from '../dto/user.dto';
-import { AppRoles } from '../../app.roles';
+import { UserRO } from '../dto/response-user.dto';
+import { AppRoles } from '@/app.roles';
+import { IUserModel } from '../dto/user.model';
 
 @Entity('user')
-export class UserEntity {
+export class UserEntity implements IUserModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -16,7 +17,7 @@ export class UserEntity {
     @Column({ type: 'text', nullable: true })
     avatarUrl: string;
 
-    @Column({ type: 'text', default: 'Dora User' })
+    @Column({ type: 'text', nullable: false })
     name: string;
 
     @Column({ type: 'text', unique: true })
@@ -40,9 +41,14 @@ export class UserEntity {
         this.password = await bcrypt.hash(this.password, 10);
     }
 
+    @BeforeInsert()
+    setDefaultName(): void {
+        this.name = this.username || this.email;
+    }
+
     toResponseObject(showToken = true): UserRO {
-        const { id, createdAt, username, token, roles, email, avatarUrl } = this;
-        const responseObject: UserRO = { id, createdAt, username, email, roles, avatarUrl };
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl } = this;
+        const responseObject: UserRO = { id, createdAt, updatedAt, username, email, name, roles, avatarUrl };
         if (showToken) {
             responseObject.token = token;
         }

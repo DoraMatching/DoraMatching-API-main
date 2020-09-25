@@ -5,10 +5,13 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { User } from './user.decorator';
-import { UserDTO, UserRO, GithubUserLogin } from './dto/user.dto';
+import { UserDTO, GithubUserLogin } from './dto/user.dto';
+import { UserRO } from './dto/response-user.dto';
 import { IPagination, UserService } from './user.service';
 import { Paginate } from '@/shared/paginate.decorator';
 import { PaginateSwagger } from '@/shared/paginate-swagger.decorator';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
 
 @Controller()
 @ApiTags('user')
@@ -36,8 +39,9 @@ export class UserController {
 
     @ApiOperation({ summary: 'User basic login', description: 'Return user' })
     @ApiResponse({ type: UserRO, status: 200 })
+    @UsePipes(ValidationPipe)
     @Post('login')
-    login(@Body() data: UserDTO): Promise<UserRO> {
+    login(@Body() data: LoginUserDTO): Promise<UserRO> {
         return this.userService.login(data);
     }
 
@@ -45,7 +49,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
     @UsePipes(ValidationPipe)
-    register(@Body() data: UserDTO): Promise<UserRO> {
+    register(@Body() data: CreateUserDTO): Promise<UserRO> {
         return this.userService.register(data);
     }
 

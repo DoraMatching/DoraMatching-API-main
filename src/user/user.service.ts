@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
-import { UserDTO, UserRO, IViewer } from './dto/user.dto';
+import { UserDTO, IViewer } from './dto/user.dto';
 import { UserEntity } from './entity/user.entity';
 import { gql } from 'graphql-request';
 import { IGithubSchema } from './dto/user.dto';
@@ -13,6 +13,9 @@ import { ghQuery } from 'src/shared/github.graphql';
 import { IGithubUserLangs } from './dto/user.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { mailAddress, feUrl } from '@/config';
+import { UserRO } from './dto/response-user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
 export interface IPagination<T> {
     items: T[];
     meta: any;
@@ -45,7 +48,7 @@ export class UserService {
         return user.toResponseObject(false);
     }
 
-    async login(data: UserDTO): Promise<UserRO> {
+    async login(data: LoginUserDTO): Promise<UserRO> {
         const { username, password, email } = data;
         const user = await this.userRepository.findOne({ where: [{ username }, { email }] });
         if (!user || !(await user.comparePassword(password))) {
@@ -54,7 +57,7 @@ export class UserService {
         return user.toResponseObject();
     }
 
-    async register(data: UserDTO): Promise<UserRO> {
+    async register(data: CreateUserDTO): Promise<UserRO> {
         const { username, email } = data;
         let user = await this.userRepository.findOne({ where: [{ username }, { email }] });
         if (user) {

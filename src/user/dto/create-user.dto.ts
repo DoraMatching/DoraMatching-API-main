@@ -1,7 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsEmail, MinLength, MaxLength, Matches } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsEmail, MinLength, MaxLength, Matches } from 'class-validator';
+import { IUserModel } from './user.model';
 
-export class CreateUserDTO {
+export type ICreateUserDTO = Omit<IUserModel, 'id' | 'roles' | 'createdAt' | 'updatedAt'>;
+
+export class CreateUserDTO implements ICreateUserDTO {
     @ApiProperty()
     @IsNotEmpty()
     username: string;
@@ -12,7 +15,7 @@ export class CreateUserDTO {
     email: string;
 
     @ApiProperty()
-    name?: string;
+    name: string;
 
     @ApiProperty()
     avatarUrl: string;
