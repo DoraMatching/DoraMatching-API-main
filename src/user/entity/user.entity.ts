@@ -5,6 +5,7 @@ import { config } from '@/shared/config';
 import { UserRO } from '../dto/response-user.dto';
 import { AppRoles } from '@/app.roles';
 import { IUserModel } from '../dto/user.model';
+import { AvatarGenerator } from 'random-avatar-generator';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -44,6 +45,13 @@ export class UserEntity implements IUserModel {
     @BeforeInsert()
     setDefaultName(): void {
         this.name = this.username || this.email;
+    }
+
+    @BeforeInsert()
+    setDefaultAvatar(): void {
+        const generator = new AvatarGenerator();
+        generator.generateRandomAvatar();
+        this.avatarUrl = this.avatarUrl || generator.generateRandomAvatar(this.username);
     }
 
     toResponseObject(showToken = true): UserRO {

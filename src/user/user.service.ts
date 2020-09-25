@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { Repository } from 'typeorm';
-import { UserDTO, IViewer } from './dto/user.dto';
+import { IViewer } from './dto/user.dto';
 import { UserEntity } from './entity/user.entity';
 import { gql } from 'graphql-request';
 import { IGithubSchema } from './dto/user.dto';
@@ -31,7 +31,7 @@ export class UserService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { id: order }, cache: true });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: true });
 
         const result: IPagination<UserRO> = {
             items: items.map(user => user.toResponseObject(false)),
@@ -84,7 +84,7 @@ export class UserService {
         return viewer;
     }
 
-    async githubLogin(githubToken: string) {
+    async githubLogin(githubToken: string): Promise<UserRO> {
         const viewer = await this.getGithubProfile(githubToken);
         const { login, avatarUrl, name } = viewer;
         let { email } = viewer;
