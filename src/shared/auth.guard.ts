@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { config } from './config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@/user/user.entity';
+import { UserEntity } from '@/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { AppRoles } from '@/app.roles';
 

@@ -6,19 +6,19 @@ export const mailPassword = process.env.MAIL_PASSWORD;
 
 export const mailerConfig = {
     transport: {
-        host: "smtp.gmail.com",
+        host: 'smtp.gmail.com',
         secure: true,
         port: 465,
         auth: {
-            "user": mailAddress,
-            "pass": mailPassword
+            'user': mailAddress,
+            'pass': mailPassword
         },
         tls: {
-            "rejectUnauthorized": false
+            'rejectUnauthorized': false
         }
     },
     defaults: {
-        from: '"nest-modules" <modules@nestjs.com>',
+        from: 'nest-modules <modules@nestjs.com>',
     },
     template: {
         dir: join(process.cwd(), 'src/templates'),

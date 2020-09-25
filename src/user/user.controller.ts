@@ -5,9 +5,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { User } from './user.decorator';
-import { UserDTO, UserRO, GithubUserLogin } from './user.dto';
+import { UserDTO, UserRO, GithubUserLogin } from './dto/user.dto';
 import { IPagination, UserService } from './user.service';
-import { Paginate } from '../shared/paginate.decorator';
+import { Paginate } from '@/shared/paginate.decorator';
 import { PaginateSwagger } from '@/shared/paginate-swagger.decorator';
 
 @Controller()

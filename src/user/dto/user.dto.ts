@@ -1,7 +1,7 @@
 import { IsNotEmpty, MinLength, MaxLength, Matches, IsEmail, IsString, IsUrl, IsOptional, Validate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { AppRoles } from '../app.roles';
-import { RolesValidator } from '../shared/roles.validate';
+import { AppRoles } from '@/app.roles';
+import { RolesValidator } from '@/shared/roles.validate';
 
 export class UserDTO {
     @ApiProperty()

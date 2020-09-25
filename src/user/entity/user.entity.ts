@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert,
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { config } from '@/shared/config';
-import { UserRO } from './user.dto';
-import { AppRoles } from '../app.roles';
+import { UserRO } from '../dto/user.dto';
+import { AppRoles } from '../../app.roles';
 
 @Entity('user')
 export class UserEntity {
