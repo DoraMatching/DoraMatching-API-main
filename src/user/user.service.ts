@@ -1,4 +1,4 @@
-import { feUrl, mailAddress } from '@/config';
+import { feUrl, mailAddress, isEnableCache } from '@/config';
 import { ghQuery } from '@/shared/graphql/github.graphql';
 import { IPagination } from '@/shared/pagination/paginate.interface';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
@@ -24,7 +24,7 @@ export class UserService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: true });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
 
         const result: IPagination<UserRO> = {
             items: items.map(user => user.toResponseObject(false)),
@@ -35,7 +35,7 @@ export class UserService {
     }
 
     async getUser({ id }: Partial<UserModel>): Promise<UserRO> {
-        const user = await this.userRepository.findOne({ where: { id } });
+        const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
         if (user) {
             return user.toResponseObject(false);
         } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);

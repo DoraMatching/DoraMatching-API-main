@@ -24,7 +24,7 @@ export class UserController {
     ) { }
 
     @Auth()
-    @ApiOperation({ summary: 'Get users', description: 'Return 1 page of users' })
+    @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
     @Get('users')
@@ -38,6 +38,9 @@ export class UserController {
     }
 
     @Auth()
+    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiResponse({ type: UserRO, status: 200 })
+    @UsePipes(ValidationPipe)
     @Get('user/:id')
     async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<UserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, id);

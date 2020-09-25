@@ -9,5 +9,6 @@ export const synchronize = true;
 export const dropSchema = false;
 export const logging = false;
 export const cacheDuration = process.env.DATABASE_CACHE_DURATION;
-export const cache = process.env.DATABASE_ENABLE_CACHE ? { duration: cacheDuration } : false;
+export const isEnableCache = Boolean(process.env.DATABASE_ENABLE_CACHE);
+export const cache = isEnableCache ? { duration: cacheDuration } : false;
 export const entities = ['./dist/**/*.entity{.ts,.js}']
