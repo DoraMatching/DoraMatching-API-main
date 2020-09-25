@@ -4,7 +4,7 @@ import { PaginateParams } from './pipes.params';
 
 export type PaginateType = Pick<PaginateParams, 'route'>;
 
-export const Paginate = createParamDecorator<PaginateType, ExecutionContext, PaginateParams>(({ route }: PaginateType, ctx: ExecutionContext) => {
+export const Paginate = createParamDecorator<PaginateType, ExecutionContext, PaginateParams>(({ route }: PaginateType, ctx: ExecutionContext): PaginateParams => {
     const request = ctx.switchToHttp().getRequest();
     const { page, limit, order } = request.query;
     route = `${apiUrl}/${route}`;

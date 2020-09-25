@@ -27,7 +27,9 @@ export class UserController {
     async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: UserDTO): Promise<IPagination<UserRO>> {
         const permission = this.rolesBuilder.can(user.roles).readAny(AppResources.USER);
         if (permission.granted) {
-            return this.userService.showAll(pagOpts);
+            const { items, ...res } = await this.userService.showAll(pagOpts);
+            const _items = permission.filter(items);
+            return { items: _items, ...res };
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
