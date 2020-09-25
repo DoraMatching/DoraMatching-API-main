@@ -1,7 +1,7 @@
 import { AppResources } from '@/app.roles';
 import { Auth } from '@/shared/auth.decorator';
 import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, HttpStatus } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { PaginateParams } from 'src/shared/pipes.params';
 import { User } from './user.decorator';
@@ -11,6 +11,7 @@ import { Paginate } from '../shared/paginate.decorator';
 import { PaginateSwagger } from '@/shared/paginate-swagger.decorator';
 
 @Controller()
+@ApiTags('user')
 export class UserController {
     constructor(
         private readonly userService: UserService,
@@ -19,7 +20,7 @@ export class UserController {
     ) { }
 
     @Auth({ resource: AppResources.USER, action: 'read', possession: 'any' })
-    @ApiOperation({ summary: 'Read users' })
+    @ApiOperation({ summary: 'Get users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
     @Get('users')
@@ -33,14 +34,14 @@ export class UserController {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    @ApiOperation({ summary: 'User login' })
+    @ApiOperation({ summary: 'User basic login', description: 'Return user' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Post('login')
     login(@Body() data: UserDTO): Promise<UserRO> {
         return this.userService.login(data);
     }
 
-    @ApiOperation({ summary: 'User register' })
+    @ApiOperation({ summary: 'Create user', description: 'Return user created' })
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
     @UsePipes(ValidationPipe)
@@ -56,13 +57,14 @@ export class UserController {
         return this.userService.githubLogin(accessToken);
     }
 
-    @ApiOperation({ summary: `Get repos of current user` })
+    @ApiOperation({ summary: `Utils`, description: 'Get repos of current user' })
     @Post('github/langs')
     githubLangs(@Body() { accessToken }: GithubUserLogin) {
         return this.userService.githubLangs(accessToken);
     }
 
     @Auth({ resource: AppResources.USER, action: 'read', possession: 'any' })
+    @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
         @User() user: UserDTO
