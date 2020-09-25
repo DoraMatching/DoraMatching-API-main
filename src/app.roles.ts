@@ -18,7 +18,7 @@ roles
     // Resource USER
     .grant(AppRoles.GUEST)
     .readAny(AppResources.USER, '*, !email, !roles, !password, !createdAt, !updatedAt')
-    .createAny(AppResources.USER)
+    .createAny(AppResources.USER, '*, !roles')
     .grant(AppRoles.TRAINEE)
     .readAny(AppResources.USER, '*, !password')
     .updateOwn(AppResources.USER)

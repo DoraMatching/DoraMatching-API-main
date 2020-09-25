@@ -1,17 +1,23 @@
 import { AppResources } from '@/app.roles';
 import { Auth } from '@/shared/auth/auth.decorator';
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { User } from './user.decorator';
 import { UserDTO, GithubUserLogin } from './dto/user.dto';
 import { UserRO } from './dto/response-user.dto';
-import { IPagination, UserService } from './user.service';
+import { UserService } from './user.service';
 import { Paginate } from '@/shared/pagination/paginate.decorator';
 import { PaginateSwagger } from '@/shared/pagination/paginate-swagger.decorator';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
+import { FindOneParams } from '../shared/pipes/find-one.params';
+import { grantPermission } from '../shared/access-control/grant-permission';
+import { UserModel } from './dto/user.model';
+import { JwtUser } from './dto/jwt-payload-user.dto';
+import { paginateFilter } from '@/shared/pagination/paginate-filter';
+import { IPagination } from '@/shared/pagination/paginate.interface';
 
 @Controller()
 @ApiTags('user')
@@ -22,18 +28,35 @@ export class UserController {
         private readonly rolesBuilder: RolesBuilder
     ) { }
 
-    @Auth({ resource: AppResources.USER, action: 'read', possession: 'any' })
+    @Auth()
     @ApiOperation({ summary: 'Get users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
     @Get('users')
     @UsePipes(ValidationPipe)
-    async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: UserDTO): Promise<IPagination<UserRO>> {
-        const permission = this.rolesBuilder.can(user.roles).readAny(AppResources.USER);
+    async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<UserRO>> {
+        // const permission = this.rolesBuilder.can(user.roles).readAny(AppResources.USER);
+        // if (permission.granted) {
+        //     const { items, ...res } = await this.userService.showAll(pagOpts);
+        //     const _items = permission.filter(items);
+        //     return { items: _items, ...res };
+        // } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+
+
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
-            const { items, ...res } = await this.userService.showAll(pagOpts);
-            const _items = permission.filter(items);
-            return { items: _items, ...res };
+            const users = await this.userService.showAll(pagOpts);
+            return paginateFilter(users, permission);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    @Auth()
+    @Get('user/:id')
+    async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<UserRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, id);
+        if (permission.granted) {
+            const foundUser = await this.userService.getUser({ id });
+            return permission.filter(foundUser);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 

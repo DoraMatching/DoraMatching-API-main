@@ -4,5 +4,5 @@ import { ApiProperty } from '@nestjs/swagger';
 export class FindOneParams {
     @ApiProperty()
     @IsNumberString()
-    id: number;
+    id: string;
 }

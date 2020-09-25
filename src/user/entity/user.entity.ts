@@ -6,6 +6,7 @@ import { AppRoles } from '@/app.roles';
 import { IUserModel } from '../dto/user.model';
 import { AvatarGenerator } from 'random-avatar-generator';
 import { jwtExpiresIn, jwtSecretKey } from '@/config';
+import { JwtUser } from '../dto/jwt-payload-user.dto';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -69,7 +70,7 @@ export class UserEntity implements IUserModel {
     }
 
     private get token() {
-        const { id, username, roles, email } = this;
+        const { id, username, roles, email }: JwtUser = this;
         return jwt.sign(
             { id, username, roles, email: email ? email : undefined },
             jwtSecretKey,

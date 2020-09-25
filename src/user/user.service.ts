@@ -16,11 +16,9 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { ghQuery } from '@/shared/graphql/github.graphql';
-export interface IPagination<T> {
-    items: T[];
-    meta: any;
-    links: any;
-}
+import { UserModel } from './dto/user.model';
+import { IPagination } from '@/shared/pagination/paginate.interface';
+
 
 @Injectable()
 export class UserService {
@@ -39,6 +37,13 @@ export class UserService {
         }
 
         return result;
+    }
+
+    async getUser({ id }: Partial<UserModel>): Promise<UserRO> {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (user) {
+            return user.toResponseObject(false);
+        } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     async findByUsernameOrEmail(username: string, email?: string): Promise<UserRO> {
