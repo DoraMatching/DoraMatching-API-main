@@ -1,4 +1,5 @@
 import { AppRoles } from '@/app.roles';
+import { IPostModel } from '@/modules/post/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { IUserModel } from './user.model';
@@ -29,6 +30,9 @@ export class UserRO implements IUserRO {
 
     @ApiProperty()
     createdAt: Date;
+
+    @ApiProperty()
+    posts: IPostModel[];
 
     @ApiProperty()
     updatedAt: Date;

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from 'class-validator';
 import { IUserModel } from './user.model';
 
-export type ICreateUserDTO = Omit<IUserModel, 'id' | 'roles' | 'createdAt' | 'updatedAt'>;
+export type ICreateUserDTO = Omit<IUserModel, 'id' | 'roles' | 'createdAt' | 'updatedAt' | 'posts'>;
 
 export class CreateUserDTO implements ICreateUserDTO {
     @ApiProperty()

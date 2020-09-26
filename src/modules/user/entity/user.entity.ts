@@ -3,8 +3,9 @@ import { jwtExpiresIn, jwtSecretKey } from '@/config';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AvatarGenerator } from 'random-avatar-generator';
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { IUserModel, UserRO, JwtUser } from '../dto';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { IUserModel, JwtUser, UserRO } from '../dto';
+import { PostEntity } from '../../post/entity/post.entity';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -28,6 +29,9 @@ export class UserEntity implements IUserModel {
 
     @Column({ type: 'simple-array', default: AppRoles.TRAINEE })
     roles: AppRoles[];
+
+    @OneToMany(() => PostEntity, post => post.author)
+    posts: PostEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
@@ -54,8 +58,8 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl } = this;
-        const responseObject: UserRO = { id, createdAt, updatedAt, username, email, name, roles, avatarUrl };
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts } = this;
+        const responseObject: UserRO = { id, createdAt, updatedAt, username, email, name, roles, avatarUrl, posts };
         if (showToken) {
             responseObject.token = token;
         }

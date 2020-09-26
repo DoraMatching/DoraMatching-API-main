@@ -4,7 +4,7 @@ import { IUserModel } from './user.model';
 import { RolesValidator } from '@/shared/validation/roles.validate';
 import { AppRoles } from '@/app.roles';
 
-export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt'>;
+export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts'>;
 
 export class UpdateUser implements IUpdateUser {
     @ApiProperty()

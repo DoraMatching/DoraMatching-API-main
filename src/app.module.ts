@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
 import { UserModule } from './modules/user/user.module';
+import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { UserModule } from './modules/user/user.module';
     TypeOrmModule.forRoot(),
     AccessControlModule.forRoles(roles),
     MailerModule.forRoot(mailerConfig),
-    UserModule
+    UserModule,
+    PostModule
   ],
   controllers: [AppController],
   providers: [],
