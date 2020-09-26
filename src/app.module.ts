@@ -6,7 +6,7 @@ import { AccessControlModule } from 'nest-access-control';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [

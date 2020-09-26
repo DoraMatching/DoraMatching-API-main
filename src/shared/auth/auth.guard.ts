@@ -1,6 +1,6 @@
 import { AppRoles } from '@/app.roles';
 import { jwtSecretKey } from '@/config';
-import { UserEntity } from '@/user/entity/user.entity';
+import { UserEntity } from '@/modules/user/entity/user.entity';
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
