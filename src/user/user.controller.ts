@@ -52,7 +52,6 @@ export class UserController {
     }
 
     @Auth()
-    @Auth()
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @UsePipes(ValidationPipe)
@@ -74,12 +73,17 @@ export class UserController {
         return this.userService.login(data);
     }
 
+    @Auth()
     @ApiOperation({ summary: 'Create user', description: 'Return user created' })
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
     @UsePipes(ValidationPipe)
-    register(@Body() data: CreateUserDTO): Promise<UserRO> {
-        return this.userService.register(data);
+    register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<UserRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', user, null);
+        if (permission.granted) {
+            data = permission.filter(data);
+            return this.userService.register(data);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     @ApiOperation({ summary: 'User Github login' })

@@ -6,7 +6,7 @@ export const rolesArray = Object.values(AppRoles);
 
 @ValidatorConstraint({ name: 'roleCheck', async: false })
 export class RolesValidator implements ValidatorConstraintInterface {
-    validate(roles: string[]) {
+    validate(roles: AppRoles[]) {
         return _.difference(roles, rolesArray).length === 0;
     }
 
