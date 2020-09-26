@@ -1,25 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
+import { IUserModel } from './user.model';
+import { RolesValidator } from '@/shared/validation/roles.validate';
 import { AppRoles } from '@/app.roles';
 
-export interface IUserModel {
-    id: string;
-    username: string;
-    email: string;
-    name: string;
-    avatarUrl: string;
-    roles: AppRoles[];
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt'>;
 
-export class UserModel implements IUserModel {
+export class UpdateUser implements IUpdateUser {
     @ApiProperty()
-    id: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
+    @IsString()
     username: string;
 
     @ApiProperty()
@@ -27,17 +17,21 @@ export class UserModel implements IUserModel {
     @IsEmail()
     email: string;
 
-    @ApiProperty()
+    @IsString()
+    @IsOptional()
     name: string;
 
     @ApiProperty()
+    @IsOptional()
     avatarUrl: string;
 
     @ApiProperty()
+    @IsOptional()
+    @Validate(RolesValidator)
     roles: AppRoles[];
 
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @MinLength(8)
     @MaxLength(20)
     @Matches(
@@ -49,8 +43,6 @@ export class UserModel implements IUserModel {
     password: string;
 
     @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
+    @IsOptional()
+    oldPassword: string;
 }

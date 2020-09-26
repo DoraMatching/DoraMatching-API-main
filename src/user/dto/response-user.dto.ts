@@ -1,3 +1,4 @@
+import { AppRoles } from '@/app.roles';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { IUserModel } from './user.model';
@@ -24,7 +25,7 @@ export class UserRO implements IUserRO {
     avatarUrl: string;
 
     @ApiProperty()
-    roles: string[];
+    roles: AppRoles[];
 
     @ApiProperty()
     createdAt: Date;

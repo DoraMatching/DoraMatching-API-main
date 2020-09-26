@@ -1,5 +1,6 @@
 import { AppResources } from '@/app.roles';
 import { grantPermission } from '@/shared/access-control/grant-permission';
+import { rolesFilter } from '@/shared/access-control/roles-filter';
 import { Auth } from '@/shared/auth/auth.decorator';
 import { paginateFilter } from '@/shared/pagination/paginate-filter';
 import { PaginateSwagger } from '@/shared/pagination/paginate-swagger.decorator';
@@ -7,10 +8,10 @@ import { Paginate } from '@/shared/pagination/paginate.decorator';
 import { IPagination } from '@/shared/pagination/paginate.interface';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { FindOneParams } from '@/shared/pipes/find-one.params';
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateUserDTO, GithubUserLogin, JwtUser, LoginUserDTO, UserRO } from './dto';
+import { CreateUserDTO, GithubUserLogin, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
 import { User } from './user.decorator';
 import { UserService } from './user.service';
 
@@ -47,6 +48,21 @@ export class UserController {
         if (permission.granted) {
             const foundUser = await this.userService.getUser({ id });
             return permission.filter(foundUser);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    @Auth()
+    @Auth()
+    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiResponse({ type: UserRO, status: 200 })
+    @UsePipes(ValidationPipe)
+    @Patch('user/:id')
+    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', user, id);
+        if (permission.granted) {
+            updateUser = permission.filter(updateUser);
+            updateUser.roles = rolesFilter(user.roles, updateUser.roles);
+            return await this.userService.updateUser(id, updateUser);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 

@@ -27,7 +27,7 @@ export class UserEntity implements IUserModel {
     password: string;
 
     @Column({ type: 'simple-array', default: AppRoles.TRAINEE })
-    roles: string[];
+    roles: AppRoles[];
 
     @CreateDateColumn()
     createdAt: Date;

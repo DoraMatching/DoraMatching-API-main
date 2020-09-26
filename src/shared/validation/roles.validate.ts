@@ -2,7 +2,7 @@ import { AppRoles } from '@/app.roles';
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import _ from 'lodash';
 
-export const rolesArray = Object.keys(AppRoles);
+export const rolesArray = Object.values(AppRoles);
 
 @ValidatorConstraint({ name: 'roleCheck', async: false })
 export class RolesValidator implements ValidatorConstraintInterface {

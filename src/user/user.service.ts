@@ -1,4 +1,4 @@
-import { feUrl, mailAddress, isEnableCache } from '@/config';
+import { feUrl, isEnableCache, mailAddress } from '@/config';
 import { ghQuery } from '@/shared/graphql/github.graphql';
 import { IPagination } from '@/shared/pagination/paginate.interface';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
@@ -10,8 +10,7 @@ import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UserRO } from './dto';
-import { UserModel } from './dto/user.model';
+import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UpdateUser, UserModel, UserRO } from './dto';
 import { UserEntity } from './entity/user.entity';
 
 
@@ -63,9 +62,22 @@ export class UserService {
         if (user) {
             throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
         }
-        user = await this.userRepository.create(data);
+        user = this.userRepository.create(data);
         await this.userRepository.save(user);
         return user.toResponseObject();
+    }
+
+    async updateUser(id: string, user: UpdateUser): Promise<UserRO> {
+        const foundUser = await this.userRepository.findOne({ id });
+        if (foundUser) {
+            const updateUser = this.userRepository.create(user);
+            try {
+                await this.userRepository.update({ id }, updateUser);
+            } catch ({ detail }) {
+                throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return (await this.userRepository.findOne({ id })).toResponseObject(false);
+        } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
@@ -92,11 +104,11 @@ export class UserService {
         email = email || `${login}@doramatching.tk`;
 
         let user = await this.userRepository.findOne({
-            where: [{ username: login }, { email: email }]
+            where: [{ username: login }, { email }]
         });
         if (!user) {
             const password = pwGenerator.generate({ length: 10, strict: true });
-            user = await this.userRepository.create({ avatarUrl, email, username: login, name, password });
+            user = this.userRepository.create({ avatarUrl, email, username: login, name, password });
 
             await this.userRepository.save(user);
 
