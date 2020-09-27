@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken';
 import { AvatarGenerator } from 'random-avatar-generator';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { IUserModel, JwtUser, UserRO } from '../dto';
-import { PostEntity } from '../../post/entity/post.entity';
+import { PostEntity } from '@/modules/post/entity/post.entity';
 
 @Entity('user')
 export class UserEntity implements IUserModel {

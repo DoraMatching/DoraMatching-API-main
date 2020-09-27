@@ -1,8 +1,8 @@
+import { AppRoles } from '@/app.roles';
+import { RolesValidator } from '@/shared/validation/roles.validate';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
 import { IUserModel } from './user.model';
-import { RolesValidator } from '@/shared/validation/roles.validate';
-import { AppRoles } from '@/app.roles';
 
 export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts'>;
 

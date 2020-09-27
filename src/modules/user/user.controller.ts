@@ -11,7 +11,7 @@ import { FindOneParams } from '@/shared/pipes/find-one.params';
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateUserDTO, GithubUserLogin, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
+import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
 import { User } from './user.decorator';
 import { UserService } from './user.service';
 
@@ -28,9 +28,9 @@ export class UserController {
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
-    @Get('users')
+    @Get('user')
     @UsePipes(ValidationPipe)
-    async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<UserRO>> {
+    async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
             const users = await this.userService.showAll(pagOpts);
@@ -43,7 +43,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @UsePipes(ValidationPipe)
     @Get('user/:id')
-    async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<UserRO> {
+    async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, id);
         if (permission.granted) {
             const foundUser = await this.userService.getUser({ id });
@@ -56,7 +56,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @UsePipes(ValidationPipe)
     @Patch('user/:id')
-    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser) {
+    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', user, id);
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
@@ -69,7 +69,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @UsePipes(ValidationPipe)
     @Post('login')
-    login(@Body() data: LoginUserDTO): Promise<UserRO> {
+    login(@Body() data: LoginUserDTO): Promise<IUserRO> {
         return this.userService.login(data);
     }
 
@@ -78,7 +78,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
     @UsePipes(ValidationPipe)
-    register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<UserRO> {
+    register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', user, null);
         if (permission.granted) {
             data = permission.filter(data);
