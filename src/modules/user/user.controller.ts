@@ -28,9 +28,9 @@ export class UserController {
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
-    @Get('user')
+    @Get('users')
     @UsePipes(ValidationPipe)
-    async index(@Paginate({ route: 'user' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
+    async index(@Paginate({ route: 'users' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
             const users = await this.userService.showAll(pagOpts);

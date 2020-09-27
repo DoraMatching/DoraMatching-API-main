@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsIn, IsInt, IsNotEmpty, IsString, Max, Min } from "class-validator";
 
-export type Order = 'ASC' | 'DESC' | 1 | -1;
+export type Order = 'ASC' | 'DESC';
 
 export class PaginateParams {
     @ApiProperty()

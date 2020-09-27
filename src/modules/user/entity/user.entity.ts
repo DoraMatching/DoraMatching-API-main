@@ -1,11 +1,11 @@
 import { AppRoles } from '@/app.roles';
 import { jwtExpiresIn, jwtSecretKey } from '@/config';
+import { PostEntity } from '@/modules/post/entity/post.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AvatarGenerator } from 'random-avatar-generator';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { IUserModel, JwtUser, UserRO } from '../dto';
-import { PostEntity } from '@/modules/post/entity/post.entity';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -24,7 +24,7 @@ export class UserEntity implements IUserModel {
     @Column({ type: 'text', unique: true })
     username: string;
 
-    @Column('text')
+    @Column({ type: 'text' })
     password: string;
 
     @Column({ type: 'simple-array', default: AppRoles.TRAINEE })

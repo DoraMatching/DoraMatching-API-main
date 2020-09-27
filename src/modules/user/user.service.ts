@@ -23,7 +23,7 @@ export class UserService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, relations: [], cache: isEnableCache });
 
         const result: IPagination<UserRO> = {
             items: items.map(user => user.toResponseObject(false)),

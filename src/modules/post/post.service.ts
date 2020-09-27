@@ -6,9 +6,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../user/entity/user.entity';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
-import { UserEntity } from '../user/entity/user.entity';
 
 @Injectable()
 export class PostService {
@@ -20,12 +20,12 @@ export class PostService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
-        const result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
+        const result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
         return result;
     }
 
     async createPost(data: CreatePostDTO, { id }: JwtUser): Promise<PostRO> {
-        const user = await this.userRepository.findOne({ id });
+        const user = await this.userRepository.findOne({ where: { id }, select: ['id', 'name', 'username', 'email'] });
         const newPost = this.postRepository.create({
             ...data,
             author: user

@@ -15,6 +15,6 @@
       "@/*": ["src/*"]
     }
   },
-  "exclude": ["src/node_modules", "dist"],
+  "exclude": ["src/node_modules", "dist", "*.js"],
   "types": ["node"]
 }
