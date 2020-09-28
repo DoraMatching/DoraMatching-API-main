@@ -19,7 +19,7 @@ export class PostService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
-        let result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
+        const result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
         return paginateOrder(result, order);
     }
 

@@ -5,33 +5,29 @@ import { IPagination } from '@/shared/pagination/paginate.interface';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
 import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { Repository } from 'typeorm';
 import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UpdateUser, UserModel, UserRO } from './dto';
 import { UserEntity } from './entity/user.entity';
+import { UserRepository } from './repositories/user.repository';
 
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>,
+        private readonly userRepository: UserRepository,
         private readonly mailerService: MailerService
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
         const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
 
-        let result: IPagination<UserRO> = paginateOrder({
+        return paginateOrder({
             items: items.map(user => user.toResponseObject(false)),
             links, meta
         }, order);
-
-        return result;
     }
 
     async getUser({ id }: Partial<UserModel>): Promise<UserRO> {
