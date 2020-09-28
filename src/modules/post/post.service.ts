@@ -1,7 +1,6 @@
 import { isEnableCache } from '@/config/database.config';
 import { JwtUser } from '@/modules/user/dto/';
-import { IPagination } from '@/shared/pagination/paginate.interface';
-import { PaginateParams } from '@/shared/pagination/paginate.params';
+import { IPagination, paginateOrder, PaginateParams } from '@/shared/pagination';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -20,8 +19,8 @@ export class PostService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
-        const result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
-        return result;
+        let result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
+        return paginateOrder(result, order);
     }
 
     async createPost(data: CreatePostDTO, { id }: JwtUser): Promise<PostRO> {
