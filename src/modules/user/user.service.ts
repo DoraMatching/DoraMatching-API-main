@@ -1,5 +1,6 @@
 import { feUrl, isEnableCache, mailAddress } from '@/config';
 import { ghQuery } from '@/shared/graphql/github.graphql';
+import { paginateOrder } from '@/shared/pagination/paginate-order';
 import { IPagination } from '@/shared/pagination/paginate.interface';
 import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -23,12 +24,12 @@ export class UserService {
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, relations: [], cache: isEnableCache });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
 
-        const result: IPagination<UserRO> = {
+        let result: IPagination<UserRO> = paginateOrder({
             items: items.map(user => user.toResponseObject(false)),
-            meta, links
-        }
+            links, meta
+        }, order);
 
         return result;
     }
