@@ -13,7 +13,6 @@ import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, 
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
-
 @Injectable()
 export class UserService {
     constructor(
