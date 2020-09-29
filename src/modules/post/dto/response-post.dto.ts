@@ -1,5 +1,5 @@
-import { IUserModel } from '@/modules/user/dto';
-import { IPostModel } from '@/modules/post/dto';
+import { IPostModel } from '@post/dto';
+import { IUserModel } from '@user/dto';
 
 export type IPostRO = IPostModel;
 

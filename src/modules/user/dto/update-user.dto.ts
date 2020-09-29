@@ -1,6 +1,6 @@
 import { AppRoles } from '@/app.roles';
-import { RolesValidator } from '@/shared/validation/roles.validate';
 import { ApiProperty } from '@nestjs/swagger';
+import { RolesValidator } from '@shared/validation/roles.validate';
 import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
 import { IUserModel } from './user.model';
 

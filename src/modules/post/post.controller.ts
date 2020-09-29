@@ -1,12 +1,12 @@
 import { AppResources } from '@/app.roles';
-import { grantPermission } from '@/shared/access-control/grant-permission';
-import { Auth } from '@/shared/auth/auth.decorator';
-import { IPagination, Paginate, paginateFilter, PaginateParams, PaginateSwagger } from '@/shared/pagination/';
 import { Body, Controller, Get, HttpException, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { grantPermission } from '@shared/access-control/grant-permission';
+import { Auth } from '@shared/auth/auth.decorator';
+import { IPagination, Paginate, paginateFilter, PaginateParams, PaginateSwagger } from '@shared/pagination/';
+import { JwtUser } from '@user/dto/';
+import { User } from '@user/user.decorator';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { JwtUser } from '../user/dto/';
-import { User } from '../user/user.decorator';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
 

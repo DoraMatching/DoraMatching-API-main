@@ -1,6 +1,6 @@
 import { AppRoles } from '@/app.roles';
 import { jwtExpiresIn, jwtSecretKey } from '@/config';
-import { PostEntity } from '@/modules/post/entity/post.entity';
+import { PostEntity } from '@post/entity/post.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AvatarGenerator } from 'random-avatar-generator';

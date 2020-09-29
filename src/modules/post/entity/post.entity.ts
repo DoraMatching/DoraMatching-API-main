@@ -1,4 +1,4 @@
-import { UserEntity } from '@/modules/user/entity/user.entity';
+import { UserEntity } from '@user/entity/user.entity';
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { IPostModel } from '../dto';
 

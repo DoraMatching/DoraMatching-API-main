@@ -1,5 +1,5 @@
-import { IUserModel, UserModel } from '@/modules/user/dto/user.model';
 import { ApiProperty } from '@nestjs/swagger';
+import { IUserModel, UserModel } from '@user/dto/user.model';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface IPostModel {

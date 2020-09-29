@@ -1,11 +1,11 @@
-import { isEnableCache } from '@/config/database.config';
-import { JwtUser } from '@/modules/user/dto/';
-import { IPagination, paginateOrder, PaginateParams } from '@/shared/pagination';
+import { isEnableCache } from '@config/database.config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
+import { JwtUser } from '@user/dto/';
+import { UserEntity } from '@user/entity/user.entity';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../user/entity/user.entity';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 

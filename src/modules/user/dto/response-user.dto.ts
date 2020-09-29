@@ -1,6 +1,6 @@
 import { AppRoles } from '@/app.roles';
-import { IPostModel } from '@/modules/post/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { IPostModel } from '@post/dto';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { IUserModel } from './user.model';
 

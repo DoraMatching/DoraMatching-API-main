@@ -1,17 +1,16 @@
+import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
 import { feUrl, isEnableCache, mailAddress } from '@/config';
 import { ghQuery } from '@/shared/graphql/github.graphql';
-import { paginateOrder } from '@/shared/pagination/paginate-order';
-import { IPagination } from '@/shared/pagination/paginate.interface';
-import { PaginateParams } from '@/shared/pagination/paginate.params';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
 import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UpdateUser, UserModel, UserRO } from './dto';
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
+
 
 @Injectable()
 export class UserService {

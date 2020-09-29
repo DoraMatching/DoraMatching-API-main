@@ -12,7 +12,11 @@
     "incremental": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@user/*": ["src/modules/user/*"],
+      "@post/*": ["src/modules/post/*"],
+      "@shared/*": ["src/shared/*"],
+      "@config/*": ["src/config/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

@@ -1,5 +1,5 @@
 import { AppResources } from '@/app.roles';
-import { IJwtUser } from '@/modules/user/dto/jwt-payload-user.dto';
+import { IJwtUser } from '@user/dto/jwt-payload-user.dto';
 import { Permission } from 'accesscontrol';
 import { RolesBuilder } from 'nest-access-control';
 
