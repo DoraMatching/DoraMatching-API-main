@@ -1,6 +1,6 @@
 import { AppResources } from '@/app.roles';
 import { Body, Controller, Get, HttpException, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { Auth } from '@shared/auth/auth.decorator';
 import { IPagination, Paginate, paginateFilter, PaginateParams, PaginateSwagger } from '@shared/pagination/';
@@ -11,6 +11,7 @@ import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
 
 @Controller()
+@ApiTags('post')
 export class PostController {
     constructor(
         private readonly postService: PostService,
@@ -22,12 +23,12 @@ export class PostController {
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
     @ApiResponse({ type: [PostRO], status: 200 })
     @PaginateSwagger()
-    @Get('posts')
     @UsePipes(ValidationPipe)
+    @Get('posts')
     async index(@Paginate({ route: 'post' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IPostRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, null);
         if (permission.granted) {
-            const posts = await this.postService.showAll(pagOpts);
+            const posts = await this.postService.getAllPosts(pagOpts);
             return paginateFilter(posts, permission);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
@@ -37,10 +38,5 @@ export class PostController {
     @UsePipes(ValidationPipe)
     async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
         return this.postService.createPost(data, user);
-    }
-
-    @Get('/post/test')
-    test(@Paginate({route: 'post'}) pagOpts: PaginateParams): Promise<IPagination<PostRO>> {
-        return this.postService.getAllPosts(pagOpts);
     }
 }

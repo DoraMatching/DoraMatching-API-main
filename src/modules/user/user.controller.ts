@@ -24,8 +24,8 @@ export class UserController {
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @PaginateSwagger()
-    @Get('users')
     @UsePipes(ValidationPipe)
+    @Get('users')
     async index(@Paginate({ route: 'users' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
@@ -72,8 +72,8 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Create user', description: 'Return user created' })
     @ApiResponse({ type: UserRO, status: 201 })
-    @Post('register')
     @UsePipes(ValidationPipe)
+    @Post('register')
     register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', user, null);
         if (permission.granted) {
@@ -84,8 +84,8 @@ export class UserController {
 
     @ApiOperation({ summary: 'User Github login' })
     @ApiResponse({ type: UserRO, status: 200 })
-    @Post('github')
     @UsePipes(ValidationPipe)
+    @Post('github')
     githubLogin(@Body() { accessToken }: GithubUserLogin) {
         return this.userService.githubLogin(accessToken);
     }
