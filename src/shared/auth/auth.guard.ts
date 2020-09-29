@@ -2,8 +2,8 @@ import { AppRoles } from '@/app.roles';
 import { jwtSecretKey } from '@/config';
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import * as jwt from 'jsonwebtoken';
 import { UserRepository } from '@user/repositories/user.repository';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
