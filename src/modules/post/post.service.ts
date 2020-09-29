@@ -1,4 +1,4 @@
-import { isEnableCache } from '@config/database.config';
+import { isEnableCache } from '@/config/database.config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
