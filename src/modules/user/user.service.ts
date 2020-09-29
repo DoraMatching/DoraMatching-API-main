@@ -10,6 +10,7 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UpdateUser, UserModel, UserRO } from './dto';
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 
 @Injectable()

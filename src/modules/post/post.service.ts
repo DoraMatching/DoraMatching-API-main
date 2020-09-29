@@ -6,16 +6,16 @@ import { JwtUser } from '@user/dto/';
 import { UserEntity } from '@user/entity/user.entity';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
+import { UserRepository } from '../user/repositories/user.repository';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
+import { PostRepository } from './repositories/post.repository';
 
 @Injectable()
 export class PostService {
     constructor(
-        @InjectRepository(PostEntity)
-        private readonly postRepository: Repository<PostEntity>,
-        @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
+        private readonly postRepository: PostRepository,
+        private readonly userRepository: UserRepository
     ) { }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {

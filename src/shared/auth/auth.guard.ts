@@ -1,17 +1,14 @@
 import { AppRoles } from '@/app.roles';
 import { jwtSecretKey } from '@/config';
-import { UserEntity } from '@user/entity/user.entity';
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
-import { Repository } from 'typeorm';
+import { UserRepository } from '@user/repositories/user.repository';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
-        @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
+        private readonly userRepository: UserRepository
     ) { }
 
     async attachUser(authorization: string): Promise<any> {
