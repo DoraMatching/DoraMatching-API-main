@@ -38,4 +38,9 @@ export class PostController {
     async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
         return this.postService.createPost(data, user);
     }
+
+    @Get('/post/test')
+    async test(@Paginate({route: 'post'}) pagOpts: PaginateParams): Promise<PostRO[]> {
+        return this.postService.getAll(pagOpts);
+    }
 }

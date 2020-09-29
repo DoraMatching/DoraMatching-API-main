@@ -1,9 +1,9 @@
 import { UserEntity } from '@user/entity/user.entity';
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { IPostModel } from '../dto';
 
 @Entity('post')
-export class PostEntity implements IPostModel {
+export class PostEntity extends BaseEntity implements IPostModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
