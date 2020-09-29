@@ -1,11 +1,11 @@
 import { BaseService } from '@/commons/base-service';
 import { isEnableCache } from '@/config/database.config';
+import { customPaginate } from '@/shared/pagination/paginate-custom';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
+import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { UserEntity } from '../user/entity/user.entity';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
@@ -38,7 +38,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         return newPost;
     }
 
-    async getAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostEntity>> {
-        return paginate<PostEntity>(this.postRepository.getAllPost<PostEntity>(pagOpts), { limit, order, route }, { order: { createdAt: order } });
+    async getAllPosts(pagOpts: PaginateParams): Promise<IPagination<PostRO>> {
+        const data = await this.postRepository.getAllPosts(pagOpts);
+        return customPaginate<PostRO>(data, pagOpts);
     }
 }

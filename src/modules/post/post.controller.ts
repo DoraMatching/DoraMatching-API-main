@@ -40,7 +40,7 @@ export class PostController {
     }
 
     @Get('/post/test')
-    async test(@Paginate({route: 'post'}) pagOpts: PaginateParams): Promise<PostRO[]> {
-        return this.postService.getAll(pagOpts);
+    test(@Paginate({route: 'post'}) pagOpts: PaginateParams): Promise<IPagination<PostRO>> {
+        return this.postService.getAllPosts(pagOpts);
     }
 }

@@ -2,10 +2,10 @@ import { IPagination } from "./paginate.interface";
 import { Order } from "./paginate.params";
 
 function addOrderQuery(links: any, order: Order): any {
-    let _links = {};
+    const _links = {};
     Object.keys(links).map(pageName => {
         const pageData = links[pageName];
-        _links[pageName] = pageData ? `${pageData}&${order}` : '';
+        _links[pageName] = pageData ? `${pageData}&order=${order}` : '';
     });
     return _links;
 }

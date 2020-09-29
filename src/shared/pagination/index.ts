@@ -1,3 +1,4 @@
+export * from './paginate-custom';
 export * from './paginate-filter';
 export * from './paginate-order';
 export * from './paginate-swagger.decorator';
