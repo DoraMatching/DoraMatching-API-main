@@ -16,7 +16,7 @@ export function customPaginate<T>({ entities, count }: EntityResults<T>, { route
         meta: {
             totalItems: count,
             itemCount: entitiesLength,
-            itemsPerPage: entitiesLength,
+            itemsPerPage: limit,
             totalPages,
             currentPage: page
         }
