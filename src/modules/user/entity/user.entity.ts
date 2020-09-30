@@ -4,7 +4,16 @@ import { PostEntity } from '@post/entity/post.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AvatarGenerator } from 'random-avatar-generator';
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { IUserModel, JwtUser, UserRO } from '../dto';
 
 @Entity('user')
@@ -40,9 +49,16 @@ export class UserEntity implements IUserModel {
     updatedAt: Date;
 
     @BeforeInsert()
-    @BeforeUpdate()
     async hashPassword(): Promise<void> {
         this.password = await bcrypt.hash(this.password, 10);
+    }
+
+    @BeforeUpdate()
+    async updateHashPassword(): Promise<void> {
+        const isNewPassword = await this.comparePassword(this.password);
+        if (isNewPassword) {
+            this.password = await bcrypt.hash(this.password, 10);
+        }
     }
 
     @BeforeInsert()
@@ -74,8 +90,8 @@ export class UserEntity implements IUserModel {
     private get token() {
         const { id, username, roles, email }: JwtUser = this;
         return jwt.sign(
-            { id, username, roles, email: email ? email : undefined },
-            jwtSecretKey,
-            { expiresIn: jwtExpiresIn });
+          { id, username, roles, email: email ? email : undefined },
+          jwtSecretKey,
+          { expiresIn: jwtExpiresIn });
     }
 }

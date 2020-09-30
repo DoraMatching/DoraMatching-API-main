@@ -7,25 +7,37 @@ import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
 import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { CreateUserDTO, IGithubSchema, IGithubUserLangs, IViewer, LoginUserDTO, UpdateUser, UserModel, UserRO } from './dto';
+import {
+    CreateUserDTO,
+    IGithubSchema,
+    IGithubUserLangs,
+    IViewer,
+    LoginUserDTO,
+    UpdateUser,
+    UserModel,
+    UserRO,
+} from './dto';
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-
 
 @Injectable()
 export class UserService {
     constructor(
-        private readonly userRepository: UserRepository,
-        private readonly mailerService: MailerService
-    ) { }
+      private readonly userRepository: UserRepository,
+      private readonly mailerService: MailerService,
+    ) {
+    }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, { limit, page, route }, { order: { createdAt: order }, cache: isEnableCache });
+        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, {
+            limit,
+            page,
+            route,
+        }, { order: { createdAt: order }, cache: isEnableCache });
 
         return paginateOrder({
             items: items.map(user => user.toResponseObject(false)),
-            links, meta
+            links, meta,
         }, order);
     }
 
@@ -38,7 +50,7 @@ export class UserService {
 
     async findByUsernameOrEmail(username: string, email?: string): Promise<UserRO> {
         const user = await this.userRepository.findOne({
-            where: [{ username }, { email }]
+            where: [{ username }, { email }],
         });
         return user.toResponseObject(false);
     }
@@ -63,29 +75,34 @@ export class UserService {
         return user.toResponseObject();
     }
 
-    async updateUser(id: string, user: UpdateUser): Promise<UserRO> {
+    async updateUser(id: string, user: Partial<UpdateUser>): Promise<UserRO> {
         const foundUser = await this.userRepository.findOne({ id });
+
+        Object.keys(user).forEach(key => {
+            foundUser[key] = user[key];
+        });
+
         if (foundUser) {
             try {
-                await this.userRepository.updateUser(id, user);
+                await this.userRepository.save(foundUser);
             } catch ({ detail }) {
-                throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || 'Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return (await this.userRepository.findOne({ id })).toResponseObject(false);
         } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
-        const query = gql`
-        query { 
-            viewer { 
-                login
-                email
-                avatarUrl
-                name
-            }
+      const query = gql`
+          query {
+              viewer {
+                  login
+                  email
+                  avatarUrl
+                  name
+              }
           }
-        `;
+      `;
 
         const { viewer } = await ghQuery<IGithubSchema>(accessToken, query);
         return viewer;
@@ -99,7 +116,7 @@ export class UserService {
         email = email || `${login}@doramatching.tk`;
 
         let user = await this.userRepository.findOne({
-            where: [{ username: login }, { email }]
+            where: [{ username: login }, { email }],
         });
         if (!user) {
             const password = pwGenerator.generate({ length: 10, strict: true });
@@ -107,7 +124,7 @@ export class UserService {
 
             await this.userRepository.save(user);
 
-            this.mailerService.sendMail({
+            await this.mailerService.sendMail({
                 to: email,
                 from: mailAddress,
                 subject: 'You have successfully registered an account on DoraMatching',
@@ -116,8 +133,8 @@ export class UserService {
                     name,
                     email,
                     password,
-                    feLoginUrl: `${feUrl}/login`
-                }
+                    feLoginUrl: `${feUrl}/login`,
+                },
             });
 
             return user.toResponseObject(true);
@@ -127,25 +144,25 @@ export class UserService {
     }
 
     async githubLangs(accessToken: string) {
-        const query = gql`
-        {
-            viewer {
-              repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
-                nodes {
-                  name
-                  languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
-                    edges {
-                      size
-                      node {
-                        name
+      const query = gql`
+          {
+              viewer {
+                  repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
+                      nodes {
+                          name
+                          languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
+                              edges {
+                                  size
+                                  node {
+                                      name
+                                  }
+                              }
+                          }
                       }
-                    }
                   }
-                }
+                  name
               }
-              name
-            }
-        }`;
+          }`;
 
         const result: IGithubUserLangs = { langs: {}, name: '' };
         const { viewer } = await ghQuery<any>(accessToken, query);
@@ -160,7 +177,7 @@ export class UserService {
                 } else {
                     result.langs[langName] += size;
                 }
-            })
+            });
         });
 
         return result;

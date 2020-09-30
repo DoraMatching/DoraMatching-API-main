@@ -52,7 +52,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @UsePipes(ValidationPipe)
     @Patch('user/:id')
-    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
+    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: Partial<UpdateUser>): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', user, id);
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
