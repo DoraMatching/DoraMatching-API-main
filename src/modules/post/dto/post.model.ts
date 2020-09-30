@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IUserModel, UserModel } from '@user/dto/user.model';
+import { UserModel } from '@user/dto/user.model';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface IPostModel {
@@ -7,7 +7,7 @@ export interface IPostModel {
     title: string;
     content: string;
     tags: string[];
-    author: IUserModel;
+    author: Partial<UserModel>;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,7 +29,7 @@ export class PostModel implements IPostModel {
     tags: string[];
 
     @ApiProperty()
-    author: UserModel;
+    author: Partial<UserModel>;
 
     @ApiProperty()
     createdAt: Date;

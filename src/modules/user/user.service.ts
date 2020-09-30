@@ -66,9 +66,8 @@ export class UserService {
     async updateUser(id: string, user: UpdateUser): Promise<UserRO> {
         const foundUser = await this.userRepository.findOne({ id });
         if (foundUser) {
-            const updateUser = this.userRepository.create(user);
             try {
-                await this.userRepository.update({ id }, updateUser);
+                await this.userRepository.updateUser(id, user);
             } catch ({ detail }) {
                 throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
             }
