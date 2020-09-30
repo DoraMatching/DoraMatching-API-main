@@ -1,7 +1,7 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from "typeorm";
-import { UserEntity } from "../modules/user/entity/user.entity";
+import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
+import { UserEntity } from '@user/entity/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { AvatarGenerator } from "random-avatar-generator";
+import { AvatarGenerator } from 'random-avatar-generator';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
@@ -10,7 +10,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     }
 
     async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
-        const { password, username, name, email, avatarUrl } = event.entity
+        const { password, username, name, email, avatarUrl } = event.entity;
 
         if (password) {
             event.entity.password = await bcrypt.hash(password, 10);

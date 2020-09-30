@@ -1,5 +1,5 @@
-import { IPagination } from "./paginate.interface";
-import { Order } from "./paginate.params";
+import { IPagination } from './paginate.interface';
+import { Order } from './paginate.params';
 
 function addOrderQuery(links: any, order: Order): any {
     const _links = {};
@@ -13,6 +13,6 @@ function addOrderQuery(links: any, order: Order): any {
 export function paginateOrder<T>({ items, links, meta }, order: Order): IPagination<T> {
     return {
         items, meta,
-        links: addOrderQuery(links, order)
-    }
+        links: addOrderQuery(links, order),
+    };
 }

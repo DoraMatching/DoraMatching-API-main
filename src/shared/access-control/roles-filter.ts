@@ -1,4 +1,4 @@
-import { AppRoles } from "@/app.roles";
+import { AppRoles } from '@/app.roles';
 import _ from 'lodash';
 
 const userExcludeRoles = [AppRoles.ADMIN, AppRoles.GUEST];
