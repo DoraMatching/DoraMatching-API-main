@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
-import { IUserModel, UserModel } from '@user/dto/user.model';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -15,10 +14,10 @@ export class UserRepository extends Repository<UserEntity> {
           .execute();
     }
 
-    updateUser(id: string, updateUser: Partial<UserEntity>) {
+    updateUser(id: string, updateUser: Partial<UserEntity>, password: string) {
         return this.createQueryBuilder()
           .update(UserEntity)
-          .set(updateUser)
+          .set({ ...updateUser, password })
           .where('id = :id', { id })
           .execute();
     }

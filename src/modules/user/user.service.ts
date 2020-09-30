@@ -76,15 +76,18 @@ export class UserService {
     }
 
     async updateUser(id: string, user: Partial<UpdateUser>): Promise<UserRO> {
-        const { password, ...foundUser } = await this.userRepository.findOne({ id });
+        const foundUser = await this.userRepository.findOne({ id });
 
         if (foundUser) {
             Object.keys(user).forEach(key => {
-                foundUser[key] = user[key];
+                if (key === 'password' && user['password']) {
+                    foundUser.password = user.password;
+                } else
+                    foundUser[key] = user[key];
             });
 
             try {
-                await this.userRepository.update(foundUser.id, foundUser);
+                await this.userRepository.save(foundUser);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -93,7 +96,7 @@ export class UserService {
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
-      const query = gql`
+        const query = gql`
           query {
               viewer {
                   login
@@ -144,7 +147,7 @@ export class UserService {
     }
 
     async githubLangs(accessToken: string) {
-      const query = gql`
+        const query = gql`
           {
               viewer {
                   repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {

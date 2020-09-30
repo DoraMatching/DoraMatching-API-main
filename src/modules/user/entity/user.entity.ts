@@ -51,7 +51,6 @@ export class UserEntity implements IUserModel {
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword(): Promise<void> {
-        console.log('hashPassword');
         this.password = await bcrypt.hash(this.password, 10);
     }
 
