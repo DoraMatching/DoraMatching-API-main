@@ -49,16 +49,10 @@ export class UserEntity implements IUserModel {
     updatedAt: Date;
 
     @BeforeInsert()
-    async hashPassword(): Promise<void> {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
-
     @BeforeUpdate()
-    async updateHashPassword(): Promise<void> {
-        const isNewPassword = await this.comparePassword(this.password);
-        if (isNewPassword) {
-            this.password = await bcrypt.hash(this.password, 10);
-        }
+    async hashPassword(): Promise<void> {
+        console.log('hashPassword');
+        this.password = await bcrypt.hash(this.password, 10);
     }
 
     @BeforeInsert()

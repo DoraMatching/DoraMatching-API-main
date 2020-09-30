@@ -76,15 +76,15 @@ export class UserService {
     }
 
     async updateUser(id: string, user: Partial<UpdateUser>): Promise<UserRO> {
-        const foundUser = await this.userRepository.findOne({ id });
-
-        Object.keys(user).forEach(key => {
-            foundUser[key] = user[key];
-        });
+        const { password, ...foundUser } = await this.userRepository.findOne({ id });
 
         if (foundUser) {
+            Object.keys(user).forEach(key => {
+                foundUser[key] = user[key];
+            });
+
             try {
-                await this.userRepository.save(foundUser);
+                await this.userRepository.update(foundUser.id, foundUser);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
