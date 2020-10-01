@@ -1,5 +1,16 @@
 import { AppResources } from '@/app.roles';
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpException,
+    HttpStatus,
+    Param,
+    Patch,
+    Post,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { rolesFilter } from '@shared/access-control/roles-filter';
@@ -15,10 +26,11 @@ import { UserService } from './user.service';
 @ApiTags('user')
 export class UserController {
     constructor(
-        private readonly userService: UserService,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder
-    ) { }
+      private readonly userService: UserService,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
+    ) {
+    }
 
     @Auth()
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
@@ -100,7 +112,7 @@ export class UserController {
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
-        @User() user: JwtUser
+      @User() user: JwtUser,
     ) {
         return user;
     }

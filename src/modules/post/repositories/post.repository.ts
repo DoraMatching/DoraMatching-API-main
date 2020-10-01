@@ -13,6 +13,7 @@ export class PostRepository extends Repository<PostEntity> {
               'user.id',
               'user.name',
               'user.roles',
+              'user.avatarUrl',
           ])
           .orderBy('post.createdAt', order)
           .skip(limit * (page - 1))
@@ -29,6 +30,7 @@ export class PostRepository extends Repository<PostEntity> {
               'user.id',
               'user.name',
               'user.roles',
+              'user.avatarUrl',
           ])
           .getOne();
 

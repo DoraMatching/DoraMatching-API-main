@@ -5,8 +5,8 @@ import { apiUrl } from './config';
 @Controller()
 export class AppController {
 
-  @Get()
-  getHello(@Res() res: Response) {
-    return res.redirect(`${apiUrl}/docs`);
-  }
+    @Get()
+    getHello(@Res() res: Response) {
+        return res.redirect(`${apiUrl}/docs`);
+    }
 }

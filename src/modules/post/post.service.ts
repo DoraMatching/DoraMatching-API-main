@@ -38,7 +38,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         try {
             await this.postRepository.save(newPost);
         } catch ({ detail }) {
-            throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return newPost;
     }
@@ -48,15 +48,17 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         return customPaginate<PostRO>(data, pagOpts);
     }
 
-    findOne(id: string): Promise<PostRO> {
-        return this.postRepository.findOne({ where: { id }, relations: ['author'] });
+    async findOne(id: string): Promise<PostRO> {
+        const foundPost = await this.postRepository.getPost(id);
+        if (!foundPost) throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+        else return foundPost;
     }
 
     async updatePost(id: string, data: UpdatePostDTO): Promise<PostRO> {
         try {
             await this.postRepository.update(id, data);
         } catch ({ detail }) {
-            throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return this.postRepository.getPost(id);
     }

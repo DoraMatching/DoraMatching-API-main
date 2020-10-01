@@ -89,7 +89,7 @@ export class UserService {
             try {
                 await this.userRepository.save(foundUser);
             } catch ({ detail }) {
-                throw new HttpException(detail || 'Error', HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return (await this.userRepository.findOne({ id })).toResponseObject(false);
         } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);

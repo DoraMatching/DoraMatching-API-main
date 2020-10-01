@@ -10,18 +10,19 @@ import { roles } from './app.roles';
 import { mailerConfig } from './config';
 
 @Module({
-  imports: [
-    GraphQLModule.forRoot({
-      typePaths: ['./**/*.graphql'],
-      context: ({ req }) => ({ headers: req.headers })
-    }),
-    TypeOrmModule.forRoot(),
-    AccessControlModule.forRoles(roles),
-    MailerModule.forRoot(mailerConfig),
-    UserModule,
-    PostModule
-  ],
-  controllers: [AppController],
-  providers: [],
+    imports: [
+        GraphQLModule.forRoot({
+            typePaths: ['./**/*.graphql'],
+            context: ({ req }) => ({ headers: req.headers }),
+        }),
+        TypeOrmModule.forRoot(),
+        AccessControlModule.forRoles(roles),
+        MailerModule.forRoot(mailerConfig),
+        UserModule,
+        PostModule,
+    ],
+    controllers: [AppController],
+    providers: [],
 })
-export class AppModule { }
+export class AppModule {
+}

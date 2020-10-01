@@ -48,6 +48,20 @@ export class PostController {
     }
 
     @Auth()
+    @ApiOperation({ summary: 'Get posts by :id', description: 'Return 1 post with :id' })
+    @ApiResponse({ type: [PostRO], status: 200 })
+    @PaginateSwagger()
+    @UsePipes(ValidationPipe)
+    @Get('post/:id')
+    async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPagination<IPostRO>> {
+        const foundPost = await this.postService.findOne(id);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, foundPost.author.id);
+        if (permissions.granted) {
+            return permissions.filter(foundPost);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    @Auth()
     @ApiOperation({ summary: 'Create post', description: 'Return post created' })
     @ApiResponse({ type: [PostRO], status: 201 })
     @UsePipes(ValidationPipe)
@@ -57,7 +71,7 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Create post', description: 'Return post created' })
+    @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: [PostRO], status: 201 })
     @UsePipes(ValidationPipe)
     @Patch('post/:id')
