@@ -2,6 +2,7 @@ import { BaseService } from '@/commons/base-service';
 import { isEnableCache } from '@/config/database.config';
 import { customPaginate } from '@/shared/pagination/paginate-custom';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
@@ -9,7 +10,6 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
-import { UpdatePostDTO } from '@post/dto/update-post.dto';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {

@@ -1,5 +1,5 @@
-import { IPostModel } from '@post/dto/post.model';
 import { ApiProperty } from '@nestjs/swagger';
+import { IPostModel } from '@post/dto/post.model';
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export type IUpdatePostDTO = Omit<IPostModel, 'id' | 'author' | 'createdAt' | 'updatedAt'>;

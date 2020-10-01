@@ -1,4 +1,5 @@
 import { AppResources } from '@/app.roles';
+import { apiUrl } from '@/config';
 import {
     Body,
     Controller,
@@ -7,9 +8,7 @@ import {
     HttpStatus,
     Param,
     Patch,
-    Post, Query,
-    UsePipes,
-    ValidationPipe,
+    Post, Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { grantPermission } from '@shared/access-control/grant-permission';
@@ -21,7 +20,6 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
 import { User } from './user.decorator';
 import { UserService } from './user.service';
-import { apiUrl } from '@/config';
 
 @Controller()
 @ApiTags('user')
@@ -36,7 +34,6 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
-    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
     @Get('users')
     async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
@@ -49,7 +46,6 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
-    @UsePipes(ValidationPipe)
     @Get('user/:id')
     async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, id);
@@ -62,7 +58,6 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
-    @UsePipes(ValidationPipe)
     @Patch('user/:id')
     async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', user, id);
@@ -75,7 +70,6 @@ export class UserController {
 
     @ApiOperation({ summary: 'User basic login', description: 'Return user' })
     @ApiResponse({ type: UserRO, status: 200 })
-    @UsePipes(ValidationPipe)
     @Post('login')
     login(@Body() data: LoginUserDTO): Promise<IUserRO> {
         return this.userService.login(data);
@@ -84,7 +78,6 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Create user', description: 'Return user created' })
     @ApiResponse({ type: UserRO, status: 201 })
-    @UsePipes(ValidationPipe)
     @Post('register')
     register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<IUserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', user, null);
@@ -96,7 +89,6 @@ export class UserController {
 
     @ApiOperation({ summary: 'User Github login' })
     @ApiResponse({ type: UserRO, status: 200 })
-    @UsePipes(ValidationPipe)
     @Post('github')
     githubLogin(@Body() { accessToken }: GithubUserLogin) {
         return this.userService.githubLogin(accessToken);

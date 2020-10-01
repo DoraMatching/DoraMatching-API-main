@@ -12,7 +12,7 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 import { IUserModel, JwtUser, UserRO } from '../dto';
 

@@ -5,7 +5,7 @@ import { PaginateParams } from './paginate.params';
 
 export function customPaginate<T>({ entities, count }: EntityResults<BaseEntity>, { route, order, limit, page }: PaginateParams): IPagination<T> {
     const entitiesLength = entities.length;
-    const totalPages = Math.ceil(count / entitiesLength);
+    const totalPages = Math.ceil(count / entitiesLength) || 1;
     return {
         items: entities,
         links: {

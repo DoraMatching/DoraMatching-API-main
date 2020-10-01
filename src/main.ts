@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
@@ -13,6 +13,14 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.use(helmet());
+    app.useGlobalPipes(
+      new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          dismissDefaultMessages: true,
+          validationError: { target: false },
+      }),
+    );
 
     if (environment === 'development') {
         app.enableCors();

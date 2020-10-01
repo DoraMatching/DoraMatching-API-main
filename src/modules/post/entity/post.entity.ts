@@ -7,7 +7,7 @@ import {
     JoinTable,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 import { IPostModel } from '../dto';
 

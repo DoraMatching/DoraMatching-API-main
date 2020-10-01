@@ -1,44 +1,40 @@
 import { AppResources } from '@/app.roles';
+import { apiUrl } from '@/config';
 import {
-    Body, ClassSerializerInterceptor,
-    Controller, Delete,
+    Body, Controller, Delete,
     Get, HttpCode,
     HttpException,
     HttpStatus,
     Param,
     Patch,
-    Post, Query, UseInterceptors,
-    UsePipes,
-    ValidationPipe,
+    Post, Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, Paginate, paginateFilter, PaginateParams, PaginateSwagger } from '@shared/pagination/';
+import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
+import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination/';
+import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto/';
 import { User } from '@user/user.decorator';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
-import { UpdatePostDTO } from '@post/dto/update-post.dto';
-import { FindOneParams } from '@shared/pipes/find-one.params';
-import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
-import { apiUrl } from '@/config';
 
 @Controller()
 @ApiTags('post')
 export class PostController {
     constructor(
-      private readonly postService: PostService,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+        private readonly postService: PostService,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder,
     ) {
     }
 
     @Auth()
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
     @ApiResponse({ type: [PostRO], status: 200 })
-    @UsePipes(new ValidationPipe({ transform: true }))
     @Get('posts')
     async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IPostRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, null);
@@ -51,7 +47,6 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Get post by :id', description: 'Return 1 post with :id' })
     @ApiResponse({ type: PostRO, status: 200 })
-    @UsePipes(ValidationPipe)
     @Get('post/:id')
     async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPostRO> {
         const foundPost = await this.postService.findOne(id);
@@ -64,7 +59,6 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Delete post by :id', description: 'Return a message' })
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
-    @UsePipes(ValidationPipe)
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
     async deletePostById(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IDeleteResultDTO> {
@@ -81,7 +75,6 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Create post', description: 'Return post created' })
     @ApiResponse({ type: PostRO, status: 201 })
-    @UsePipes(ValidationPipe)
     @Post('post')
     async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
         return this.postService.createPost(data, user);
@@ -90,7 +83,6 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
-    @UsePipes(ValidationPipe)
     @Patch('post/:id')
     async updatePost(@Body() data: UpdatePostDTO, @User() user: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
         const post = await this.postService.findOne(id);
@@ -100,13 +92,4 @@ export class PostController {
             return permissions.filter(updatedPost);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
-
-    // @UsePipes(new PaginatePipe())
-    @UseInterceptors(ClassSerializerInterceptor)
-    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-    @Get('test')
-    test(@Query() pageOptions: PaginateParams) {
-        return pageOptions;
-    }
-
 }

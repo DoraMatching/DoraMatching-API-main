@@ -1,7 +1,7 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
 import { UserEntity } from '@user/entity/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { AvatarGenerator } from 'random-avatar-generator';
+import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
