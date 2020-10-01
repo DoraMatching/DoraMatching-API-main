@@ -50,7 +50,7 @@ export class PostController {
 
     @Auth()
     @ApiOperation({ summary: 'Get post by :id', description: 'Return 1 post with :id' })
-    @ApiResponse({ type: [PostRO], status: 200 })
+    @ApiResponse({ type: PostRO, status: 200 })
     @UsePipes(ValidationPipe)
     @Get('post/:id')
     async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPostRO> {
@@ -63,7 +63,7 @@ export class PostController {
 
     @Auth()
     @ApiOperation({ summary: 'Delete post by :id', description: 'Return a message' })
-    @ApiResponse({ type: [DeleteResultDTO], status: 204 })
+    @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @UsePipes(ValidationPipe)
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
@@ -80,7 +80,7 @@ export class PostController {
 
     @Auth()
     @ApiOperation({ summary: 'Create post', description: 'Return post created' })
-    @ApiResponse({ type: [PostRO], status: 201 })
+    @ApiResponse({ type: PostRO, status: 201 })
     @UsePipes(ValidationPipe)
     @Post('post')
     async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
@@ -89,7 +89,7 @@ export class PostController {
 
     @Auth()
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
-    @ApiResponse({ type: [PostRO], status: 201 })
+    @ApiResponse({ type: PostRO, status: 201 })
     @UsePipes(ValidationPipe)
     @Patch('post/:id')
     async updatePost(@Body() data: UpdatePostDTO, @User() user: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
