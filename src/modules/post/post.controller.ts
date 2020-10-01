@@ -1,8 +1,8 @@
 import { AppResources } from '@/app.roles';
 import {
     Body,
-    Controller,
-    Get,
+    Controller, Delete,
+    Get, HttpCode,
     HttpException,
     HttpStatus,
     Param,
@@ -22,6 +22,7 @@ import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { FindOneParams } from '@shared/pipes/find-one.params';
+import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
 
 @Controller()
 @ApiTags('post')
@@ -48,15 +49,32 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get posts by :id', description: 'Return 1 post with :id' })
+    @ApiOperation({ summary: 'Get post by :id', description: 'Return 1 post with :id' })
     @ApiResponse({ type: [PostRO], status: 200 })
     @UsePipes(ValidationPipe)
     @Get('post/:id')
-    async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPagination<IPostRO>> {
+    async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPostRO> {
         const foundPost = await this.postService.findOne(id);
         const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, foundPost.author.id);
         if (permissions.granted) {
             return permissions.filter(foundPost);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    @Auth()
+    @ApiOperation({ summary: 'Delete post by :id', description: 'Return a message' })
+    @ApiResponse({ type: [DeleteResultDTO], status: 204 })
+    @UsePipes(ValidationPipe)
+    @HttpCode(HttpStatus.ACCEPTED)
+    @Delete('post/:id')
+    async deletePostById(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IDeleteResultDTO> {
+        const foundPost = await this.postService.findOne(id);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', user, foundPost.author.id);
+        if (permissions.granted) {
+            await this.postService.deletePostById(foundPost.id);
+            return {
+                message: `Delete post with id: ${foundPost.id}`,
+            };
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 

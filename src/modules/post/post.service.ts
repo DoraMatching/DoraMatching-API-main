@@ -20,6 +20,10 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         super(postRepository);
     }
 
+    async deletePostById(id: string) {
+        return this.postRepository.delete(id);
+    }
+
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
         const result = await paginate<PostEntity>(this.postRepository, {
             limit,
