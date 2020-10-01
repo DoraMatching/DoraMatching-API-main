@@ -9,18 +9,23 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
+import { UpdatePostDTO } from '@post/dto/update-post.dto';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
     constructor(
-        private readonly postRepository: PostRepository,
-        private readonly userRepository: UserRepository
+      private readonly postRepository: PostRepository,
+      private readonly userRepository: UserRepository,
     ) {
         super(postRepository);
     }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
-        const result = await paginate<PostEntity>(this.postRepository, { limit, page, route }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
+        const result = await paginate<PostEntity>(this.postRepository, {
+            limit,
+            page,
+            route,
+        }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
         return paginateOrder(result, order);
     }
 
@@ -28,7 +33,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         const user = await this.userRepository.findOne({ where: { id }, select: ['id', 'name', 'username', 'email'] });
         const newPost = this.postRepository.create({
             ...data,
-            author: user
+            author: user,
         });
         try {
             await this.postRepository.save(newPost);
@@ -41,5 +46,18 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     async getAllPosts(pagOpts: PaginateParams): Promise<IPagination<PostRO>> {
         const data = await this.postRepository.getAllPosts(pagOpts);
         return customPaginate<PostRO>(data, pagOpts);
+    }
+
+    findOne(id: string): Promise<PostRO> {
+        return this.postRepository.findOne({ where: { id }, relations: ['author'] });
+    }
+
+    async updatePost(id: string, data: UpdatePostDTO): Promise<PostRO> {
+        try {
+            await this.postRepository.update(id, data);
+        } catch ({ detail }) {
+            throw new HttpException(detail, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return this.postRepository.getPost(id);
     }
 }

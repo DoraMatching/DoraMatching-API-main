@@ -1,5 +1,16 @@
 import { AppResources } from '@/app.roles';
-import { Body, Controller, Get, HttpException, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpException,
+    HttpStatus,
+    Param,
+    Patch,
+    Post,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { Auth } from '@shared/auth/auth.decorator';
@@ -9,15 +20,18 @@ import { User } from '@user/user.decorator';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
+import { UpdatePostDTO } from '@post/dto/update-post.dto';
+import { FindOneParams } from '@shared/pipes/find-one.params';
 
 @Controller()
 @ApiTags('post')
 export class PostController {
     constructor(
-        private readonly postService: PostService,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder
-    ) { }
+      private readonly postService: PostService,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
+    ) {
+    }
 
     @Auth()
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
@@ -40,5 +54,19 @@ export class PostController {
     @Post('post')
     async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
         return this.postService.createPost(data, user);
+    }
+
+    @Auth()
+    @ApiOperation({ summary: 'Create post', description: 'Return post created' })
+    @ApiResponse({ type: [PostRO], status: 201 })
+    @UsePipes(ValidationPipe)
+    @Patch('post/:id')
+    async updatePost(@Body() data: UpdatePostDTO, @User() user: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
+        const post = await this.postService.findOne(id);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', user, post.author.id);
+        if (permissions.granted) {
+            const updatedPost = await this.postService.updatePost(id, data);
+            return permissions.filter(updatedPost);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }
