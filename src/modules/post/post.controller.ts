@@ -50,7 +50,6 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Get posts by :id', description: 'Return 1 post with :id' })
     @ApiResponse({ type: [PostRO], status: 200 })
-    @PaginateSwagger()
     @UsePipes(ValidationPipe)
     @Get('post/:id')
     async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPagination<IPostRO>> {
