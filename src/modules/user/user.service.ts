@@ -32,7 +32,7 @@ export class UserService {
         const { items, meta, links } = await paginate<UserEntity>(this.userRepository, {
             limit,
             page,
-            route: 'users',
+            route,
         }, { order: { createdAt: order }, cache: isEnableCache });
 
         return paginateOrder({

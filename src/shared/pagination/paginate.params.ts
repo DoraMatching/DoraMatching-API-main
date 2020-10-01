@@ -10,7 +10,7 @@ export class PaginateParams {
     @IsInt()
     @Min(0)
     @Type(() => Number)
-    page?: number = 1;
+    page: number;
 
     @ApiProperty()
     @IsNotEmpty()
@@ -18,13 +18,13 @@ export class PaginateParams {
     @Min(1)
     @Max(50)
     @Type(() => Number)
-    limit?: number = 20;
+    limit: number;
 
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
     @IsIn(['DESC', 'ASC'])
-    order?: Order = 'DESC';
+    order: Order;
 
     route: string;
 }

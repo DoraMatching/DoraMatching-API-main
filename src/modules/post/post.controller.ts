@@ -7,7 +7,7 @@ import {
     HttpStatus,
     Param,
     Patch,
-    Post,
+    Post, UseInterceptors,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -23,6 +23,7 @@ import { PostService } from './post.service';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
+import { PaginateInterceptor, PaginatePipe } from '@shared/pagination';
 
 @Controller()
 @ApiTags('post')
@@ -100,4 +101,12 @@ export class PostController {
             return permissions.filter(updatedPost);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
+
+    // @UsePipes(new PaginatePipe())
+    @UseInterceptors(PaginateInterceptor)
+    @Get('test')
+    test(@Paginate({ route: 'test' }) pageOptions: PaginateParams) {
+        return { mess: 'ok' };
+    }
+
 }
