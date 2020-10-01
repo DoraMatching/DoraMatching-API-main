@@ -7,6 +7,9 @@ export type ICreateUserDTO = Omit<IUserModel, 'id' | 'roles' | 'createdAt' | 'up
 export class CreateUserDTO implements ICreateUserDTO {
     @ApiProperty()
     @IsNotEmpty()
+    @Matches(/^[a-zA-Z\-]+$/, {
+        message: 'Invalid username'
+    })
     username: string;
 
     @ApiProperty()
