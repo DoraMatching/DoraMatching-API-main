@@ -7,7 +7,7 @@ import {
     HttpStatus,
     Param,
     Patch,
-    Post,
+    Post, Query,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -15,12 +15,13 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { rolesFilter } from '@shared/access-control/roles-filter';
 import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, Paginate, paginateFilter, PaginateParams, PaginateSwagger } from '@shared/pagination';
+import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
 import { User } from './user.decorator';
 import { UserService } from './user.service';
+import { apiUrl } from '@/config';
 
 @Controller()
 @ApiTags('user')
@@ -35,13 +36,12 @@ export class UserController {
     @Auth()
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
-    @PaginateSwagger()
-    @UsePipes(ValidationPipe)
+    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
     @Get('users')
-    async index(@Paginate({ route: 'users' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
+    async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
         if (permission.granted) {
-            const users = await this.userService.showAll(pagOpts);
+            const users = await this.userService.showAll({ ...pagOpts, route: `${apiUrl}/users` });
             return paginateFilter(users, permission);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }

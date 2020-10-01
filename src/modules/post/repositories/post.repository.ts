@@ -32,6 +32,7 @@ export class PostRepository extends Repository<PostEntity> {
               'user.roles',
               'user.avatarUrl',
           ])
+          .where('post.id = :id', { id })
           .getOne();
 
         return post;

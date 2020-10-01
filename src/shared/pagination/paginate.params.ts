@@ -1,30 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 
-export type Order = 'ASC' | 'DESC';
+export enum EnumOrder {
+    ASC = 'ASC',
+    DESC = 'DESC'
+}
 
 export class PaginateParams {
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ minimum: 1, default: 1 })
+    @IsOptional()
     @IsInt()
-    @Min(0)
+    @Min(1)
     @Type(() => Number)
-    page: number;
+    readonly page?: number = 1;
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ minimum: 1, maximum: 50, default: 20 })
+    @IsOptional()
     @IsInt()
     @Min(1)
     @Max(50)
     @Type(() => Number)
-    limit: number;
+    readonly limit?: number = 20;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    @IsIn(['DESC', 'ASC'])
-    order: Order;
+    @ApiProperty({ enum: EnumOrder, default: EnumOrder.DESC })
+    @IsEnum(EnumOrder, { message: `order must be one of the following values: ${Object.keys(EnumOrder).join(', ')}` })
+    @IsOptional()
+    readonly order?: EnumOrder = EnumOrder.DESC;
 
     route: string;
 }

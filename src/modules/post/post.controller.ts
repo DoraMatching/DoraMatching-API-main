@@ -1,13 +1,13 @@
 import { AppResources } from '@/app.roles';
 import {
-    Body,
+    Body, ClassSerializerInterceptor,
     Controller, Delete,
     Get, HttpCode,
     HttpException,
     HttpStatus,
     Param,
     Patch,
-    Post, UseInterceptors,
+    Post, Query, UseInterceptors,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -23,7 +23,7 @@ import { PostService } from './post.service';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
-import { PaginateInterceptor, PaginatePipe } from '@shared/pagination';
+import { apiUrl } from '@/config';
 
 @Controller()
 @ApiTags('post')
@@ -38,13 +38,12 @@ export class PostController {
     @Auth()
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
     @ApiResponse({ type: [PostRO], status: 200 })
-    @PaginateSwagger()
-    @UsePipes(ValidationPipe)
+    @UsePipes(new ValidationPipe({ transform: true }))
     @Get('posts')
-    async index(@Paginate({ route: 'post' }) pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IPostRO>> {
+    async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IPostRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, null);
         if (permission.granted) {
-            const posts = await this.postService.getAllPosts(pagOpts);
+            const posts = await this.postService.getAllPosts({ ...pagOpts, route: `${apiUrl}/posts` });
             return paginateFilter(posts, permission);
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
@@ -103,10 +102,11 @@ export class PostController {
     }
 
     // @UsePipes(new PaginatePipe())
-    @UseInterceptors(PaginateInterceptor)
+    @UseInterceptors(ClassSerializerInterceptor)
+    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
     @Get('test')
-    test(@Paginate({ route: 'test' }) pageOptions: PaginateParams) {
-        return { mess: 'ok' };
+    test(@Query() pageOptions: PaginateParams) {
+        return pageOptions;
     }
 
 }

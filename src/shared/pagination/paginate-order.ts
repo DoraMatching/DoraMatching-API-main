@@ -1,7 +1,7 @@
 import { IPagination } from './paginate.interface';
-import { Order } from './paginate.params';
+import { EnumOrder } from './paginate.params';
 
-function addOrderQuery(links: any, order: Order): any {
+function addOrderQuery(links: any, order: EnumOrder): any {
     const _links = {};
     Object.keys(links).map(pageName => {
         const pageData = links[pageName];
@@ -10,7 +10,7 @@ function addOrderQuery(links: any, order: Order): any {
     return _links;
 }
 
-export function paginateOrder<T>({ items, links, meta }, order: Order): IPagination<T> {
+export function paginateOrder<T>({ items, links, meta }, order: EnumOrder): IPagination<T> {
     return {
         items, meta,
         links: addOrderQuery(links, order),
