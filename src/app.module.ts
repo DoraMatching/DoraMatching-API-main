@@ -8,6 +8,7 @@ import { AccessControlModule } from 'nest-access-control';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
+import { QuestionModule } from './modules/question/question.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { mailerConfig } from './config';
         MailerModule.forRoot(mailerConfig),
         UserModule,
         PostModule,
+        QuestionModule,
     ],
     controllers: [AppController],
     providers: [],
