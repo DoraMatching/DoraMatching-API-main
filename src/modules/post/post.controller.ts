@@ -66,7 +66,7 @@ export class PostController {
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
-    updatePost(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser,): Promise<PostRO> {
+    updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser): Promise<PostRO> {
         return this.postService.updatePost(id, data, jwtUser);
     }
 }
