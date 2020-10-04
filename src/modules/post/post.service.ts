@@ -25,8 +25,16 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         super(postRepository);
     }
 
-    async deletePostById(id: string) {
-        return this.postRepository.delete(id);
+    async deletePostById(id: string, jwtUser: JwtUser) {
+        const foundPost = await this.findOne(id, jwtUser);
+
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
+        if (permissions.granted) {
+            await this.postRepository.delete(id);
+            return {
+                message: `Delete post with id: ${foundPost.id}`,
+            };
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {

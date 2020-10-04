@@ -53,15 +53,8 @@ export class PostController {
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
-    async deletePostById(@User() jwtUser: JwtUser, @Param() { id }: FindOneParams): Promise<IDeleteResultDTO> {
-        const foundPost = await this.postService.findOne(id, jwtUser);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
-        if (permissions.granted) {
-            await this.postService.deletePostById(foundPost.id);
-            return {
-                message: `Delete post with id: ${foundPost.id}`,
-            };
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    async deletePostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        return this.postService.deletePostById(id, jwtUser);
     }
 
     @Auth()
