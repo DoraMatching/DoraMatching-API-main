@@ -44,12 +44,8 @@ export class PostController {
     @ApiOperation({ summary: 'Get post by :id', description: 'Return 1 post with :id' })
     @ApiResponse({ type: PostRO, status: 200 })
     @Get('post/:id')
-    async getPostByID(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IPostRO> {
-        const foundPost = await this.postService.findOne(id);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, foundPost.author.id);
-        if (permissions.granted) {
-            return permissions.filter(foundPost);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    getPostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IPostRO> {
+        return this.postService.findOne(id, jwtUser);
     }
 
     @Auth()
@@ -57,9 +53,9 @@ export class PostController {
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
-    async deletePostById(@User() user: JwtUser, @Param() { id }: FindOneParams): Promise<IDeleteResultDTO> {
-        const foundPost = await this.postService.findOne(id);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', user, foundPost.author.id);
+    async deletePostById(@User() jwtUser: JwtUser, @Param() { id }: FindOneParams): Promise<IDeleteResultDTO> {
+        const foundPost = await this.postService.findOne(id, jwtUser);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
         if (permissions.granted) {
             await this.postService.deletePostById(foundPost.id);
             return {
@@ -80,9 +76,9 @@ export class PostController {
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
-    async updatePost(@Body() data: UpdatePostDTO, @User() user: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
-        const post = await this.postService.findOne(id);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', user, post.author.id);
+    async updatePost(@Body() data: UpdatePostDTO, @User() jwtUser: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
+        const post = await this.postService.findOne(id, jwtUser);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
         if (permissions.granted) {
             const updatedPost = await this.postService.updatePost(id, data);
             return permissions.filter(updatedPost);

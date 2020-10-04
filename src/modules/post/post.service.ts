@@ -61,10 +61,15 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async findOne(id: string): Promise<PostRO> {
+    async findOne(id: string, jwtUser: JwtUser): Promise<PostRO> {
         const foundPost = await this.postRepository.getPost(id);
         if (!foundPost) throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
-        else return foundPost;
+        else {
+            const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
+            if (permissions.granted) {
+                return permissions.filter(foundPost);
+            } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+        }
     }
 
     async updatePost(id: string, data: UpdatePostDTO): Promise<PostRO> {
