@@ -1,9 +1,7 @@
-import { AppResources } from '@/app.roles';
 import { apiUrl } from '@/config';
 import {
     Body, Controller, Delete,
     Get, HttpCode,
-    HttpException,
     HttpStatus,
     Param,
     Patch,
@@ -11,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
-import { grantPermission } from '@shared/access-control/grant-permission';
 import { Auth } from '@shared/auth/auth.decorator';
 import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
 import { IPagination, PaginateParams } from '@shared/pagination/';
@@ -69,12 +66,7 @@ export class PostController {
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
-    async updatePost(@Body() data: UpdatePostDTO, @User() jwtUser: JwtUser, @Param() { id }: FindOneParams): Promise<PostRO> {
-        const post = await this.postService.findOne(id, jwtUser);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
-        if (permissions.granted) {
-            const updatedPost = await this.postService.updatePost(id, data);
-            return permissions.filter(updatedPost);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    updatePost(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser,): Promise<PostRO> {
+        return this.postService.updatePost(id, data, jwtUser);
     }
 }

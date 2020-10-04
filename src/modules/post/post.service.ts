@@ -80,12 +80,17 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         }
     }
 
-    async updatePost(id: string, data: UpdatePostDTO): Promise<PostRO> {
-        try {
-            await this.postRepository.update(id, data);
-        } catch ({ detail }) {
-            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return this.postRepository.getPost(id);
+    async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
+        const post = await this.findOne(id, jwtUser);
+        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
+        if (permissions.granted) {
+            try {
+                await this.postRepository.update(id, data);
+                const result = await this.postRepository.getPost(id);
+                return permissions.filter(result);
+            } catch ({ detail }) {
+                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }
