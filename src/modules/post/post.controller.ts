@@ -58,7 +58,7 @@ export class PostController {
     @ApiOperation({ summary: 'Create post', description: 'Return post created' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Post('post')
-    async createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
+    createPost(@Body() data: CreatePostDTO, @User() user: JwtUser): Promise<PostRO> {
         return this.postService.createPost(data, user);
     }
 
