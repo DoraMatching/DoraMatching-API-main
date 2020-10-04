@@ -14,7 +14,7 @@ import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { Auth } from '@shared/auth/auth.decorator';
 import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
-import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination/';
+import { IPagination, PaginateParams } from '@shared/pagination/';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto/';
 import { User } from '@user/user.decorator';
@@ -36,12 +36,8 @@ export class PostController {
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
     @ApiResponse({ type: [PostRO], status: 200 })
     @Get('posts')
-    async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IPostRO>> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', user, null);
-        if (permission.granted) {
-            const posts = await this.postService.getAllPosts({ ...pagOpts, route: `${apiUrl}/posts` });
-            return paginateFilter(posts, permission);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IPostRO>> {
+        return this.postService.getAllPosts({ ...pagOpts, route: `${apiUrl}/posts` }, jwtUser);
     }
 
     @Auth()

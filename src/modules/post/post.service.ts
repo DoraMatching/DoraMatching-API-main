@@ -1,11 +1,14 @@
+import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
 import { isEnableCache } from '@/config/database.config';
+import { grantPermission } from '@/shared/access-control/grant-permission';
 import { customPaginate } from '@/shared/pagination/paginate-custom';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
-import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
+import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
@@ -14,8 +17,10 @@ import { PostRepository } from './repositories/post.repository';
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
     constructor(
-      private readonly postRepository: PostRepository,
-      private readonly userRepository: UserRepository,
+        private readonly postRepository: PostRepository,
+        private readonly userRepository: UserRepository,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder
     ) {
         super(postRepository);
     }
@@ -47,9 +52,13 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         return newPost;
     }
 
-    async getAllPosts(pagOpts: PaginateParams): Promise<IPagination<PostRO>> {
-        const data = await this.postRepository.getAllPosts(pagOpts);
-        return customPaginate<PostRO>(data, pagOpts);
+    async getAllPosts(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<PostRO>> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
+        if (permission.granted) {
+            const data = await this.postRepository.getAllPosts(pagOpts);
+            const result = customPaginate<PostRO>(data, pagOpts);
+            return paginateFilter(result, permission);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async findOne(id: string): Promise<PostRO> {
