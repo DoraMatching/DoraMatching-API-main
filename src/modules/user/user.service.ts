@@ -2,7 +2,7 @@ import { feUrl, isEnableCache, mailAddress } from '@/config';
 import { ghQuery } from '@/shared/graphql/github.graphql';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IPagination, paginateOrder, PaginateParams } from '@shared/pagination';
+import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
 import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
 import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
@@ -11,6 +11,7 @@ import {
     CreateUserDTO,
     IGithubSchema,
     IGithubUserLangs,
+    IUserRO,
     IViewer,
     LoginUserDTO,
     UpdateUser,
@@ -19,33 +20,50 @@ import {
 } from './dto';
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
+import { JwtUser } from './dto/jwt-payload-user.dto';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { AppResources } from '@/app.roles';
+import { grantPermission } from '@/shared/access-control/grant-permission';
+import { rolesFilter } from '@/shared/access-control/roles-filter';
 
 @Injectable()
 export class UserService {
     constructor(
-      private readonly userRepository: UserRepository,
-      private readonly mailerService: MailerService,
+        private readonly userRepository: UserRepository,
+        private readonly mailerService: MailerService,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder
     ) {
     }
 
-    async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<UserRO>> {
-        const { items, meta, links } = await paginate<UserEntity>(this.userRepository, {
-            limit,
-            page,
-            route,
-        }, { order: { createdAt: order }, cache: isEnableCache });
+    async showAll({ limit, page, order, route }: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IUserRO>> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
 
-        return paginateOrder({
-            items: items.map(user => user.toResponseObject(false)),
-            links, meta,
-        }, order);
+        if (permission.granted) {
+            const { items, meta, links } = await paginate<UserEntity>(this.userRepository, {
+                limit,
+                page,
+                route,
+            }, { order: { createdAt: order }, cache: isEnableCache });
+
+            const result = paginateOrder<UserRO>({
+                items: items.map(user => user.toResponseObject(false)),
+                links, meta
+            }, order);
+
+            return paginateFilter<UserRO>(result, permission);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getUser({ id }: Partial<UserModel>): Promise<UserRO> {
-        const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
-        if (user) {
-            return user.toResponseObject(false);
-        } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    async getUser({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, id);
+        if (permission.granted) {
+            const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
+            if (user) {
+                const result = user.toResponseObject(false);
+                return permission.filter(result);
+            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async findByUsernameOrEmail(username: string, email?: string): Promise<UserRO> {
@@ -64,35 +82,51 @@ export class UserService {
         return user.toResponseObject();
     }
 
-    async register(data: CreateUserDTO): Promise<UserRO> {
-        const { username, email } = data;
-        let user = await this.userRepository.findOne({ where: [{ username }, { email }] });
-        if (user) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-        }
-        user = this.userRepository.create(data);
-        await this.userRepository.save(user);
-        return user.toResponseObject();
+    async register(data: CreateUserDTO, jwtUser: JwtUser): Promise<UserRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', jwtUser, null);
+        if (permission.granted) {
+            data = permission.filter(data);
+
+            const { username, email } = data;
+            let user = await this.userRepository.findOne({ where: [{ username }, { email }] });
+            if (user) {
+                throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+            }
+            user = this.userRepository.create(data);
+            user = await this.userRepository.save(user);
+            return user.toResponseObject();
+
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+
+
+
     }
 
-    async updateUser(id: string, user: Partial<UpdateUser>): Promise<UserRO> {
-        const foundUser = await this.userRepository.findOne({ id });
+    async updateUser(id: string, updateUser: Partial<UpdateUser>, jwtUser: JwtUser): Promise<UserRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', jwtUser, id);
+        if (permission.granted) {
+            updateUser = permission.filter(updateUser);
+            updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
 
-        if (foundUser) {
-            Object.keys(user).forEach(key => {
-                if (key === 'password' && user['password']) {
-                    foundUser.password = user.password;
-                } else
-                    foundUser[key] = user[key];
-            });
+            const foundUser = await this.userRepository.findOne({ id });
 
-            try {
-                await this.userRepository.save(foundUser);
-            } catch ({ detail }) {
-                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return (await this.userRepository.findOne({ id })).toResponseObject(false);
-        } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+            if (foundUser) {
+                Object.keys(updateUser).forEach(key => {
+                    if (key === 'password' && updateUser['password']) {
+                        foundUser.password = updateUser.password;
+                    } else
+                        foundUser[key] = updateUser[key];
+                });
+
+                try {
+                    await this.userRepository.save(foundUser);
+                } catch ({ detail }) {
+                    throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                return (await this.userRepository.findOne({ id })).toResponseObject(false);
+            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {

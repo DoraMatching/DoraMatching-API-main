@@ -18,9 +18,11 @@ export class CreateUserDTO implements ICreateUserDTO {
     email: string;
 
     @ApiProperty()
+    @IsOptional()
     name: string;
 
     @ApiProperty()
+    @IsOptional()
     @IsUrl()
     avatarUrl: string;
 

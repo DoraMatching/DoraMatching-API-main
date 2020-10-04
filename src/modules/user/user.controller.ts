@@ -4,19 +4,14 @@ import {
     Body,
     Controller,
     Get,
-    HttpException,
-    HttpStatus,
     Param,
     Patch,
     Post, Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { grantPermission } from '@shared/access-control/grant-permission';
-import { rolesFilter } from '@shared/access-control/roles-filter';
 import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
+import { IPagination, PaginateParams } from '@shared/pagination';
 import { FindOneParams } from '@shared/pipes/find-one.params';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
 import { User } from './user.decorator';
 import { UserService } from './user.service';
@@ -24,48 +19,30 @@ import { UserService } from './user.service';
 @Controller()
 @ApiTags('user')
 export class UserController {
-    constructor(
-      private readonly userService: UserService,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
-    ) {
-    }
+    constructor(private readonly userService: UserService) { }
 
     @Auth()
     @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
     @ApiResponse({ type: [UserRO], status: 200 })
     @Get('users')
-    async index(@Query() pagOpts: PaginateParams, @User() user: JwtUser): Promise<IPagination<IUserRO>> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, null);
-        if (permission.granted) {
-            const users = await this.userService.showAll({ ...pagOpts, route: `${apiUrl}/users` });
-            return paginateFilter(users, permission);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IUserRO>> {
+        return this.userService.showAll({ ...pagOpts, route: `${apiUrl}/users` }, jwtUser);
     }
 
     @Auth()
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
-    async getUser(@Param() { id }: FindOneParams, @User() user: JwtUser): Promise<IUserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', user, id);
-        if (permission.granted) {
-            const foundUser = await this.userService.getUser({ id });
-            return permission.filter(foundUser);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
+        return this.userService.getUser({ id }, jwtUser);
     }
 
     @Auth()
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Patch('user/:id')
-    async updateUser(@Param() { id }: FindOneParams, @User() user: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', user, id);
-        if (permission.granted) {
-            updateUser = permission.filter(updateUser);
-            updateUser.roles = rolesFilter(user.roles, updateUser.roles);
-            return await this.userService.updateUser(id, updateUser);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    updateUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
+        return this.userService.updateUser(id, updateUser, jwtUser);
     }
 
     @ApiOperation({ summary: 'User basic login', description: 'Return user' })
@@ -79,12 +56,8 @@ export class UserController {
     @ApiOperation({ summary: 'Create user', description: 'Return user created' })
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
-    register(@Body() data: CreateUserDTO, @User() user: JwtUser): Promise<IUserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', user, null);
-        if (permission.granted) {
-            data = permission.filter(data);
-            return this.userService.register(data);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    register(@Body() data: CreateUserDTO, @User() jwtUser: JwtUser): Promise<IUserRO> {
+        return this.userService.register(data, jwtUser);
     }
 
     @ApiOperation({ summary: 'User Github login' })
@@ -104,7 +77,7 @@ export class UserController {
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
-      @User() user: JwtUser,
+        @User() user: JwtUser,
     ) {
         return user;
     }
