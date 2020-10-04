@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 export class GithubUser {
     @ApiProperty()
@@ -36,6 +36,7 @@ export class GithubUserLogin {
     user?: GithubUser;
 
     @ApiProperty()
+    @IsNotEmpty()
     accessToken: string;
 }
 

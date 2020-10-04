@@ -21,10 +21,18 @@ export const mailerConfig = {
         from: 'nest-modules <modules@nestjs.com>',
     },
     template: {
-        dir: join(process.cwd(), 'src/templates'),
+        dir: join(process.cwd(), 'src/templates/pages'),
         adapter: new HandlebarsAdapter(),
         options: {
             strict: true,
         },
     },
+    options: {
+        partials: {
+          dir: join(process.cwd(), 'src/templates/partials'),
+          options: {
+            strict: true,
+          },
+        }
+      }
 }

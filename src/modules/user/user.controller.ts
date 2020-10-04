@@ -1,4 +1,3 @@
-import { AppResources } from '@/app.roles';
 import { apiUrl } from '@/config';
 import {
     Body,
@@ -73,7 +72,6 @@ export class UserController {
         return this.userService.githubLangs(accessToken);
     }
 
-    @Auth({ resource: AppResources.USER, action: 'read', possession: 'any' })
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
