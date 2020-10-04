@@ -46,8 +46,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         return paginateOrder(result, order);
     }
 
-    async createPost(data: CreatePostDTO, { id }: JwtUser): Promise<PostRO> {
-        const user = await this.userRepository.findOne({ where: { id }, select: ['id', 'name', 'username', 'email'] });
+    async createPost(data: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
+        const user = await this.userRepository.findOne({ where: { id: jwtUser.id }, select: ['id', 'name', 'username', 'email'] });
         const newPost = this.postRepository.create({
             ...data,
             author: user,
