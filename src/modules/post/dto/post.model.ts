@@ -3,8 +3,10 @@ import { UserModel } from '@user/dto/user.model';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface IPostModel {
-    id: string;
     title: string;
+    subTitle: string;
+    featuredImage: string;
+    isDraft: boolean;
     content: string;
     tags: string[];
     author: Partial<UserModel>;
@@ -14,11 +16,20 @@ export interface IPostModel {
 
 export class PostModel implements IPostModel {
     @ApiProperty()
-    id: string;
+    @IsNotEmpty()
+    title: string;
 
     @ApiProperty()
     @IsNotEmpty()
-    title: string;
+    subTitle: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    featuredImage: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    isDraft: boolean;
 
     @ApiProperty()
     @IsNotEmpty()

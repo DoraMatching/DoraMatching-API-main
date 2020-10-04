@@ -11,6 +11,18 @@ export class UpdatePostDTO implements IUpdatePostDTO {
 
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()
+    subTitle: string;
+
+    @ApiProperty({ example: 'https://doramatching.tk/abc.jpg' })
+    @IsNotEmpty()
+    featuredImage: string;
+
+    @ApiProperty({ example: true })
+    @IsNotEmpty()
+    isDraft: boolean;
+
+    @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
+    @IsNotEmpty()
     @IsString()
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;

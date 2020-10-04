@@ -57,7 +57,7 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Delete post by :id', description: 'Return a message' })
+    @ApiOperation({ summary: 'Delete post by :id', description: 'Return a delete status message' })
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')

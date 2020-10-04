@@ -2,12 +2,24 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { IPostModel } from './post.model';
 
-export type ICreatePostDTO = Omit<IPostModel, 'id' | 'author' | 'createdAt' | 'updatedAt'>;
+export type ICreatePostDTO = Omit<IPostModel, 'author' | 'createdAt' | 'updatedAt'>;
 
 export class CreatePostDTO implements ICreatePostDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()
     title: string;
+
+    @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
+    @IsNotEmpty()
+    subTitle: string;
+
+    @ApiProperty({ example: 'https://doramatching.tk/abc.jpg' })
+    @IsNotEmpty()
+    featuredImage: string;
+
+    @ApiProperty({ example: true })
+    @IsNotEmpty()
+    isDraft: boolean;
 
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()

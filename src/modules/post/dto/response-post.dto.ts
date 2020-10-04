@@ -12,6 +12,15 @@ export class PostRO implements IPostRO {
     title: string;
 
     @ApiProperty()
+    subTitle: string;
+
+    @ApiProperty()
+    featuredImage: string;
+
+    @ApiProperty()
+    isDraft: boolean;
+
+    @ApiProperty()
     content: string;
 
     @ApiProperty()

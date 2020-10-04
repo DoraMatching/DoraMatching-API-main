@@ -7,7 +7,7 @@ import {
     JoinTable,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 import { IPostModel } from '../dto';
 
@@ -18,6 +18,15 @@ export class PostEntity extends BaseEntity implements IPostModel {
 
     @Column({ type: 'text', nullable: false })
     title: string;
+
+    @Column({ type: 'text', nullable: true })
+    subTitle: string;
+
+    @Column({ type: 'text', nullable: true })
+    featuredImage: string;
+
+    @Column({ type: 'boolean', nullable: false })
+    isDraft: boolean;
 
     @Column({ type: 'text', nullable: false })
     content: string;
