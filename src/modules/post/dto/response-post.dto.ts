@@ -1,6 +1,7 @@
 import { UserModel } from '@/modules/user/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel } from '@post/dto';
+import { TagPostModel } from '@tag-post/dto/tag-post.model';
 
 export type IPostRO = IPostModel;
 
@@ -24,7 +25,7 @@ export class PostRO implements IPostRO {
     content: string;
 
     @ApiProperty()
-    tags: string[];
+    tags: TagPostModel[];
 
     @ApiProperty({ type: () => UserModel })
     author: Partial<UserModel>;

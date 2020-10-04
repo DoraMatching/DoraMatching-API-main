@@ -1,3 +1,4 @@
+import { ITagPostModel, TagPostModel } from '@tag-post/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserModel } from '@user/dto/user.model';
 import { IsNotEmpty, IsOptional } from 'class-validator';
@@ -8,7 +9,7 @@ export interface IPostModel {
     featuredImage: string;
     isDraft: boolean;
     content: string;
-    tags: string[];
+    tags: ITagPostModel[];
     author: Partial<UserModel>;
     createdAt: Date;
     updatedAt: Date;
@@ -37,7 +38,7 @@ export class PostModel implements IPostModel {
 
     @ApiProperty()
     @IsOptional()
-    tags: string[];
+    tags: TagPostModel[];
 
     @ApiProperty()
     author: Partial<UserModel>;

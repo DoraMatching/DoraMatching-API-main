@@ -5,11 +5,13 @@ import {
     CreateDateColumn,
     Entity,
     JoinTable,
+    ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { IPostModel } from '../dto';
+import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 
 @Entity('post')
 export class PostEntity extends BaseEntity implements IPostModel {
@@ -31,8 +33,8 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @Column({ type: 'simple-array', nullable: true })
-    tags: string[];
+    @ManyToMany(() => TagPostEntity, tag => tag.posts, { eager: true })
+    tags: TagPostEntity[];
 
     @ManyToOne(() => UserEntity, author => author.posts, { cascade: true })
     @JoinTable()
