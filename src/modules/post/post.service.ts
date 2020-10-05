@@ -17,10 +17,10 @@ import { PostRepository } from './repositories/post.repository';
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
     constructor(
-        private readonly postRepository: PostRepository,
-        private readonly userRepository: UserRepository,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder
+      private readonly postRepository: PostRepository,
+      private readonly userRepository: UserRepository,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
     ) {
         super(postRepository);
     }
@@ -47,7 +47,10 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     }
 
     async createPost(data: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
-        const user = await this.userRepository.findOne({ where: { id: jwtUser.id }, select: ['id', 'name', 'username', 'email'] });
+        const user = await this.userRepository.findOne({
+            where: { id: jwtUser.id },
+            select: ['id', 'name', 'username', 'email'],
+        });
         const newPost = this.postRepository.create({
             ...data,
             author: user,
@@ -63,9 +66,13 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     async getAllPosts(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<PostRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
         if (permission.granted) {
-            const data = await this.postRepository.getAllPosts(pagOpts);
-            const result = customPaginate<PostRO>(data, pagOpts);
-            return paginateFilter(result, permission);
+            try {
+                const data = await this.postRepository.getAllPosts(pagOpts);
+                const result = customPaginate<PostRO>(data, pagOpts);
+                return paginateFilter(result, permission);
+            } catch ({ detail }) {
+                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
