@@ -13,12 +13,14 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
+import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
     constructor(
       private readonly postRepository: PostRepository,
       private readonly userRepository: UserRepository,
+      private readonly tagPostRepository: TagPostRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -46,21 +48,28 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         return paginateOrder(result, order);
     }
 
-    async createPost(data: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
-        const user = await this.userRepository.findOne({
-            where: { id: jwtUser.id },
-            select: ['id', 'name', 'username', 'email'],
-        });
-        const newPost = this.postRepository.create({
-            ...data,
-            author: user,
-        });
+    async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
+
         try {
+            const [user, _tags] = await Promise.all([
+                this.userRepository.findOne({
+                    where: { id: jwtUser.id },
+                    select: ['id', 'name', 'username', 'email'],
+                }),
+                this.tagPostRepository.findManyAndCreateIfNotExisted(tags.map(tag => tag.name)),
+            ]);
+            const newPost = this.postRepository.create({
+                ...data,
+                author: user,
+                tags: _tags,
+            });
+            console.log(newPost);
             await this.postRepository.save(newPost);
-        } catch ({ detail }) {
+            return newPost;
+        } catch ({ detail, ...errors }) {
+            console.log('ERRORS', errors);
             throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return newPost;
     }
 
     async getAllPosts(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<PostRO>> {

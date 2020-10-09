@@ -33,7 +33,8 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToMany(() => TagPostEntity, tag => tag.posts, { eager: true })
+    @ManyToMany(() => TagPostEntity, tag => tag.posts)
+    @JoinTable()
     tags: TagPostEntity[];
 
     @ManyToOne(() => UserEntity, author => author.posts, { cascade: true })

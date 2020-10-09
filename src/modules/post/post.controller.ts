@@ -5,7 +5,7 @@ import {
     HttpStatus,
     Param,
     Patch,
-    Post, Query
+    Post, Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
@@ -23,9 +23,9 @@ import { PostService } from './post.service';
 @ApiTags('post')
 export class PostController {
     constructor(
-        private readonly postService: PostService,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder,
+      private readonly postService: PostService,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
     ) {
     }
 
