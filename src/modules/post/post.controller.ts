@@ -15,19 +15,13 @@ import { IPagination, PaginateParams } from '@shared/pagination/';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto/';
 import { User } from '@user/user.decorator';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
 
 @Controller()
 @ApiTags('post')
 export class PostController {
-    constructor(
-      private readonly postService: PostService,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
-    ) {
-    }
+    constructor(private readonly postService: PostService) { }
 
     @Auth()
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
