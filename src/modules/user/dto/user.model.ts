@@ -12,8 +12,8 @@ export interface IUserModel {
     roles: AppRoles[];
     password: string;
     posts: IPostModel[];
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class UserModel implements IUserModel {

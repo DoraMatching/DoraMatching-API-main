@@ -1,8 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import {
+    IsArray,
+    IsBoolean,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    IsUrl,
+    MinLength,
+    ValidateNested,
+} from 'class-validator';
 import { IPostModel } from './post.model';
-import { TagPostModel } from '@tag-post/dto/tag-post.model';
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
+import { CreateTagPostDTO } from '@tag-post/dto';
 
 export type ICreatePostDTO = Omit<IPostModel, 'author' | 'createdAt' | 'updatedAt'>;
 
@@ -34,13 +43,10 @@ export class CreatePostDTO implements ICreatePostDTO {
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
 
-    @ApiProperty({ example: ['react', 'nodejs', 'react-native'] })
+    @ApiProperty({ type: () => CreateTagPostDTO, isArray: true })
+    @ValidateNested()
+    @Type(() => CreateTagPostDTO)
     @IsOptional()
     @IsArray()
-    @Transform(values => {
-        return values.map(value => {
-            return { ...value, name: value.name.toLowerCase() };
-        });
-    })
-    tags: TagPostModel[];
+    tags: CreateTagPostDTO[];
 }

@@ -8,7 +8,6 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         try {
             return await this.findOne({ where: { name: tagName } });
         } catch ({ detail }) {
-            console.log(1);
             throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -19,7 +18,6 @@ export class TagPostRepository extends Repository<TagPostEntity> {
             tag.name = tagName;
             return await this.save(tag);
         } catch ({ detail }) {
-            console.log(2);
             throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -30,7 +28,6 @@ export class TagPostRepository extends Repository<TagPostEntity> {
             if (tag) return tag;
             else return this.createTagByName(tagName);
         } catch ({ detail }) {
-            console.log(3);
             throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

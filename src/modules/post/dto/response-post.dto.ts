@@ -31,8 +31,8 @@ export class PostRO implements IPostRO {
     author: Partial<UserModel>;
 
     @ApiProperty()
-    createdAt: Date;
+    createdAt?: Date;
 
     @ApiProperty()
-    updatedAt: Date;
+    updatedAt?: Date;
 }

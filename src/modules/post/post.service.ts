@@ -49,7 +49,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     }
 
     async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
-
         try {
             const [user, _tags] = await Promise.all([
                 this.userRepository.findOne({

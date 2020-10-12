@@ -11,8 +11,8 @@ export interface IPostModel {
     content: string;
     tags: ITagPostModel[];
     author: Partial<UserModel>;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class PostModel implements IPostModel {
