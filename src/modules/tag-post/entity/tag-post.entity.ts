@@ -12,13 +12,17 @@ import {
 
 @Entity('tag-post')
 export class TagPostEntity extends BaseEntity implements ITagPostModel {
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ type: 'text', nullable: false })
     name: string;
 
-    @ManyToMany(() => PostEntity, post => post.tags)
+    @ManyToMany(() => PostEntity, post => post.tags, {
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+    })
     posts: PostEntity[];
 
     @CreateDateColumn()

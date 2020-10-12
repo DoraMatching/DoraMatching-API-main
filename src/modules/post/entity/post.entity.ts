@@ -1,3 +1,4 @@
+import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 import { UserEntity } from '@user/entity/user.entity';
 import {
     BaseEntity,
@@ -11,7 +12,6 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { IPostModel } from '../dto';
-import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 
 @Entity('post')
 export class PostEntity extends BaseEntity implements IPostModel {
@@ -33,7 +33,12 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToMany(() => TagPostEntity, tag => tag.posts, { eager: true })
+    @ManyToMany(() => TagPostEntity, tag => tag.posts, {
+        cascade: true,
+        eager: true,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+    })
     @JoinTable()
     tags: TagPostEntity[];
 
@@ -46,4 +51,9 @@ export class PostEntity extends BaseEntity implements IPostModel {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    map(data: Partial<PostEntity>): PostEntity {
+        Object.assign(this, data);
+        return this;
+    }
 }

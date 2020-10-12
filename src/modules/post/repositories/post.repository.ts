@@ -41,7 +41,7 @@ export class PostRepository extends Repository<PostEntity> {
               .where('post.id = :id', { id })
               .getOne();
         } catch ({ detail }) {
-            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(detail || `oops! Can't get post by ID`, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

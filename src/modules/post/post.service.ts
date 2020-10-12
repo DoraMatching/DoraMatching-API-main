@@ -3,7 +3,7 @@ import { BaseService } from '@/commons/base-service';
 import { isEnableCache } from '@/config/database.config';
 import { grantPermission } from '@/shared/access-control/grant-permission';
 import { customPaginate } from '@/shared/pagination/paginate-custom';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto/';
@@ -17,12 +17,14 @@ import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
+    private readonly logger: Logger = new Logger(PostService.name);
+
     constructor(
       private readonly postRepository: PostRepository,
       private readonly userRepository: UserRepository,
       private readonly tagPostRepository: TagPostRepository,
       @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+      private readonly rolesBuilder: RolesBuilder
     ) {
         super(postRepository);
     }
@@ -98,11 +100,17 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
         if (permissions.granted) {
             try {
-                await this.postRepository.update(id, data);
+                post.title = data.title;
+                post.subTitle = data.subTitle;
+                post.featuredImage = data.featuredImage;
+                post.content = data.content;
+                post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
+                await this.postRepository.save(post);
                 const result = await this.postRepository.getPost(id);
                 return permissions.filter(result);
-            } catch ({ detail }) {
-                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch ({ detail, message }) {
+                this.logger.error(message);
+                throw new HttpException(detail || `oops! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
