@@ -35,7 +35,7 @@ export class UpdatePostDTO implements IUpdatePostDTO {
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
 
-    @ApiProperty({ example: ['reactjs', 'nodejs', 'react-native'] })
+    @ApiProperty({ example: ['react-js', 'nodejs', 'react-native'] })
     @IsOptional()
     tags: TagPostModel[];
 }

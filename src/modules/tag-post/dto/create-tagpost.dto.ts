@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagPostModel } from '@tag-post/dto';
 import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
-import { Transform } from 'class-transformer';
 
 export type ICreateTagPostDTO = Omit<ITagPostModel, 'posts' | 'createdAt' | 'updatedAt'>;
 

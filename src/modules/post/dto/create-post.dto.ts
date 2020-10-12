@@ -37,11 +37,10 @@ export class CreatePostDTO implements ICreatePostDTO {
     @ApiProperty({ example: ['react', 'nodejs', 'react-native'] })
     @IsOptional()
     @IsArray()
-    // @Transform((tags) => {
-    //     return tags.map((tag) => {
-    //         console.log('123', tag);
-    //         name: tag.name.toLowerCase();
-    //     });
-    // })
+    @Transform(values => {
+        return values.map(value => {
+            return { ...value, name: value.name.toLowerCase() };
+        });
+    })
     tags: TagPostModel[];
 }

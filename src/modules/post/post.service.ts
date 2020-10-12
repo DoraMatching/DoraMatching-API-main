@@ -63,11 +63,9 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 author: user,
                 tags: _tags,
             });
-            console.log(newPost);
             await this.postRepository.save(newPost);
             return newPost;
         } catch ({ detail, ...errors }) {
-            console.log('ERRORS', errors);
             throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

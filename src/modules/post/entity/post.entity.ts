@@ -33,7 +33,7 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToMany(() => TagPostEntity, tag => tag.posts)
+    @ManyToMany(() => TagPostEntity, tag => tag.posts, { eager: true })
     @JoinTable()
     tags: TagPostEntity[];
 
