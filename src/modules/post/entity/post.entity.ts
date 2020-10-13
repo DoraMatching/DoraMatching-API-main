@@ -51,9 +51,4 @@ export class PostEntity extends BaseEntity implements IPostModel {
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    map(data: Partial<PostEntity>): PostEntity {
-        Object.assign(this, data);
-        return this;
-    }
 }

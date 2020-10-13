@@ -11,6 +11,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
+import { CommentPostModule } from './modules/comment-post/comment-post.module';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { mailerConfig } from './config';
         PostModule,
         QuestionModule,
         TagPostModule,
+        CommentPostModule,
     ],
     controllers: [AppController],
     providers: [],
