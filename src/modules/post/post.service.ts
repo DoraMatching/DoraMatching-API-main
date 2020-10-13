@@ -3,9 +3,10 @@ import { BaseService } from '@/commons/base-service';
 import { isEnableCache } from '@/config/database.config';
 import { grantPermission } from '@/shared/access-control/grant-permission';
 import { customPaginate } from '@/shared/pagination/paginate-custom';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
+import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
@@ -13,16 +14,17 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
-import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
+    private readonly logger: Logger = new Logger(PostService.name);
+
     constructor(
       private readonly postRepository: PostRepository,
       private readonly userRepository: UserRepository,
       private readonly tagPostRepository: TagPostRepository,
       @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+      private readonly rolesBuilder: RolesBuilder
     ) {
         super(postRepository);
     }
@@ -65,7 +67,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
             await this.postRepository.save(newPost);
             return newPost;
         } catch ({ detail, ...errors }) {
-            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,7 +79,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 const result = customPaginate<PostRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
@@ -98,11 +100,17 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
         if (permissions.granted) {
             try {
-                await this.postRepository.update(id, data);
+                post.title = data.title;
+                post.subTitle = data.subTitle;
+                post.featuredImage = data.featuredImage;
+                post.content = data.content;
+                post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
+                await this.postRepository.save(post);
                 const result = await this.postRepository.getPost(id);
                 return permissions.filter(result);
-            } catch ({ detail }) {
-                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch ({ detail, message }) {
+                this.logger.error(message);
+                throw new HttpException(detail || `OOPS! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }

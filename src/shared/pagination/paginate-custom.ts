@@ -21,5 +21,5 @@ export function customPaginate<T>({ entities, count }: EntityResults<BaseEntity>
             totalPages,
             currentPage: page
         }
-    }
+    };
 }

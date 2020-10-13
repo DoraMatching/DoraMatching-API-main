@@ -10,7 +10,8 @@ export enum AppRoles {
 export enum AppResources {
     USER = 'USER',
     TOPIC = 'TOPIC',
-    POST = 'POST'
+    POST = 'POST',
+    TAG_POST = 'TAG_POST'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -45,4 +46,14 @@ roles
   .readAny(AppResources.POST)
   .createAny(AppResources.POST)
   .updateAny(AppResources.POST)
-  .deleteAny(AppResources.POST);
+  .deleteAny(AppResources.POST)
+
+  // Resource TAG_POST
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TAG_POST)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER);

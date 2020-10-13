@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel } from '@post/dto/post.model';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
-import { TagPostModel } from '@tag-post/dto/tag-post.model';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import { CreateTagPostDTO } from '@tag-post/dto';
 
 export type IUpdatePostDTO = Omit<IPostModel, 'id' | 'author' | 'createdAt' | 'updatedAt'>;
 
@@ -35,7 +35,8 @@ export class UpdatePostDTO implements IUpdatePostDTO {
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
 
-    @ApiProperty({ example: ['react-js', 'nodejs', 'react-native'] })
+    @ApiProperty({ type: () => CreateTagPostDTO, isArray: true })
+    @IsArray()
     @IsOptional()
-    tags: TagPostModel[];
+    tags: CreateTagPostDTO[];
 }
