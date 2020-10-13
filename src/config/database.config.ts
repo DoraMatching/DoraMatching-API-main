@@ -11,4 +11,4 @@ export const logging = false;
 export const cacheDuration = process.env.DATABASE_CACHE_DURATION;
 export const isEnableCache = Boolean(process.env.DATABASE_ENABLE_CACHE);
 export const cache = isEnableCache ? { duration: cacheDuration } : false;
-export const entities = ['./dist/**/*.entity{.ts,.js}']
+export const entities = ['./dist/**/*.entity{.ts,.js}'];

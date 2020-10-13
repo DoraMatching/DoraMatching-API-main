@@ -9,7 +9,7 @@ import {
     ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 import { IPostModel } from '../dto';
 
@@ -34,7 +34,7 @@ export class PostEntity extends BaseEntity implements IPostModel {
     content: string;
 
     @ManyToMany(() => TagPostEntity, tag => tag.posts, {
-        cascade: true,
+        cascade: ['insert', 'update', 'remove'],
         eager: true,
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

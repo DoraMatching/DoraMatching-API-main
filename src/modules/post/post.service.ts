@@ -6,6 +6,7 @@ import { customPaginate } from '@/shared/pagination/paginate-custom';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
+import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
@@ -13,7 +14,6 @@ import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
-import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
@@ -67,7 +67,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
             await this.postRepository.save(newPost);
             return newPost;
         } catch ({ detail, ...errors }) {
-            throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -79,7 +79,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 const result = customPaginate<PostRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
@@ -110,7 +110,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 return permissions.filter(result);
             } catch ({ detail, message }) {
                 this.logger.error(message);
-                throw new HttpException(detail || `oops! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || `OOPS! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
