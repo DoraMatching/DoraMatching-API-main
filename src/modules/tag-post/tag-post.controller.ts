@@ -8,11 +8,11 @@ import { TagPostService } from '@tag-post/tag-post.service';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 
-@ApiTags('TagPost')
+@ApiTags('tag-post')
 @Controller('/tag-post')
 export class TagPostController {
     constructor(
-        private readonly tagPostService: TagPostService,
+      private readonly tagPostService: TagPostService,
     ) {
     }
 
