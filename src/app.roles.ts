@@ -11,7 +11,8 @@ export enum AppResources {
     USER = 'USER',
     TOPIC = 'TOPIC',
     POST = 'POST',
-    TAG_POST = 'TAG_POST'
+    TAG_POST = 'TAG_POST',
+    COMMENT_POST = 'COMMENT_POST'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -56,4 +57,19 @@ roles
   .grant(AppRoles.TRAINER)
   .extend(AppRoles.TRAINEE)
   .grant(AppRoles.ADMIN)
-  .extend(AppRoles.TRAINER);
+  .extend(AppRoles.TRAINER)
+
+  // Resource COMMENT_POST
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.COMMENT_POST)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .createAny(AppResources.COMMENT_POST)
+  .updateOwn(AppResources.COMMENT_POST)
+  .deleteOwn(AppResources.COMMENT_POST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER)
+  .deleteAny(AppResources.COMMENT_POST);
+

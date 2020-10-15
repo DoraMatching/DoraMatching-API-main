@@ -2,6 +2,7 @@ import { UserModel } from '@/modules/user/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel } from '@post/dto';
 import { TagPostModel } from '@tag-post/dto/tag-post.model';
+import { CommentPostRO } from '@comment-post/dto';
 
 export type IPostRO = IPostModel;
 
@@ -23,6 +24,9 @@ export class PostRO implements IPostRO {
 
     @ApiProperty()
     content: string;
+
+    @ApiProperty()
+    comments ?: CommentPostRO[];
 
     @ApiProperty()
     tags: TagPostModel[];

@@ -85,8 +85,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     }
 
     async findOne(id: string, jwtUser: JwtUser): Promise<PostRO> {
-        const foundPost = await this.postRepository.getPost(id);
-        if (!foundPost) throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+        const foundPost = await this.postRepository.getPostById(id);
+        if (!foundPost) throw new HttpException(`Post with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         else {
             const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
             if (permissions.granted) {
@@ -106,7 +106,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 post.content = data.content;
                 post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
                 await this.postRepository.save(post);
-                const result = await this.postRepository.getPost(id);
+                const result = await this.postRepository.getPostById(id);
                 return permissions.filter(result);
             } catch ({ detail, message }) {
                 this.logger.error(message);

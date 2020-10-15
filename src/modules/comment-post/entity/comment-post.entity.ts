@@ -7,12 +7,12 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { ICommentPost } from '@comment-post/dto';
+import { ICommentPostModel } from '@comment-post/dto';
 import { UserEntity } from '@user/entity/user.entity';
 import { PostEntity } from '@post/entity/post.entity';
 
 @Entity('comment-post')
-export class CommentPostEntity extends BaseEntity implements ICommentPost {
+export class CommentPostEntity extends BaseEntity implements ICommentPostModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

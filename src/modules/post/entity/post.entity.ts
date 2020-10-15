@@ -7,11 +7,12 @@ import {
     Entity,
     JoinTable,
     ManyToMany,
-    ManyToOne,
+    ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 import { IPostModel } from '../dto';
+import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 
 @Entity('post')
 export class PostEntity extends BaseEntity implements IPostModel {
@@ -45,6 +46,10 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @ManyToOne(() => UserEntity, author => author.posts, { cascade: true })
     @JoinTable()
     author: UserEntity;
+
+    @OneToMany(() => CommentPostEntity, comment => comment.post)
+    @JoinTable()
+    comments: CommentPostEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
