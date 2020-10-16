@@ -1,13 +1,14 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateQuestionDTO } from '@question/dto';
+import { CreateQuestionDTO, QuestionRO } from '@question/dto';
 import { QuestionEntity } from '@question/entity/question.entity';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { customPaginate, paginateFilter, PaginateParams } from '@shared/pagination';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionEntity, QuestionRepository> {
@@ -20,8 +21,17 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
         super(questionRepository);
     }
 
-    async getAllQuestions() {
-
+    async getAllQuestions(pagOpts: PaginateParams, jwtUser: JwtUser) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, null);
+        if (permission.granted) {
+            try {
+                const data = await this.questionRepository.getAllQuestions(pagOpts);
+                const result = customPaginate<QuestionRO>(data, pagOpts);
+                return paginateFilter(result, permission);
+            } catch ({ detail }) {
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async createQuestion(data: CreateQuestionDTO, jwtUser: JwtUser) {

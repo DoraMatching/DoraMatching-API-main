@@ -93,7 +93,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async getPostById(id: string, jwtUser: JwtUser): Promise<IPostRO> {
         const foundPost = await this.postRepository.getPostById(id);
-        console.log(foundPost);
         if (!foundPost) throw new HttpException(`Post with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         else {
             const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
