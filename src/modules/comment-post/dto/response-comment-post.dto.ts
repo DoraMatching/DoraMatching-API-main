@@ -7,6 +7,5 @@ export class CommentPostRO implements ICommentPostRO {
     author: Partial<UserModel>;
     content: string;
     createdAt: Date;
-    // post: Partial<PostModel>;
     updatedAt: Date;
 }
