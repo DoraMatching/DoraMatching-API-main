@@ -5,12 +5,12 @@ import {
     HttpStatus,
     Param,
     Patch,
-    Post, Query,
+    Post, Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { Auth } from '@shared/auth/auth.decorator';
-import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/delete-result-response.dto';
+import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/';
 import { IPagination, PaginateParams } from '@shared/pagination/';
 import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto/';
@@ -36,7 +36,7 @@ export class PostController {
     @ApiResponse({ type: PostRO, status: 200 })
     @Get('post/:id')
     getPostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IPostRO> {
-        return this.postService.findOne(id, jwtUser);
+        return this.postService.getPostById(id, jwtUser);
     }
 
     @Auth()
@@ -52,7 +52,7 @@ export class PostController {
     @ApiOperation({ summary: 'Create post', description: 'Return post created' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Post('post')
-    createPost(@Body() data: CreatePostDTO, @User() jwtUser: JwtUser): Promise<PostRO> {
+    createPost(@Body() data: CreatePostDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
         return this.postService.createPost(data, jwtUser);
     }
 
@@ -60,7 +60,7 @@ export class PostController {
     @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
-    updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser): Promise<PostRO> {
+    updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
         return this.postService.updatePost(id, data, jwtUser);
     }
 }

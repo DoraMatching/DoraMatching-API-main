@@ -1,3 +1,4 @@
+import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 import { UserEntity } from '@user/entity/user.entity';
 import {
@@ -7,7 +8,7 @@ import {
     Entity,
     JoinTable,
     ManyToMany,
-    ManyToOne,
+    ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
@@ -42,18 +43,17 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @JoinTable()
     tags: TagPostEntity[];
 
-    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true })
+    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, nullable: false })
     @JoinTable()
     author: UserEntity;
+
+    @OneToMany(() => CommentPostEntity, comment => comment.post)
+    @JoinTable()
+    comments: CommentPostEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    map(data: Partial<PostEntity>): PostEntity {
-        Object.assign(this, data);
-        return this;
-    }
 }

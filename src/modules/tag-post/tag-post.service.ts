@@ -36,17 +36,4 @@ export class TagPostService extends BaseService<TagPostEntity, TagPostRepository
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
-
-    // async getAllPostByTagId(tagId: string, pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<PostRO>> {
-    //     const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
-    //     if (permission.granted) {
-    //         try {
-    //             const data = await this.postRepository.getAllPostByTagId(tagId, pagOpts);
-    //             const result = customPaginate<PostRO>(data, pagOpts);
-    //             return paginateFilter(result, permission);
-    //         } catch ({ detail }) {
-    //             throw new HttpException(detail || `Oops! Can't get posts by tag id`, HttpStatus.INTERNAL_SERVER_ERROR);
-    //         }
-    //     } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
-    // }
 }

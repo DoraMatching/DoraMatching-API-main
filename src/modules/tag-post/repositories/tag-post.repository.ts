@@ -1,5 +1,4 @@
 import { EntityResults } from '@/commons/entity-results';
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { PaginateParams } from '@shared/pagination';
 import { EntityRepository, Repository } from 'typeorm';
 import { TagPostEntity } from '../entity/tag-post.entity';
@@ -10,15 +9,20 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         'tag',
         'post.id',
         'post.title',
+        'post.subTitle',
         'post.featuredImage',
+        'author.id',
+        'author.avatarUrl',
+        'author.name',
+        'author.roles',
     ];
 
 
     async getTagByName(tagName: string) {
         try {
             return await this.findOne({ where: { name: tagName } });
-        } catch ({ detail }) {
-            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (e) {
+           console.error(e);
         }
     }
 
@@ -27,8 +31,8 @@ export class TagPostRepository extends Repository<TagPostEntity> {
             const tag = new TagPostEntity();
             tag.name = tagName;
             return await this.save(tag);
-        } catch ({ detail }) {
-            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (e) {
+           console.error(e);
         }
     }
 
@@ -37,8 +41,8 @@ export class TagPostRepository extends Repository<TagPostEntity> {
             const tag = await this.getTagByName(tagName);
             if (tag) return tag;
             else return this.createTagByName(tagName);
-        } catch ({ detail }) {
-            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -46,8 +50,8 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         const tagPromises = tagNames.map(name => this.createIfNotExists(name));
         try {
             return await Promise.all(tagPromises);
-        } catch ({ detail }) {
-            throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -55,30 +59,15 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         try {
             const [entities, count] = await this.createQueryBuilder('tag')
               .leftJoinAndSelect('tag.posts', 'post')
+              .leftJoinAndSelect('post.author', 'author')
               .select(this.SELECT_TAG_POST_SCOPE)
               .orderBy('tag.createdAt', order)
               .skip(limit * (page - 1))
               .take(limit)
               .getManyAndCount();
             return { entities, count };
-        } catch ({ detail, ...e }) {
-            throw new HttpException(detail || `OOPS! Can't get all tags`, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (e) {
+            console.error(e);
         }
     }
-
-    // async getTagById(tagId: string, { order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TagPostEntity>> {
-    //     try {
-    //         const [entities, count] = await this.createQueryBuilder('tag')
-    //           .leftJoinAndSelect('tag.posts', 'post')
-    //           .select(this.SELECT_TAG_POST_SCOPE)
-    //           .where('tag.id = :tagId', { tagId })
-    //           .orderBy('tag.createdAt', order)
-    //           .skip(limit * (page - 1))
-    //           .take(limit)
-    //           .getManyAndCount();
-    //         return { entities, count };
-    //     } catch ({ detail, ...e }) {
-    //         throw new HttpException(detail || `OOPS! Can't get all tags`, HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
 }

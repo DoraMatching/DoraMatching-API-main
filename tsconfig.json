@@ -17,7 +17,8 @@
       "@post/*": ["src/modules/post/*"],
       "@shared/*": ["src/shared/*"],
       "@question/*": ["src/modules/question/*"],
-      "@tag-post/*": ["src/modules/tag-post/*"]
+      "@tag-post/*": ["src/modules/tag-post/*"],
+      "@comment-post/*": ["src/modules/comment-post/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

@@ -23,12 +23,4 @@ export class TagPostController {
     getTagPost(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<TagPostRO>> {
         return this.tagPostService.getAllTags({ ...pagOpts, route: `${apiUrl}/tag-post` }, jwtUser);
     }
-
-    // @Auth()
-    // @ApiOperation({ summary: 'Get all posts by tag id', description: 'Return 1 page of post' })
-    // @ApiResponse({ type: [PostRO], status: 200 })
-    // @Get(':id/posts')
-    // getAllPostsByTagId(@Param() { id }: FindOneParams, @Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
-    //     return this.tagPostService.getAllPostByTagId(id,{ ...pagOpts, route: `${apiUrl}/tag-post/${id}/posts` }, jwtUser);
-    // }
 }
