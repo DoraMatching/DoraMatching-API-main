@@ -1,6 +1,6 @@
 import { EntityResults } from '@/commons/entity-results';
 import { PaginateParams } from '@/shared/pagination';
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { PostEntity } from '../entity/post.entity';
 
@@ -10,10 +10,10 @@ export class PostRepository extends Repository<PostEntity> {
 
     private readonly SELECT_POST_SCOPE = [
         'post',
-        'user.id',
-        'user.name',
-        'user.roles',
-        'user.avatarUrl',
+        'author.id',
+        'author.name',
+        'author.roles',
+        'author.avatarUrl',
         'tag.id',
         'tag.name',
         'comments',
@@ -26,7 +26,7 @@ export class PostRepository extends Repository<PostEntity> {
     async getAllPosts({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<PostEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('post')
-              .leftJoinAndSelect('post.author', 'user')
+              .leftJoinAndSelect('post.author', 'author')
               .leftJoinAndSelect('post.tags', 'tag')
               .leftJoinAndSelect('post.comments', 'comments')
               .leftJoinAndSelect('comments.author', 'commentAuthor')
@@ -44,7 +44,7 @@ export class PostRepository extends Repository<PostEntity> {
     async getPostById(id: string): Promise<PostEntity> {
         try {
             return await this.createQueryBuilder('post')
-              .leftJoinAndSelect('post.author', 'user')
+              .leftJoinAndSelect('post.author', 'author')
               .leftJoinAndSelect('post.tags', 'tag')
               .leftJoinAndSelect('post.comments', 'comments')
               .leftJoinAndSelect('comments.author', 'commentAuthor')

@@ -1,11 +1,12 @@
 import { ICommentPostModel } from '@comment-post/dto/comment-post.model';
 import { UserModel } from '@user/dto';
-import { PostModel } from '@post/dto';
 
-export class CommentPostRO implements ICommentPostModel {
+export type ICommentPostRO = ICommentPostModel;
+
+export class CommentPostRO implements ICommentPostRO {
     author: Partial<UserModel>;
     content: string;
     createdAt: Date;
-    post: Partial<PostModel>;
+    // post: Partial<PostModel>;
     updatedAt: Date;
 }

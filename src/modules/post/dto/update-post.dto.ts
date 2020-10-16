@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IPostModel } from '@post/dto/post.model';
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import { IPostModel } from '@post/dto';
 import { CreateTagPostDTO } from '@tag-post/dto';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
 
 export type IUpdatePostDTO = Omit<IPostModel, 'id' | 'author' | 'createdAt' | 'updatedAt'>;
 

@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export interface ICommentPostModel {
     content: string;
     author: Partial<UserModel>;
-    post: Partial<PostModel>;
+    post?: Partial<PostModel>;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -18,7 +18,7 @@ export class CommentPostModel implements ICommentPostModel {
     author: Partial<UserModel>;
 
     @ApiProperty({ type: () => PostModel })
-    post: Partial<PostModel>;
+    post?: Partial<PostModel>;
 
     @ApiProperty()
     createdAt: Date;

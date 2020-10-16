@@ -1,15 +1,21 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { AppResources } from '@/app.roles';
+import { BaseService } from '@/commons/base-service';
+import {
+    CommentPostParams,
+    CreateCommentPostDTO,
+    ICommentPostRO,
+    UpdateCommentPostDTO,
+} from '@comment-post/dto';
 import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 import { CommentPostRepository } from '@comment-post/repositories/comment-post.repository,ts';
-import { BaseService } from '@/commons/base-service';
-import { CommentPostParams, CreateCommentPostDTO, UpdateCommentPostDTO } from '@comment-post/dto';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { IPostRO } from '@post/dto';
 import { PostRepository } from '@post/repositories/post.repository';
-import { UserRepository } from '@user/repositories/user.repository';
-import { JwtUser } from '@user/dto';
-import { PostRO } from '@post/dto';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { grantPermission } from '@shared/access-control/grant-permission';
-import { AppResources } from '@/app.roles';
+import { IDeleteResultDTO } from '@shared/dto/';
+import { JwtUser } from '@user/dto';
+import { UserRepository } from '@user/repositories/user.repository';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class CommentPostService extends BaseService<CommentPostEntity, CommentPostRepository> {
@@ -25,7 +31,7 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
         super(commentPostRepository);
     }
 
-    async createComment(id: string, data: CreateCommentPostDTO, jwtUser: JwtUser): Promise<PostRO> {
+    async createComment(id: string, data: CreateCommentPostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const [post, user] = await Promise.all([this.postRepository.getPostById(id), this.userRepository.findOne({ where: { id: jwtUser.id } })]);
         if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         if (post) {
@@ -49,7 +55,7 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
         return comment;
     }
 
-    async updateComment({ id, commentId }: CommentPostParams, data: UpdateCommentPostDTO, jwtUser: JwtUser) {
+    async updateCommentById({ id, commentId }: CommentPostParams, data: UpdateCommentPostDTO, jwtUser: JwtUser): Promise<ICommentPostRO> {
         const [post, comment] = await Promise.all([this.postRepository.getPostById(id), this.findCommentById(commentId)]);
         if (!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.COMMENT_POST, 'update', jwtUser, comment.author.id);
@@ -57,6 +63,19 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
             comment.content = data.content;
             await this.commentPostRepository.save(comment);
             return this.findCommentById(commentId);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async deleteCommentById({ id, commentId }: CommentPostParams, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        const [post, comment] = await Promise.all([this.postRepository.getPostById(id), this.findCommentById(commentId)]);
+        if (!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        if (!comment) throw new HttpException(`Comment with id: ${commentId} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.COMMENT_POST, 'delete', jwtUser, comment.author.id);
+        if (permission.granted) {
+            await this.commentPostRepository.delete(commentId);
+            return {
+                message: `Deleted comment with id: ${commentId}.`,
+            };
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }

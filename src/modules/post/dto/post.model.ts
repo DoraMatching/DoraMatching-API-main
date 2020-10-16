@@ -1,8 +1,8 @@
-import { ITagPostModel, TagPostModel } from '@tag-post/dto';
-import { ApiProperty } from '@nestjs/swagger';
-import { UserModel } from '@user/dto/user.model';
-import { IsNotEmpty, IsOptional } from 'class-validator';
 import { CommentPostModel, ICommentPostModel } from '@comment-post/dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { ITagPostModel, TagPostModel } from '@tag-post/dto';
+import { UserModel } from '@user/dto';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export interface IPostModel {
     title: string;
@@ -19,30 +19,37 @@ export interface IPostModel {
 
 export class PostModel implements IPostModel {
     @ApiProperty()
+    @IsString()
     @IsNotEmpty()
     title: string;
 
     @ApiProperty()
+    @IsString()
     @IsNotEmpty()
     subTitle: string;
 
     @ApiProperty()
+    @IsString()
     @IsNotEmpty()
     featuredImage: string;
 
     @ApiProperty()
+    @IsBoolean()
     @IsNotEmpty()
     isDraft: boolean;
 
     @ApiProperty()
+    @IsString()
     @IsNotEmpty()
     content: string;
 
     @ApiProperty()
+    @IsArray()
     @IsOptional()
     tags: TagPostModel[];
 
     @ApiProperty()
+    @IsArray()
     @IsOptional()
     comments?: CommentPostModel[];
 

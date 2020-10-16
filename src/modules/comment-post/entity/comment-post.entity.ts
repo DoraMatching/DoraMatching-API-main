@@ -22,7 +22,7 @@ export class CommentPostEntity extends BaseEntity implements ICommentPostModel {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, { nullable: false })
     author: UserEntity;
 
     @ManyToOne(() => PostEntity)

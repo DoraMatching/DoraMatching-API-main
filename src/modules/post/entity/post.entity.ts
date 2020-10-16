@@ -1,3 +1,4 @@
+import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 import { UserEntity } from '@user/entity/user.entity';
 import {
@@ -9,10 +10,9 @@ import {
     ManyToMany,
     ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 import { IPostModel } from '../dto';
-import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 
 @Entity('post')
 export class PostEntity extends BaseEntity implements IPostModel {
@@ -43,7 +43,7 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @JoinTable()
     tags: TagPostEntity[];
 
-    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true })
+    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, nullable: false })
     @JoinTable()
     author: UserEntity;
 

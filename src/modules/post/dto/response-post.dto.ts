@@ -1,10 +1,12 @@
 import { UserModel } from '@/modules/user/dto';
+import { CommentPostRO } from '@comment-post/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel } from '@post/dto';
-import { TagPostModel } from '@tag-post/dto/tag-post.model';
-import { CommentPostRO } from '@comment-post/dto';
+import { TagPostModel } from '@tag-post/dto';
 
-export type IPostRO = IPostModel;
+export interface IPostRO extends IPostModel {
+    id: string;
+}
 
 export class PostRO implements IPostRO {
     @ApiProperty()

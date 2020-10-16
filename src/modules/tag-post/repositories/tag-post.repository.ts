@@ -1,5 +1,4 @@
 import { EntityResults } from '@/commons/entity-results';
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { PaginateParams } from '@shared/pagination';
 import { EntityRepository, Repository } from 'typeorm';
 import { TagPostEntity } from '../entity/tag-post.entity';
