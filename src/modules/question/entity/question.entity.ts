@@ -17,7 +17,7 @@ export class QuestionEntity extends BaseEntity implements IQuestionModel {
     id: string;
 
     @Column({ type: 'text', nullable: false })
-    content: string;p
+    content: string;
 
     @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, nullable: false })
     @JoinTable()

@@ -62,6 +62,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 this.tagPostRepository.findManyAndCreateIfNotExisted(tags.map(tag => tag.name)),
             ]);
             if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            data = permission.filter(data);
             const newPost = this.postRepository.create({
                 ...data,
                 author: user,
