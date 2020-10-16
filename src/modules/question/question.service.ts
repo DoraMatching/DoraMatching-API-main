@@ -20,6 +20,10 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
         super(questionRepository);
     }
 
+    async getAllQuestions() {
+
+    }
+
     async createQuestion(data: CreateQuestionDTO, jwtUser: JwtUser) {
         const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'create', jwtUser, null);
         if (permission.granted) {
