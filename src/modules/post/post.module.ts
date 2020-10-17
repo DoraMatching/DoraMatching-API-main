@@ -8,7 +8,9 @@ import { PostService } from './post.service';
 import { PostRepository } from './repositories/post.repository';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRepository, PostRepository, TagPostRepository])],
+    imports: [
+      TypeOrmModule.forFeature([UserRepository, PostRepository, TagPostRepository]),
+    ],
     controllers: [PostController],
     providers: [PostService, PostResolver],
 })

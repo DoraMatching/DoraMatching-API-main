@@ -1,18 +1,21 @@
-import { AccessControlModule } from 'nest-access-control';
-import { AppController } from './app.controller';
-import { GraphQLModule } from '@nestjs/graphql';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from '@post/post.module';
 import { QuestionModule } from '@question/question.module';
 import { TagPostModule } from '@tag-post/tag-post.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '@user/user.module';
-import { mailerConfig } from './config';
+import { AccessControlModule } from 'nest-access-control';
+import { AutomapperModule } from 'nestjsx-automapper';
+import { AppController } from './app.controller';
 import { roles } from './app.roles';
+import { mailerConfig } from './config';
+import { CommentPostModule } from './modules/comment-post/comment-post.module';
 
 @Module({
     imports: [
+        AutomapperModule.withMapper(),
         GraphQLModule.forRoot({
             typePaths: ['./**/*.graphql'],
             context: ({ req }) => ({ headers: req.headers }),
@@ -24,6 +27,7 @@ import { roles } from './app.roles';
         PostModule,
         QuestionModule,
         TagPostModule,
+        CommentPostModule,
     ],
     controllers: [AppController],
     providers: [],

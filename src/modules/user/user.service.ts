@@ -16,7 +16,7 @@ import {
     LoginUserDTO,
     UpdateUser,
     UserModel,
-    UserRO
+    UserRO,
 } from './dto';
 import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repositories/user.repository';
@@ -29,10 +29,10 @@ import { rolesFilter } from '@/shared/access-control/roles-filter';
 @Injectable()
 export class UserService {
     constructor(
-        private readonly userRepository: UserRepository,
-        private readonly mailerService: MailerService,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder
+      private readonly userRepository: UserRepository,
+      private readonly mailerService: MailerService,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
     ) {
     }
 
@@ -48,7 +48,7 @@ export class UserService {
 
             const result = paginateOrder<UserRO>({
                 items: items.map(user => user.toResponseObject(false)),
-                links, meta
+                links, meta,
             }, order);
 
             return paginateFilter<UserRO>(result, permission);
@@ -99,7 +99,6 @@ export class UserService {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
 
 
-
     }
 
     async updateUser(id: string, updateUser: Partial<UpdateUser>, jwtUser: JwtUser): Promise<UserRO> {
@@ -121,7 +120,7 @@ export class UserService {
                 try {
                     await this.userRepository.save(foundUser);
                 } catch ({ detail }) {
-                    throw new HttpException(detail || 'oops!', HttpStatus.INTERNAL_SERVER_ERROR);
+                    throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
                 }
                 return (await this.userRepository.findOne({ id })).toResponseObject(false);
             } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -130,7 +129,7 @@ export class UserService {
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
-        const query = gql`
+      const query = gql`
           query {
               viewer {
                   login
@@ -181,7 +180,7 @@ export class UserService {
     }
 
     async githubLangs(accessToken: string) {
-        const query = gql`
+      const query = gql`
           {
               viewer {
                   repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {

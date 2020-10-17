@@ -1,6 +1,6 @@
-import { ITagPostModel } from '@tag-post/dto';
-import { PostRO } from '@post/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { PostRO } from '@post/dto';
+import { ITagPostModel } from '@tag-post/dto';
 
 export type ITagPostRO = Omit<ITagPostModel, 'posts'>;
 
