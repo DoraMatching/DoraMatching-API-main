@@ -1,16 +1,20 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+version: 2
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:12.6.0
     steps:
       - checkout
-      - node/install-packages
       - run:
-          command: yarn test
-workflows:
-  build-and-test:
-    jobs:
-      - build-and-test
+          name: update-npm
+          command: 'sudo npm install -g yarn@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-dependencies
+          command: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
