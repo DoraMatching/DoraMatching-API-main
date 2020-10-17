@@ -29,4 +29,17 @@ export class QuestionRepository extends Repository<QuestionEntity> {
             console.error(e);
         }
     }
+
+    async getQuestionById(id: string): Promise<QuestionEntity> {
+        try {
+            return await this.createQueryBuilder('question')
+              .leftJoinAndSelect('question.author', 'author')
+              .where('question.id = :id', { id })
+              .select(this.SELECT_QUESTION_SCOPE)
+              .getOne();
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }

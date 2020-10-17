@@ -30,7 +30,7 @@ export class CommentPostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Update post comment', description: 'Update post comment' })
+    @ApiOperation({ summary: 'Delete post comment', description: 'Return delete status' })
     @Delete('/post/:id/comment/:commentId')
     deleteCommentById(@Param() params: CommentPostParams, @User() jwtUser: JwtUser) {
         return this.commentPostService.deleteCommentById(params, jwtUser);

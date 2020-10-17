@@ -1,14 +1,15 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateQuestionDTO, QuestionRO } from '@question/dto';
+import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
 import { QuestionEntity } from '@question/entity/question.entity';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { customPaginate, paginateFilter, PaginateParams } from '@shared/pagination';
+import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
+import { DeleteResultDTO } from '@shared/dto';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionEntity, QuestionRepository> {
@@ -21,20 +22,20 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
         super(questionRepository);
     }
 
-    async getAllQuestions(pagOpts: PaginateParams, jwtUser: JwtUser) {
+    async getAllQuestions(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<QuestionRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, null);
         if (permission.granted) {
             try {
                 const data = await this.questionRepository.getAllQuestions(pagOpts);
                 const result = customPaginate<QuestionRO>(data, pagOpts);
-                return paginateFilter(result, permission);
+                return paginateFilter<QuestionRO>(result, permission);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async createQuestion(data: CreateQuestionDTO, jwtUser: JwtUser) {
+    async createQuestion(data: CreateQuestionDTO, jwtUser: JwtUser): Promise<QuestionRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'create', jwtUser, null);
         if (permission.granted) {
             data = permission.filter(data);
@@ -53,6 +54,39 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create question`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async getQuestionById(id: string, jwtUser: JwtUser): Promise<QuestionRO> {
+        const question = await this.questionRepository.getQuestionById(id);
+        const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, question.author.id);
+
+        if (permission.granted) {
+            return permission.filter(question);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async updateQuestion(id: string, data: UpdateQuestionDTO, jwtUser: JwtUser): Promise<IQuestionRO> {
+        const question = await this.questionRepository.getQuestionById(id);
+        if (!question) throw new HttpException(`Question with id ${id} not found!`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'update', jwtUser, question.author.id);
+        if (permission.granted) {
+            data = permission.filter(data);
+            Object.assign(question, data);
+            await this.questionRepository.save(question);
+            return await this.questionRepository.getQuestionById(id);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async deleteQuestion(id: string, jwtUser: JwtUser): Promise<DeleteResultDTO> {
+        const question = await this.questionRepository.getQuestionById(id);
+        if (!question) throw new HttpException(`Question with id ${id} not found!`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'delete', jwtUser, question.author.id);
+        if (permission.granted) {
+            await this.questionRepository.delete(question.id);
+            return {
+                message: `Question with id: ${id} deleted`,
+            };
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }
