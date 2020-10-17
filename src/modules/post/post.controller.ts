@@ -21,7 +21,9 @@ import { PostService } from './post.service';
 @Controller()
 @ApiTags('post')
 export class PostController {
-    constructor(private readonly postService: PostService) { }
+    constructor(private readonly postService: PostService) {
+
+    }
 
     @Auth()
     @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })

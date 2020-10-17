@@ -1,10 +1,10 @@
-import { ICommentPostModel } from '@comment-post/dto/';
+import { IQuestionModel } from '@question/dto/question.model';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export type ICreateCommentPostDTO = Pick<ICommentPostModel, 'content'>;
+export type IUpdateQuestionDTO = Pick<IQuestionModel, 'content'>;
 
-export class CreateCommentPostDTO implements ICreateCommentPostDTO {
+export class UpdateQuestionDTO implements IUpdateQuestionDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()
     @IsString()

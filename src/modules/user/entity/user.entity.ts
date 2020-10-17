@@ -15,6 +15,7 @@ import {
     UpdateDateColumn
 } from 'typeorm';
 import { IUserModel, JwtUser, UserRO } from '../dto';
+import { QuestionEntity } from '@question/entity/question.entity';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -41,6 +42,9 @@ export class UserEntity implements IUserModel {
 
     @OneToMany(() => PostEntity, post => post.author)
     posts: PostEntity[];
+
+    @OneToMany(() => QuestionEntity, question => question.author)
+    questions: QuestionEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

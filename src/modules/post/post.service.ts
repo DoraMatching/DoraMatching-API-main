@@ -42,15 +42,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async showAll({ limit, page, order, route }: PaginateParams): Promise<IPagination<PostRO>> {
-        const result = await paginate<PostEntity>(this.postRepository, {
-            limit,
-            page,
-            route,
-        }, { order: { createdAt: order }, relations: ['author'], cache: isEnableCache });
-        return paginateOrder(result, order);
-    }
-
     async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'create', jwtUser, null);
         if (permission.granted) {
@@ -62,6 +53,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 this.tagPostRepository.findManyAndCreateIfNotExisted(tags.map(tag => tag.name)),
             ]);
             if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            data = permission.filter(data);
             const newPost = this.postRepository.create({
                 ...data,
                 author: user,
@@ -92,7 +84,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async getPostById(id: string, jwtUser: JwtUser): Promise<IPostRO> {
         const foundPost = await this.postRepository.getPostById(id);
-        console.log(foundPost);
         if (!foundPost) throw new HttpException(`Post with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         else {
             const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
@@ -106,13 +97,12 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
         const post = await this.getPostById(id, jwtUser);
+        if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
         if (permissions.granted) {
             try {
-                post.title = data.title;
-                post.subTitle = data.subTitle;
-                post.featuredImage = data.featuredImage;
-                post.content = data.content;
+                data = permissions.filter(data);
+                Object.assign(post, data);
                 post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
                 await this.postRepository.save(post);
                 const result = await this.postRepository.getPostById(id);
