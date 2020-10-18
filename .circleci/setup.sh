@@ -14,4 +14,4 @@ echo 'Building...'
 yarn build
 
 echo 'Deploying...'
-pm2 start ./dist/main.js --name 'API.DEV.DORA'
+pm2 start ./dist/main.js --name 'API_DEV_DORA'
