@@ -7,6 +7,7 @@ import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { IPagination, PaginateParams } from '@shared/pagination';
 import { FindOneParams } from '@shared/pipes/find-one.params';
+import { apiUrl } from '@/config';
 
 @ApiTags('question')
 @Controller()
@@ -20,7 +21,7 @@ export class QuestionController {
     @ApiResponse({ type: QuestionRO, status: 200 })
     @Get('questions')
     index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IQuestionRO>> {
-        return this.questionService.getAllQuestions(pagOpts, jwtUser);
+        return this.questionService.getAllQuestions({ ...pagOpts, route: `${apiUrl}/questions` }, jwtUser);
     }
 
     @Auth()

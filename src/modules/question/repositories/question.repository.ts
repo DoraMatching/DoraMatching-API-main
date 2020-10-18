@@ -13,12 +13,19 @@ export class QuestionRepository extends Repository<QuestionEntity> {
         'author.name',
         'author.avatarUrl',
         'author.roles',
+        'comments',
+        'commentAuthor.id',
+        'commentAuthor.name',
+        'commentAuthor.avatarUrl',
+        'commentAuthor.roles',
     ];
 
     async getAllQuestions({ order, limit, page }: Partial<PaginateParams>) {
         try {
             const [entities, count] = await this.createQueryBuilder('question')
               .leftJoinAndSelect('question.author', 'author')
+              .leftJoinAndSelect('question.comments', 'comments')
+              .leftJoinAndSelect('comments.author', 'commentAuthor')
               .select(this.SELECT_QUESTION_SCOPE)
               .orderBy('question.createdAt', order)
               .skip(limit * (page - 1))
@@ -34,6 +41,8 @@ export class QuestionRepository extends Repository<QuestionEntity> {
         try {
             return await this.createQueryBuilder('question')
               .leftJoinAndSelect('question.author', 'author')
+              .leftJoinAndSelect('question.comments', 'comments')
+              .leftJoinAndSelect('comments.author', 'commentAuthor')
               .where('question.id = :id', { id })
               .select(this.SELECT_QUESTION_SCOPE)
               .getOne();

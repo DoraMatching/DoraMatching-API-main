@@ -1,5 +1,5 @@
 import { CommentPostService } from '@comment-post/comment-post.service';
-import { CommentPostParams, CreateCommentPostDTO, UpdateCommentPostDTO } from '@comment-post/dto';
+import { CommentPostParam, CreateCommentPostDTO, UpdateCommentPostDTO } from '@comment-post/dto';
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Auth } from '@shared/auth/auth.decorator';
@@ -25,14 +25,14 @@ export class CommentPostController {
     @Auth()
     @ApiOperation({ summary: 'Update post comment', description: 'Update post comment' })
     @Patch('/post/:id/comment/:commentId')
-    updateCommentById(@Param() params: CommentPostParams, @Body() data: UpdateCommentPostDTO, @User() jwtUser: JwtUser) {
+    updateCommentById(@Param() params: CommentPostParam, @Body() data: UpdateCommentPostDTO, @User() jwtUser: JwtUser) {
         return this.commentPostService.updateCommentById(params, data, jwtUser);
     }
 
     @Auth()
     @ApiOperation({ summary: 'Delete post comment', description: 'Return delete status' })
     @Delete('/post/:id/comment/:commentId')
-    deleteCommentById(@Param() params: CommentPostParams, @User() jwtUser: JwtUser) {
+    deleteCommentById(@Param() params: CommentPostParam, @User() jwtUser: JwtUser) {
         return this.commentPostService.deleteCommentById(params, jwtUser);
     }
 }
