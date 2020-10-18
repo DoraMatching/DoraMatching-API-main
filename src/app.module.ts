@@ -12,6 +12,7 @@ import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
 import { CommentPostModule } from './modules/comment-post/comment-post.module';
+import { CommentQuestionModule } from './modules/comment-question/comment-question.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { CommentPostModule } from './modules/comment-post/comment-post.module';
         QuestionModule,
         TagPostModule,
         CommentPostModule,
+        CommentQuestionModule,
     ],
     controllers: [AppController],
     providers: [],
