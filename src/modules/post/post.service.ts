@@ -1,17 +1,15 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
-import { isEnableCache } from '@/config/database.config';
 import { grantPermission } from '@/shared/access-control/grant-permission';
 import { customPaginate } from '@/shared/pagination/paginate-custom';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UpdatePostDTO } from '@post/dto/update-post.dto';
 import { IDeleteResultDTO } from '@shared/dto/';
-import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
+import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
 import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
 import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostEntity } from './entity/post.entity';
 import { PostRepository } from './repositories/post.repository';
@@ -61,8 +59,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
             });
 
             try {
-                await this.postRepository.save(newPost);
-                return newPost;
+                const _post = await this.postRepository.save(newPost);
+                return await this.postRepository.getPostById(_post.id)
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -88,9 +86,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         else {
             const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
             if (permissions.granted) {
-                const result = permissions.filter(foundPost);
-                this.logger.debug(result);
-                return result;
+                return permissions.filter(foundPost);
             } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
         }
     }

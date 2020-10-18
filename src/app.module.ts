@@ -1,3 +1,5 @@
+import { CommentPostModule } from '@comment-post/comment-post.module';
+import { CommentQuestionModule } from '@comment-question/comment-question.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -11,8 +13,6 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { CommentPostModule } from './modules/comment-post/comment-post.module';
-import { CommentQuestionModule } from './modules/comment-question/comment-question.module';
 
 @Module({
     imports: [

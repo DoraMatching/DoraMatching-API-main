@@ -49,8 +49,8 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
                 author: user,
             });
             try {
-                await this.questionRepository.save(newQuestion);
-                return newQuestion;
+                const _newQuestion = await this.questionRepository.save(newQuestion);
+                return await this.questionRepository.getQuestionById(_newQuestion.id);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create question`, HttpStatus.INTERNAL_SERVER_ERROR);
             }

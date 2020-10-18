@@ -1,10 +1,10 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
 import {
-    CommentPostParams,
+    CommentPostParam,
     CreateCommentPostDTO,
     ICommentPostRO,
-    UpdateCommentPostDTO,
+    UpdateCommentPostDTO
 } from '@comment-post/dto';
 import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 import { CommentPostRepository } from '@comment-post/repositories/comment-post.repository,ts';
@@ -55,7 +55,7 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
         return comment;
     }
 
-    async updateCommentById({ id, commentId }: CommentPostParams, data: UpdateCommentPostDTO, jwtUser: JwtUser): Promise<ICommentPostRO> {
+    async updateCommentById({ id, commentId }: CommentPostParam, data: UpdateCommentPostDTO, jwtUser: JwtUser): Promise<ICommentPostRO> {
         const [post, comment] = await Promise.all([this.postRepository.getPostById(id), this.findCommentById(commentId)]);
         if (!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.COMMENT_POST, 'update', jwtUser, comment.author.id);
@@ -66,7 +66,7 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async deleteCommentById({ id, commentId }: CommentPostParams, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+    async deleteCommentById({ id, commentId }: CommentPostParam, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const [post, comment] = await Promise.all([this.postRepository.getPostById(id), this.findCommentById(commentId)]);
         if (!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         if (!comment) throw new HttpException(`Comment with id: ${commentId} not found`, HttpStatus.NOT_FOUND);
