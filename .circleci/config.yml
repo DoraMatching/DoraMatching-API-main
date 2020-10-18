@@ -24,5 +24,5 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - deploy:
-          name: deploy to api.dev.doramatching.tk
+          name: deploy to api.dev.doramatching.tk via ssh
           command: ssh -o "StrictHostKeyChecking no" -p 2222 pi@quycomputer.ddns.net "cd /home/pi/Documents/Test/DoraMatching-API-main; git pull; chmod +x ./circleci/setup.sh; ./circleci/setup.sh"
