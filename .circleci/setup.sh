@@ -7,6 +7,9 @@ docker exec 501 bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS doramatchi
 echo 'Creating the database...'
 docker exec 501 bash -c "psql -U postgres -c 'CREATE DATABASE doramatching;'"
 
+echo "Pulling newest code"
+git pull
+
 echo 'Installing dependencies...'
 yarn install
 
