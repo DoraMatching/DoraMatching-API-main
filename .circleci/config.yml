@@ -1,4 +1,3 @@
-
 # Javascript Node CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
@@ -12,20 +11,36 @@ jobs:
 
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
-      - run: yarn install
-
+      - run:
+          name: install dependencies
+          command: yarn install
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
       - deploy:
-          name: digital-ocean
-          command: ssh -o "StrictHostKeyChecking no" -p 2222 pi@quycomputer.ddns.net "cd /home/pi/Documents/Test/DoraMatching-API-main; yarn build; pm2 start ./dist/main.js --name API_DEV_DORA"
+          name: deploy to api.dev.doramatching.tk
+          command: |
+            ssh -o "StrictHostKeyChecking no" -p 2222 pi@quycomputer.ddns.net
+            echo 'Dropping the database...'
+            docker exec 501 bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS doramatching;'"
+            echo 'Creating the database...'
+            docker exec 501 bash -c "psql -U postgres -c 'CREATE DATABASE doramatching;'"
+            echo 'Checkout working directory'
+            cd /home/pi/Documents/Test/DoraMatching-API-main
+            git checkout dev
+            echo 'Pulling newest code...'
+            git pull
+            echo 'Updating yarn...'
+            sudo npm i -g yarn
+            echo 'Installing dependencies...'
+            yarn install
+            echo 'Building...'
+            yarn build
+            echo 'Deploying...'
+            pm2 start ./dist/main.js --name 'API.DEV.DORA'
