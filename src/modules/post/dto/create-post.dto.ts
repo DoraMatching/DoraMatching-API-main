@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateTagPostDTO } from '@tag-post/dto';
+import { CreateTagPostDto } from '@tag-post/dto';
 import { Type } from 'class-transformer';
 import {
     IsArray,
@@ -43,10 +43,10 @@ export class CreatePostDTO implements ICreatePostDTO {
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
 
-    @ApiProperty({ type: () => CreateTagPostDTO, isArray: true })
+    @ApiProperty({ type: () => CreateTagPostDto, isArray: true })
     @ValidateNested()
-    @Type(() => CreateTagPostDTO)
+    @Type(() => CreateTagPostDto)
     @IsOptional()
     @IsArray()
-    tags: CreateTagPostDTO[];
+    tags: CreateTagPostDto[] = [];
 }

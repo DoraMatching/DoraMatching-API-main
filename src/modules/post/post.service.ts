@@ -31,8 +31,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     async deletePostById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundPost = await this.getPostById(id, jwtUser);
 
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
-        if (permissions.granted) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
+        if (permission.granted) {
             await this.postRepository.delete(id);
             return {
                 message: `Deleted post with id: ${foundPost.id}.`,
@@ -84,9 +84,9 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         const foundPost = await this.postRepository.getPostById(id);
         if (!foundPost) throw new HttpException(`Post with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         else {
-            const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
-            if (permissions.granted) {
-                return permissions.filter(foundPost);
+            const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
+            if (permission.granted) {
+                return permission.filter(foundPost);
             } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
         }
     }
@@ -94,15 +94,15 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
     async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
         if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
-        const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
-        if (permissions.granted) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
+        if (permission.granted) {
             try {
-                data = permissions.filter(data);
+                data = permission.filter(data);
                 Object.assign(post, data);
                 post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
                 await this.postRepository.save(post);
                 const result = await this.postRepository.getPostById(id);
-                return permissions.filter(result);
+                return permission.filter(result);
             } catch ({ detail, message }) {
                 this.logger.error(message);
                 throw new HttpException(detail || `OOPS! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,4 +1,5 @@
 import { CommentQuestionEntity } from '@/modules/comment-question/entities/comment-question.entity';
+import { TagQuestionEntity } from '@/modules/tag-question/entities/tag-question.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import { IQuestionModel } from '@question/dto';
 import {
@@ -6,10 +7,10 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinTable,
+    JoinTable, ManyToMany,
     ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('question')
@@ -30,6 +31,10 @@ export class QuestionEntity extends BaseEntity implements IQuestionModel {
     @OneToMany(() => CommentQuestionEntity, comment => comment.question)
     @JoinTable()
     comments: CommentQuestionEntity[];
+
+    @ManyToMany(() => TagQuestionEntity, tag => tag.questions, { cascade: true })
+    @JoinTable()
+    tags: TagQuestionEntity[];
 
     @CreateDateColumn()
     createdAt: string;

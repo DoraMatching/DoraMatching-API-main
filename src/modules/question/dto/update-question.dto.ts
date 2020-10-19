@@ -1,6 +1,7 @@
-import { IQuestionModel } from '@question/dto/question.model';
+import { CreateTagQuestionDTO } from '@/modules/tag-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IQuestionModel } from '@question/dto/question.model';
+import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export type IUpdateQuestionDTO = Pick<IQuestionModel, 'content'>;
 
@@ -18,4 +19,9 @@ export class UpdateQuestionDTO implements IUpdateQuestionDTO {
     @IsString()
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsArray()
+    tags: CreateTagQuestionDTO[];
 }

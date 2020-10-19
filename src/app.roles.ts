@@ -14,7 +14,8 @@ export enum AppResources {
     TAG_POST = 'TAG_POST',
     COMMENT_POST = 'COMMENT_POST',
     QUESTION = 'QUESTION',
-    COMMENT_QUESTION = 'COMMENT_QUESTION'
+    COMMENT_QUESTION = 'COMMENT_QUESTION',
+    TAG_QUESTION = 'TAG_QUESTION'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();

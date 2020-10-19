@@ -1,4 +1,4 @@
-export * from './create-tagpost.dto';
-export * from './reponse-tagpost.dto';
+export * from './create-tag-post.dto';
+export * from './reponse-tag-post.dto';
 export * from './tag-post.model';
 
