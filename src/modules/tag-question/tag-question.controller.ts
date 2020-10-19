@@ -17,7 +17,7 @@ export class TagQuestionController {
     @Auth()
     @ApiOperation({ summary: 'Get all tag-questions', description: 'Return 1 page of tag-question' })
     @ApiResponse({ type: [TagQuestionRO], status: 200 })
-    @Get('tag-post')
+    @Get('tag-question')
     getAllTags(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
         return this.tagQuestionService.getAllTags({ ...pagOpts, route: `${apiUrl}/tag-question` }, jwtUser);
     }
