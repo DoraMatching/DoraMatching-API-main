@@ -11,7 +11,7 @@ import { JwtUser } from '@user/dto/';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
-import { PostEntity } from './entity/post.entity';
+import { PostEntity } from './entities/post.entity';
 import { PostRepository } from './repositories/post.repository';
 
 @Injectable()

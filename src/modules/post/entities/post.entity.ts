@@ -1,6 +1,6 @@
-import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
-import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
-import { UserEntity } from '@user/entity/user.entity';
+import { CommentPostEntity } from '@/modules/comment-post/entities/comment-post.entity';
+import { TagPostEntity } from '@/modules/tag-post/entities/tag-post.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 import {
     BaseEntity,
     Column,

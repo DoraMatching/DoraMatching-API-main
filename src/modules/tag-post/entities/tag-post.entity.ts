@@ -1,4 +1,4 @@
-import { PostEntity } from '@post/entity/post.entity';
+import { PostEntity } from '@/modules/post/entities/post.entity';
 import { ITagPostModel } from '@tag-post/dto';
 import {
     BaseEntity,

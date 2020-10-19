@@ -1,4 +1,4 @@
-import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
+import { CommentPostEntity } from '@/modules/comment-post/entities/comment-post.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(CommentPostEntity)

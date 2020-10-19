@@ -1,12 +1,12 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
+import { CommentPostEntity } from '@/modules/comment-post/entities/comment-post.entity';
 import {
     CommentPostParam,
     CreateCommentPostDTO,
     ICommentPostRO,
     UpdateCommentPostDTO
 } from '@comment-post/dto';
-import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 import { CommentPostRepository } from '@comment-post/repositories/comment-post.repository,ts';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { IPostRO } from '@post/dto';

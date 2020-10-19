@@ -1,8 +1,8 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
+import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
-import { QuestionEntity } from '@question/entity/question.entity';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { IDeleteResultDTO } from '@shared/dto';

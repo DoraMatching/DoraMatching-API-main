@@ -1,9 +1,9 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
+import { TagPostEntity } from '@/modules/tag-post/entities/tag-post.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
-import { TagPostEntity } from '@tag-post/entity/tag-post.entity';
 import { JwtUser } from '@user/dto';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateTagPostDTO, TagPostRO } from './dto';

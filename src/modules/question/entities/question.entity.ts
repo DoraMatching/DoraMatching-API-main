@@ -1,3 +1,6 @@
+import { CommentQuestionEntity } from '@/modules/comment-question/entities/comment-question.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
+import { IQuestionModel } from '@question/dto';
 import {
     BaseEntity,
     Column,
@@ -6,11 +9,8 @@ import {
     JoinTable,
     ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
-import { IQuestionModel } from '@question/dto';
-import { UserEntity } from '@user/entity/user.entity';
-import { CommentQuestionEntity } from '@comment-question/entity/comment-question.entity';
 
 @Entity('question')
 export class QuestionEntity extends BaseEntity implements IQuestionModel {
