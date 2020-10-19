@@ -1,12 +1,12 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
+import { CommentQuestionEntity } from '@/modules/comment-question/entities/comment-question.entity';
 import {
     CommentQuestionParam,
     CreateCommentQuestionDTO,
     ICommentQuestionRO,
     UpdateCommentQuestionDTO
 } from '@comment-question/dto';
-import { CommentQuestionEntity } from '@comment-question/entity/comment-question.entity';
 import { CommentQuestionRepository } from '@comment-question/repositories/comment-question.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IQuestionRO } from '@question/dto';

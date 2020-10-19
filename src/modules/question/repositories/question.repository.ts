@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { QuestionEntity } from '@question/entity/question.entity';
+import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import { Logger } from '@nestjs/common';
 import { PaginateParams } from '@shared/pagination';
 
@@ -13,6 +13,8 @@ export class QuestionRepository extends Repository<QuestionEntity> {
         'author.name',
         'author.avatarUrl',
         'author.roles',
+        'tag.id',
+        'tag.name',
         'comments',
         'commentAuthor.id',
         'commentAuthor.name',
@@ -25,6 +27,7 @@ export class QuestionRepository extends Repository<QuestionEntity> {
             const [entities, count] = await this.createQueryBuilder('question')
               .leftJoinAndSelect('question.author', 'author')
               .leftJoinAndSelect('question.comments', 'comments')
+              .leftJoinAndSelect('question.tags', 'tag')
               .leftJoinAndSelect('comments.author', 'commentAuthor')
               .select(this.SELECT_QUESTION_SCOPE)
               .orderBy('question.createdAt', order)
@@ -42,6 +45,7 @@ export class QuestionRepository extends Repository<QuestionEntity> {
             return await this.createQueryBuilder('question')
               .leftJoinAndSelect('question.author', 'author')
               .leftJoinAndSelect('question.comments', 'comments')
+              .leftJoinAndSelect('question.tags', 'tag')
               .leftJoinAndSelect('comments.author', 'commentAuthor')
               .where('question.id = :id', { id })
               .select(this.SELECT_QUESTION_SCOPE)

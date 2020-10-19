@@ -1,8 +1,8 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
+import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
-import { QuestionEntity } from '@question/entity/question.entity';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { IDeleteResultDTO } from '@shared/dto';
@@ -10,12 +10,14 @@ import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@sh
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { TagQuestionRepository } from '../tag-question/repositories/tag-question.repository';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionEntity, QuestionRepository> {
     constructor(
       private readonly userRepository: UserRepository,
       private readonly questionRepository: QuestionRepository,
+      private readonly tagQuestionRepository: TagQuestionRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -35,18 +37,22 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async createQuestion(data: CreateQuestionDTO, jwtUser: JwtUser): Promise<IQuestionRO> {
+    async createQuestion({ tags, ...data }: CreateQuestionDTO, jwtUser: JwtUser): Promise<IQuestionRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'create', jwtUser, null);
         if (permission.granted) {
             data = permission.filter(data);
-            const user = await this.userRepository.findOne({
-                where: { id: jwtUser.id },
-                select: ['id', 'name', 'username', 'email'],
-            });
+            const [user, _tags] = await Promise.all([
+                this.userRepository.findOne({
+                    where: { id: jwtUser.id },
+                    select: ['id', 'name', 'username', 'email'],
+                }),
+                this.tagQuestionRepository.findManyAndCreateIfNotExisted(tags.map(tag => tag.name)),
+            ]);
             if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             const newQuestion = this.questionRepository.create({
                 ...data,
                 author: user,
+                tags: _tags,
             });
             try {
                 const _newQuestion = await this.questionRepository.save(newQuestion);

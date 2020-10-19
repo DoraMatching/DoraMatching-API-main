@@ -12,5 +12,4 @@ import { TagPostService } from './tag-post.service';
     controllers: [TagPostController],
     providers: [TagPostService, PostService],
 })
-export class TagPostModule {
-}
+export class TagPostModule { }

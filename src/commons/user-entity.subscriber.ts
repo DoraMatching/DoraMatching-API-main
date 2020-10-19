@@ -1,4 +1,4 @@
-import { UserEntity } from '@user/entity/user.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { AvatarGenerator } from 'random-avatar-generator';
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';

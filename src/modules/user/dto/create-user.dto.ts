@@ -8,7 +8,7 @@ export class CreateUserDTO implements ICreateUserDTO {
     @ApiProperty()
     @IsNotEmpty()
     @Matches(/^[a-z0-9_-]{3,16}$/, {
-        message: 'Invalid username'
+        message: 'Invalid username',
     })
     username: string;
 
@@ -31,10 +31,10 @@ export class CreateUserDTO implements ICreateUserDTO {
     @MinLength(8)
     @MaxLength(20)
     @Matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        {
-            message: 'Too weak password. Require minimum 8 characters, at least 1 letter, 1 number and 1 special character',
-        },
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      {
+          message: 'Too weak password. Require minimum 8 characters, at least 1 letter, 1 number and 1 special character',
+      },
     )
     password: string;
 }
