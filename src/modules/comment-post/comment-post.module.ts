@@ -7,10 +7,11 @@ import { CommentPostController } from './comment-post.controller';
 import { CommentPostService } from './comment-post.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository, PostRepository, CommentPostRepository])
-  ],
-  controllers: [CommentPostController],
-  providers: [CommentPostService]
+    imports: [
+        TypeOrmModule.forFeature([UserRepository, PostRepository, CommentPostRepository]),
+    ],
+    controllers: [CommentPostController],
+    providers: [CommentPostService],
 })
-export class CommentPostModule {}
+export class CommentPostModule {
+}

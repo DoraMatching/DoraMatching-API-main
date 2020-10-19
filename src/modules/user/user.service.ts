@@ -18,7 +18,7 @@ import {
     UserModel,
     UserRO,
 } from './dto';
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 import { JwtUser } from './dto/jwt-payload-user.dto';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';

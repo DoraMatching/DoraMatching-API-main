@@ -18,7 +18,8 @@
       "@shared/*": ["src/shared/*"],
       "@question/*": ["src/modules/question/*"],
       "@tag-post/*": ["src/modules/tag-post/*"],
-      "@comment-post/*": ["src/modules/comment-post/*"]
+      "@comment-post/*": ["src/modules/comment-post/*"],
+      "@comment-question/*": ["src/modules/comment-question/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

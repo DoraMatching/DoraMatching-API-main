@@ -1,6 +1,6 @@
-import { UserModel } from '@user/dto';
-import { PostModel } from '@post/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { PostModel } from '@post/dto';
+import { UserModel } from '@user/dto';
 
 export interface ICommentPostModel {
     content: string;

@@ -1,5 +1,5 @@
+import { CommentPostEntity } from '@/modules/comment-post/entities/comment-post.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { CommentPostEntity } from '@comment-post/entity/comment-post.entity';
 
 @EntityRepository(CommentPostEntity)
 export class CommentPostRepository extends Repository<CommentPostEntity> {
