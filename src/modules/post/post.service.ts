@@ -40,7 +40,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
+    async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'create', jwtUser, null);
         if (permission.granted) {
             const [user, _tags] = await Promise.all([
@@ -67,7 +67,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getAllPosts(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<PostRO>> {
+    async getAllPosts(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IPostRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
         if (permission.granted) {
             try {
@@ -91,7 +91,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         }
     }
 
-    async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<PostRO> {
+    async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
         if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permissions = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
