@@ -12,8 +12,8 @@ export function customPaginate<T>({ entities, count }: EntityResults<BaseEntity>
         items: entities,
         links: {
             first: `${route}?page=1&limit=${limit}&order=${order}`,
-            previous: `${page === 1 ? '' : `${route}?page=${pPrevious !== 0 ? pPrevious : 1}&limit=${limit}&order=${order}`}`,
-            next: `${page === totalPages ? '' : `${route}?page=${pNext !== totalPages ? pNext : totalPages}&limit=${limit}&order=${order}`}`,
+            previous: `${page === 1 ? '' : `${route}?page=${pPrevious <= 0 ? 1 : (pPrevious > totalPages ? totalPages : pPrevious)}&limit=${limit}&order=${order}`}`,
+            next: `${page >= totalPages ? '' : `${route}?page=${pNext > totalPages ? totalPages : pNext}&limit=${limit}&order=${order}`}`,
             last: `${route}?page=${totalPages}&limit=${limit}&order=${order}`,
         },
         meta: {
