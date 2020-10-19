@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto';
-import { TagPostRO } from '@tag-post/dto';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
