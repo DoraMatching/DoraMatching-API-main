@@ -26,6 +26,8 @@
 
 # Dora-matching API
 
+[![CircleCI](https://circleci.com/gh/DoraMatching/DoraMatching-API-main.svg?style=shield)](https://circleci.com/gh/DoraMatching/DoraMatching-API-main)
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
