@@ -9,6 +9,7 @@ import {
 import { CommentQuestionEntity } from '@comment-question/entity/comment-question.entity';
 import { CommentQuestionRepository } from '@comment-question/repositories/comment-question.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { IQuestionRO } from '@question/dto';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { IDeleteResultDTO } from '@shared/dto';
@@ -28,7 +29,7 @@ export class CommentQuestionService extends BaseService<CommentQuestionEntity, C
         super(commentQuestionRepository);
     }
 
-    async createComment(id: string, data: CreateCommentQuestionDTO, jwtUser: JwtUser) {
+    async createComment(id: string, data: CreateCommentQuestionDTO, jwtUser: JwtUser): Promise<IQuestionRO> {
         const [question, user] = await Promise.all([this.questionRepository.getQuestionById(id), this.userRepository.findOne({ where: { id: jwtUser.id } })]);
         if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         if (question) {
