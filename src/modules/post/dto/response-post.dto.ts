@@ -27,10 +27,10 @@ export class PostRO implements IPostRO {
     @ApiProperty()
     content: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => CommentPostRO, isArray: true })
     comments ?: CommentPostRO[];
 
-    @ApiProperty()
+    @ApiProperty({ type: () => TagPostModel, isArray: true })
     tags: TagPostModel[];
 
     @ApiProperty({ type: () => UserModel })

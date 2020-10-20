@@ -20,7 +20,7 @@ export class UpdateQuestionDTO implements IUpdateQuestionDTO {
     @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
     content: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => CreateTagQuestionDTO, isArray: true })
     @IsOptional()
     @IsArray()
     tags: CreateTagQuestionDTO[];

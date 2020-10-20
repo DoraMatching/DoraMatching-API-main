@@ -71,8 +71,19 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts } = this;
-        const responseObject: UserRO = { id, createdAt, updatedAt, username, email, name, roles, avatarUrl, posts };
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions } = this;
+        const responseObject: UserRO = {
+            id,
+            createdAt,
+            updatedAt,
+            username,
+            email,
+            name,
+            roles,
+            avatarUrl,
+            posts,
+            questions,
+        };
         if (showToken) {
             responseObject.token = token;
         }
