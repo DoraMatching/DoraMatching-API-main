@@ -19,8 +19,8 @@ export class HomeController {
 
     @Auth()
     @ApiOperation({
-        summary: 'Get all posts | questions | user',
-        description: 'Return 1 page of posts | questions | users',
+        summary: 'Get all posts | questions | users',
+        description: 'Return 1 page of posts | questions | users. <p><b>Note: reponse_limit = request_limit * 3</b></p>',
     })
     @ApiResponse({ type: [PostRO], status: 200 })
     @Get()
