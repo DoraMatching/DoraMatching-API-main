@@ -11,10 +11,12 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         'post.title',
         'post.subTitle',
         'post.featuredImage',
+        'post.type',
         'author.id',
         'author.avatarUrl',
         'author.name',
         'author.roles',
+        'author.type',
     ];
 
 

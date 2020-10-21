@@ -9,6 +9,10 @@ export interface IPostRO extends IPostModel {
 }
 
 export class PostRO implements IPostRO {
+    constructor(data) {
+        Object.assign(this, data);
+    }
+
     @ApiProperty()
     id: string;
 
@@ -28,7 +32,7 @@ export class PostRO implements IPostRO {
     content: string;
 
     @ApiProperty({ type: () => CommentPostRO, isArray: true })
-    comments ?: CommentPostRO[];
+    comments?: CommentPostRO[];
 
     @ApiProperty({ type: () => TagPostModel, isArray: true })
     tags: TagPostModel[];
@@ -41,4 +45,7 @@ export class PostRO implements IPostRO {
 
     @ApiProperty()
     updatedAt?: Date;
+
+    @ApiProperty()
+    type?: string = 'post';
 }

@@ -30,4 +30,7 @@ export class CommentQuestionEntity extends BaseEntity implements ICommentQuestio
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ type: 'text', default: 'comment-question', nullable: false })
+    type: string;
 }

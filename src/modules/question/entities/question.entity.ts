@@ -10,7 +10,7 @@ import {
     JoinTable, ManyToMany,
     ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 
 @Entity('question')
@@ -37,8 +37,11 @@ export class QuestionEntity extends BaseEntity implements IQuestionModel {
     tags: TagQuestionEntity[];
 
     @CreateDateColumn()
-    createdAt: string;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: string;
+    updatedAt: Date;
+
+    @Column({ type: 'text', default: 'question', nullable: false })
+    type: string;
 }

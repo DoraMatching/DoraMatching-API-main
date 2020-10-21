@@ -13,6 +13,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
+import { HomeModule } from './modules/home/home.module';
 import { TagQuestionModule } from './modules/tag-question/tag-question.module';
 
 @Module({
@@ -32,6 +33,7 @@ import { TagQuestionModule } from './modules/tag-question/tag-question.module';
         CommentPostModule,
         CommentQuestionModule,
         TagQuestionModule,
+        HomeModule,
     ],
     controllers: [AppController],
     providers: [],

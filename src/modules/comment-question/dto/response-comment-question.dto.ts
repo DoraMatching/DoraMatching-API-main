@@ -16,4 +16,7 @@ export class CommentQuestionRO implements ICommentQuestionRO {
 
     @ApiProperty()
     updatedAt: Date;
+
+    @ApiProperty({ type: () => String, default: 'comment-question' })
+    type?: string = 'comment-question';
 }

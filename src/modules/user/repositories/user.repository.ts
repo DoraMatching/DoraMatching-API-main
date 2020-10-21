@@ -9,6 +9,7 @@ export class UserRepository extends Repository<UserEntity> {
               'id',
               'name',
               'roles',
+              'type'
           ])
           .where('id = :id', { id })
           .execute();

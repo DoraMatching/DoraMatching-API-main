@@ -1,8 +1,8 @@
-import { IUserModel, UserModel } from '@user/dto';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
-import { CommentQuestionModel, ICommentQuestionModel } from '@comment-question/dto';
 import { ITagQuestionModel, TagQuestionModel } from '@/modules/tag-question/dto';
+import { CommentQuestionModel, ICommentQuestionModel } from '@comment-question/dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IUserModel, UserModel } from '@user/dto';
+import { IsArray, IsString } from 'class-validator';
 
 export interface IQuestionModel {
     title: string;
@@ -10,8 +10,8 @@ export interface IQuestionModel {
     author: Partial<IUserModel>;
     comments: ICommentQuestionModel[];
     tags: ITagQuestionModel[]
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class QuestionModel implements IQuestionModel {
@@ -34,8 +34,8 @@ export class QuestionModel implements IQuestionModel {
     tags: TagQuestionModel[];
 
     @ApiProperty()
-    createdAt: string;
+    createdAt: Date;
 
     @ApiProperty()
-    updatedAt: string;
+    updatedAt: Date;
 }
