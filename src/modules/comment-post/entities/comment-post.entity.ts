@@ -1,6 +1,6 @@
-import { ICommentPostModel } from '@comment-post/dto';
 import { PostEntity } from '@/modules/post/entities/post.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
+import { ICommentPostModel } from '@comment-post/dto';
 import {
     BaseEntity,
     Column,
@@ -30,4 +30,7 @@ export class CommentPostEntity extends BaseEntity implements ICommentPostModel {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ type: 'text', default: 'comment-post', nullable: false })
+    type: string;
 }

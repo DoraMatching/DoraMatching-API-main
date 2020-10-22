@@ -1,9 +1,8 @@
 import { EntityResults } from '@/commons/entity-results';
-import { BaseEntity } from 'typeorm';
 import { IPagination } from './paginate.interface';
 import { PaginateParams } from './paginate.params';
 
-export function customPaginate<T>({ entities, count }: EntityResults<BaseEntity>, { route, order, limit, page }: PaginateParams): IPagination<T> {
+export function customPaginate<T>({ entities, count }: EntityResults<any>, { route, order, limit, page }: PaginateParams): IPagination<T> {
     const entitiesLength = entities.length;
     const totalPages = Math.ceil(count / limit) || 1;
     const pPrevious = page - 1;

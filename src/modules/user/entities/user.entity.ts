@@ -52,6 +52,9 @@ export class UserEntity implements IUserModel {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @Column({ type: 'text', default: 'user', nullable: false })
+    type: string;
+
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword(): Promise<void> {
@@ -71,7 +74,7 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions } = this;
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions, type } = this;
         const responseObject: UserRO = {
             id,
             createdAt,
@@ -83,6 +86,7 @@ export class UserEntity implements IUserModel {
             avatarUrl,
             posts,
             questions,
+            type 
         };
         if (showToken) {
             responseObject.token = token;

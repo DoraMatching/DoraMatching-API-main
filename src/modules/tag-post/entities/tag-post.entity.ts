@@ -7,7 +7,7 @@ import {
     Entity,
     ManyToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 
 @Entity('tag-post')
@@ -26,4 +26,7 @@ export class TagPostEntity extends BaseEntity implements ITagPostModel {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ type: 'text', default: 'tag-post', nullable: false })
+    type: string;
 }

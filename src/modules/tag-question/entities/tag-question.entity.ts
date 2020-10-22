@@ -1,3 +1,5 @@
+import { ITagQuestionModel } from '@/modules/tag-question/dto';
+import { QuestionEntity } from '@question/entities/question.entity';
 import {
     BaseEntity,
     Column,
@@ -5,10 +7,8 @@ import {
     Entity,
     ManyToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
-import { ITagQuestionModel } from '@/modules/tag-question/dto';
-import { QuestionEntity } from '@question/entities/question.entity';
 
 @Entity('tag-question')
 export class TagQuestionEntity extends BaseEntity implements ITagQuestionModel {
@@ -22,8 +22,11 @@ export class TagQuestionEntity extends BaseEntity implements ITagQuestionModel {
     questions: QuestionEntity[];
 
     @CreateDateColumn()
-    createdAt: string;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: string;
+    updatedAt: Date;
+
+    @Column({ type: 'text', default: 'tag-question', nullable: false })
+    type: string;
 }

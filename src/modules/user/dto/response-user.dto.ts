@@ -43,4 +43,7 @@ export class UserRO implements IUserRO {
 
     @ApiProperty()
     updatedAt: Date;
+
+    @ApiProperty({ type: () => String, default: 'user' })
+    type?: string = 'user';
 }
