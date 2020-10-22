@@ -1,6 +1,6 @@
+import { MailerOptions } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
-import { MailerOptions } from '@nestjs-modules/mailer';
 
 export const mailAddress = process.env.MAIL_ADDRESS;
 export const mailPassword = process.env.MAIL_PASSWORD;
