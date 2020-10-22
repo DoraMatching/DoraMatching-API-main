@@ -36,8 +36,9 @@ export class HomeService {
                 if (entities.length > 0) {
                     const posts = postPermission.filter(entities);
                     items.push(...posts);
-                    counter += count;
                 }
+                counter += count;
+                console.log('POST', count);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -49,8 +50,9 @@ export class HomeService {
                 if (entities.length > 0) {
                     const questions = questionPermission.filter(entities);
                     items.push(...questions);
-                    counter += count;
                 }
+                counter += count;
+                console.log('QUESTION', count);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -63,8 +65,9 @@ export class HomeService {
                     const users = userPermission.filter(entities);
                     const userList = new UserListRO({ userList: users });
                     items.push(userList);
-                    counter += count;
                 }
+                counter += count;
+                console.log('USER', count);
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
