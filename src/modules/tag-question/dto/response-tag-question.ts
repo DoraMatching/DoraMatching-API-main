@@ -8,8 +8,11 @@ export class TagQuestionRO implements ITagQuestionRO {
     name: string;
 
     @ApiProperty()
-    createdAt: string;
+    createdAt: Date;
 
     @ApiProperty()
-    updatedAt: string;
+    updatedAt: Date;
+
+    @ApiProperty({ type: () => String, default: 'tag-question' })
+    type?: string = 'tag-question';
 }

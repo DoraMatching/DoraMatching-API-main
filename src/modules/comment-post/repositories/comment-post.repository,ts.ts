@@ -9,6 +9,7 @@ export class CommentPostRepository extends Repository<CommentPostEntity> {
         'author.name',
         'author.avatarUrl',
         'author.roles',
+        'author.type'
     ];
 
     async getCommentById(id: string): Promise<CommentPostEntity> {

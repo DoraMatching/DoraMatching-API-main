@@ -9,7 +9,7 @@ export class CreateQuestionDTO implements ICreateQuestionDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()
     @IsString()
-    @MaxLength(43, { message: 'The text you wrote is longer than "The quick brown fox jumps over the lazy dog"! Please write less...' })
+    @MaxLength(150)
     title: string;
 
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })

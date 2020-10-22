@@ -1,7 +1,7 @@
+import { EntityResults } from '@/commons/entity-results';
+import { PaginateParams } from '@shared/pagination';
 import { EntityRepository, Repository } from 'typeorm';
 import { TagQuestionEntity } from '../entities/tag-question.entity';
-import { PaginateParams } from '@shared/pagination';
-import { EntityResults } from '@/commons/entity-results';
 
 @EntityRepository(TagQuestionEntity)
 export class TagQuestionRepository extends Repository<TagQuestionEntity> {
@@ -11,10 +11,12 @@ export class TagQuestionRepository extends Repository<TagQuestionEntity> {
         'post.title',
         'post.subTitle',
         'post.featuredImage',
+        'post.type',
         'author.id',
         'author.avatarUrl',
         'author.name',
         'author.roles',
+        'author.type',
     ];
 
     async createTagByName(tagName: string): Promise<TagQuestionEntity> {

@@ -16,4 +16,7 @@ export class CommentPostRO implements ICommentPostRO {
 
     @ApiProperty()
     updatedAt: Date;
+
+    @ApiProperty({ type: () => String, default: 'comment-post' })
+    type?: string = 'comment-post';
 }

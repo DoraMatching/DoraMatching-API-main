@@ -15,6 +15,7 @@ export interface IPostModel {
     author: Partial<UserModel>;
     createdAt?: Date;
     updatedAt?: Date;
+    type?: string;
 }
 
 export class PostModel implements IPostModel {

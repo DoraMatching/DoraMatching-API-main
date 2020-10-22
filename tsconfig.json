@@ -19,7 +19,8 @@
       "@question/*": ["src/modules/question/*"],
       "@tag-post/*": ["src/modules/tag-post/*"],
       "@comment-post/*": ["src/modules/comment-post/*"],
-      "@comment-question/*": ["src/modules/comment-question/*"]
+      "@comment-question/*": ["src/modules/comment-question/*"],
+      "@home-modules/*": ["src/modules/home/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

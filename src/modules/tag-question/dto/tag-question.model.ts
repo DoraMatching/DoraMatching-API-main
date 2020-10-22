@@ -3,8 +3,8 @@ import { IsDate, IsString } from 'class-validator';
 
 export interface ITagQuestionModel {
     name: string;
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class TagQuestionModel implements ITagQuestionModel {
@@ -14,9 +14,9 @@ export class TagQuestionModel implements ITagQuestionModel {
 
     @ApiProperty()
     @IsDate()
-    createdAt: string;
+    createdAt: Date;
 
     @ApiProperty()
     @IsDate()
-    updatedAt: string;
+    updatedAt: Date;
 }
