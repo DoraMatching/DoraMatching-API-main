@@ -1,21 +1,22 @@
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
+import { MailerOptions } from '@nestjs-modules/mailer';
 
 export const mailAddress = process.env.MAIL_ADDRESS;
 export const mailPassword = process.env.MAIL_PASSWORD;
 
-export const mailerConfig = {
+export const mailerConfig: MailerOptions = {
     transport: {
         host: 'smtp.gmail.com',
         secure: true,
         port: 465,
         auth: {
             'user': mailAddress,
-            'pass': mailPassword
+            'pass': mailPassword,
         },
         tls: {
-            'rejectUnauthorized': false
-        }
+            'rejectUnauthorized': false,
+        },
     },
     defaults: {
         from: 'nest-modules <modules@nestjs.com>',
@@ -29,10 +30,10 @@ export const mailerConfig = {
     },
     options: {
         partials: {
-          dir: join(process.cwd(), 'src/templates/partials'),
-          options: {
-            strict: true,
-          },
-        }
-      }
+            dir: join(process.cwd(), 'src/templates/partials'),
+            options: {
+                strict: true,
+            },
+        },
+    },
 };
