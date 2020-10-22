@@ -14,13 +14,16 @@ export class PostRepository extends Repository<PostEntity> {
         'author.name',
         'author.roles',
         'author.avatarUrl',
+        'author.type',
         'tag.id',
         'tag.name',
+        'tag.type',
         'comments',
         'commentAuthor.id',
         'commentAuthor.name',
         'commentAuthor.avatarUrl',
         'commentAuthor.roles',
+        'commentAuthor.type'
     ];
 
     async getAllPosts({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<PostEntity>> {
