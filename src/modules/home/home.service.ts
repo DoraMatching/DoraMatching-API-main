@@ -1,5 +1,5 @@
 import { AppResources } from '@/app.roles';
-import { IHomeRO } from '@home-modules/dto';
+import { IHomeRO, UserListRO } from '@home-modules/dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '@post/repositories/post.repository';
 import { QuestionRepository } from '@question/repositories/question.repository';
@@ -33,9 +33,11 @@ export class HomeService {
         if (postPermission.granted) {
             try {
                 const { entities, count } = await this.postRepository.getAllPosts(pagOpts);
-                const posts = postPermission.filter(entities);
-                items.push(...posts);
-                counter += count;
+                if (entities.length > 0) {
+                    const posts = postPermission.filter(entities);
+                    items.push(...posts);
+                    counter += count;
+                }
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -44,9 +46,11 @@ export class HomeService {
         if (questionPermission.granted) {
             try {
                 const { entities, count } = await this.questionRepository.getAllQuestions(pagOpts);
-                const questions = questionPermission.filter(entities);
-                items.push(...questions);
-                counter += count;
+                if (entities.length > 0) {
+                    const questions = questionPermission.filter(entities);
+                    items.push(...questions);
+                    counter += count;
+                }
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -55,9 +59,12 @@ export class HomeService {
         if (userPermission.granted) {
             try {
                 const { entities, count } = await this.userRepository.getAllUsers(pagOpts);
-                const questions = userPermission.filter(entities);
-                items.push(...questions);
-                counter += count;
+                if (entities.length > 0) {
+                    const users = userPermission.filter(entities);
+                    const userList = new UserListRO({ userList: users });
+                    items.push(userList);
+                    counter += count;
+                }
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -65,7 +72,10 @@ export class HomeService {
 
         items = items.sort(() => 0.5 - Math.random()); // shuffle array
 
-        return customPaginate<IHomeRO>({ entities: items, count: counter }, { ...pagOpts, limit: pagOpts.limit * 3 });
+        return customPaginate<IHomeRO>({ entities: items, count: counter }, {
+            ...pagOpts,
+            limit: (pagOpts.limit * 3),
+        });
     }
 
 }
