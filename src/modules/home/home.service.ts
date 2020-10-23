@@ -7,8 +7,8 @@ import { grantPermission } from '@shared/access-control/grant-permission';
 import { customPaginate, IPagination, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import _ from 'lodash';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class HomeService {
