@@ -18,8 +18,8 @@ import { User } from '@user/user.decorator';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';
 
-@Controller()
 @ApiTags('post')
+@Controller()
 export class PostController {
     constructor(private readonly postService: PostService) {
 

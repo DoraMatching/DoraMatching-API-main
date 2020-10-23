@@ -12,4 +12,7 @@ export class TagPostRO implements ITagPostRO {
 
     @ApiProperty()
     updatedAt: Date;
+
+    @ApiProperty({ type: () => String, default: 'tag-post' })
+    type?: string = 'tag-post';
 }

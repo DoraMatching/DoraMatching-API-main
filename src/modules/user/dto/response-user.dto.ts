@@ -1,10 +1,11 @@
 import { AppRoles } from '@/app.roles';
 import { ApiProperty } from '@nestjs/swagger';
-import { IPostModel } from '@post/dto';
+import { PostRO } from '@post/dto';
+import { QuestionRO } from '@question/dto';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { IUserModel } from './user.model';
 
-export type IUserRO = Omit<IUserModel, 'password'>
+export type IUserRO = Omit<IUserModel, 'password'>;
 
 export class UserRO implements IUserRO {
     @ApiProperty()
@@ -28,15 +29,21 @@ export class UserRO implements IUserRO {
     @ApiProperty()
     roles: AppRoles[];
 
+    @ApiProperty({ type: () => PostRO, isArray: true })
+    posts: PostRO[];
+
+    @ApiProperty({ type: () => QuestionRO, isArray: true })
+    questions: QuestionRO[];
+
+    @ApiProperty()
+    token?: string;
+
     @ApiProperty()
     createdAt: Date;
 
     @ApiProperty()
-    posts: IPostModel[];
-
-    @ApiProperty()
     updatedAt: Date;
 
-    @ApiProperty()
-    token?: string;
+    @ApiProperty({ type: () => String, default: 'user' })
+    type?: string = 'user';
 }

@@ -15,6 +15,7 @@ export interface IPostModel {
     author: Partial<UserModel>;
     createdAt?: Date;
     updatedAt?: Date;
+    type?: string;
 }
 
 export class PostModel implements IPostModel {
@@ -48,7 +49,7 @@ export class PostModel implements IPostModel {
     @IsOptional()
     tags: TagPostModel[];
 
-    @ApiProperty()
+    @ApiProperty({ type: () => CommentPostModel, isArray: true })
     @IsArray()
     @IsOptional()
     comments?: CommentPostModel[];

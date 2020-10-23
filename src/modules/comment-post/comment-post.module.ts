@@ -8,7 +8,11 @@ import { CommentPostService } from './comment-post.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserRepository, PostRepository, CommentPostRepository]),
+        TypeOrmModule.forFeature([
+            CommentPostRepository,
+            PostRepository,
+            UserRepository,
+        ]),
     ],
     controllers: [CommentPostController],
     providers: [CommentPostService],

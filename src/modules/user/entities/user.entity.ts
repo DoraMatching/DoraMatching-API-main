@@ -4,7 +4,6 @@ import { PostEntity } from '@/modules/post/entities/post.entity';
 import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { AvatarGenerator } from 'random-avatar-generator';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -52,6 +51,9 @@ export class UserEntity implements IUserModel {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @Column({ type: 'text', default: 'user', nullable: false })
+    type: string;
+
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword(): Promise<void> {
@@ -65,14 +67,24 @@ export class UserEntity implements IUserModel {
 
     @BeforeInsert()
     setDefaultAvatar(): void {
-        const generator = new AvatarGenerator();
-        generator.generateRandomAvatar();
-        this.avatarUrl = this.avatarUrl || generator.generateRandomAvatar(this.username);
+        this.avatarUrl = `https://robohash.org/${this.username}`;
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts } = this;
-        const responseObject: UserRO = { id, createdAt, updatedAt, username, email, name, roles, avatarUrl, posts };
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions, type } = this;
+        const responseObject: UserRO = {
+            id,
+            createdAt,
+            updatedAt,
+            username,
+            email,
+            name,
+            roles,
+            avatarUrl,
+            posts,
+            questions,
+            type
+        };
         if (showToken) {
             responseObject.token = token;
         }
