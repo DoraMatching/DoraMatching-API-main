@@ -20,8 +20,8 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 @Injectable()
 export class CommentQuestionService extends BaseService<CommentQuestionEntity, CommentQuestionRepository> {
     constructor(
-      private readonly questionRepository: QuestionRepository,
       private readonly commentQuestionRepository: CommentQuestionRepository,
+      private readonly questionRepository: QuestionRepository,
       private readonly userRepository: UserRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,

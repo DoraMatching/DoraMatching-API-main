@@ -1,5 +1,5 @@
 import { AppResources } from '@/app.roles';
-import { IHomeRO } from '@home-modules/dto';
+import { IHomeRO, UserListRO } from '@home-modules/dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '@post/repositories/post.repository';
 import { QuestionRepository } from '@question/repositories/question.repository';
@@ -7,14 +7,15 @@ import { grantPermission } from '@shared/access-control/grant-permission';
 import { customPaginate, IPagination, PaginateParams } from '@shared/pagination';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
+import _ from 'lodash';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class HomeService {
     constructor(
-      private readonly userRepository: UserRepository,
       private readonly postRepository: PostRepository,
       private readonly questionRepository: QuestionRepository,
+      private readonly userRepository: UserRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -22,10 +23,11 @@ export class HomeService {
 
     async getAll(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IHomeRO>> {
         let items: IHomeRO[] = [];
-        let counter = 0;
-        const userPermission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
+        const counts: number[] = [];
+        let nestedItemsCount = 0;
         const postPermission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
         const questionPermission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, null);
+        const userPermission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
 
         if (!(userPermission.granted && questionPermission.granted && postPermission.granted))
             throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
@@ -33,9 +35,12 @@ export class HomeService {
         if (postPermission.granted) {
             try {
                 const { entities, count } = await this.postRepository.getAllPosts(pagOpts);
-                const posts = postPermission.filter(entities);
-                items.push(...posts);
-                counter += count;
+                if (entities.length > 0) {
+                    const posts = postPermission.filter(entities);
+                    nestedItemsCount += posts.length;
+                    items.push(...posts);
+                }
+                counts[0] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -44,9 +49,12 @@ export class HomeService {
         if (questionPermission.granted) {
             try {
                 const { entities, count } = await this.questionRepository.getAllQuestions(pagOpts);
-                const questions = questionPermission.filter(entities);
-                items.push(...questions);
-                counter += count;
+                if (entities.length > 0) {
+                    const questions = questionPermission.filter(entities);
+                    nestedItemsCount += questions.length;
+                    items.push(...questions);
+                }
+                counts[1] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -55,9 +63,13 @@ export class HomeService {
         if (userPermission.granted) {
             try {
                 const { entities, count } = await this.userRepository.getAllUsers(pagOpts);
-                const questions = userPermission.filter(entities);
-                items.push(...questions);
-                counter += count;
+                if (entities.length > 0) {
+                    const users = userPermission.filter(entities);
+                    nestedItemsCount += users.length;
+                    const userList = new UserListRO({ userList: users });
+                    items.push(userList);
+                }
+                counts[2] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -65,7 +77,12 @@ export class HomeService {
 
         items = items.sort(() => 0.5 - Math.random()); // shuffle array
 
-        return customPaginate<IHomeRO>({ entities: items, count: counter }, { ...pagOpts, limit: pagOpts.limit * 3 });
+        return customPaginate<IHomeRO>({
+            count: _.max(counts),
+            entities: items,
+            nestedItemsCount,
+            totalNestedCount: _.sum(counts),
+        }, pagOpts);
     }
 
 }

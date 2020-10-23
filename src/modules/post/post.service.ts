@@ -20,8 +20,8 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     constructor(
       private readonly postRepository: PostRepository,
-      private readonly userRepository: UserRepository,
       private readonly tagPostRepository: TagPostRepository,
+      private readonly userRepository: UserRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
