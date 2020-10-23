@@ -13,9 +13,9 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 @Injectable()
 export class HomeService {
     constructor(
-      private readonly userRepository: UserRepository,
       private readonly postRepository: PostRepository,
       private readonly questionRepository: QuestionRepository,
+      private readonly userRepository: UserRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -25,9 +25,9 @@ export class HomeService {
         let items: IHomeRO[] = [];
         const counts: number[] = [];
         let nestedItemsCount = 0;
-        const userPermission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
         const postPermission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
         const questionPermission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, null);
+        const userPermission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
 
         if (!(userPermission.granted && questionPermission.granted && postPermission.granted))
             throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
@@ -78,8 +78,8 @@ export class HomeService {
         items = items.sort(() => 0.5 - Math.random()); // shuffle array
 
         return customPaginate<IHomeRO>({
-            entities: items,
             count: _.max(counts),
+            entities: items,
             nestedItemsCount,
             totalNestedCount: _.sum(counts),
         }, pagOpts);

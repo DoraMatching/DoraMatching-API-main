@@ -11,17 +11,17 @@ export class PostRepository extends Repository<PostEntity> {
     private readonly SELECT_POST_SCOPE = [
         'post',
         'author.id',
+        'author.avatarUrl',
         'author.name',
         'author.roles',
-        'author.avatarUrl',
         'author.type',
         'tag.id',
         'tag.name',
         'tag.type',
         'comments',
         'commentAuthor.id',
-        'commentAuthor.name',
         'commentAuthor.avatarUrl',
+        'commentAuthor.name',
         'commentAuthor.roles',
         'commentAuthor.type'
     ];

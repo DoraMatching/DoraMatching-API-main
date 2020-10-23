@@ -22,8 +22,8 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
     private readonly logger: Logger = new Logger(CommentPostService.name);
 
     constructor(
-      private readonly postRepository: PostRepository,
       private readonly commentPostRepository: CommentPostRepository,
+      private readonly postRepository: PostRepository,
       private readonly userRepository: UserRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,

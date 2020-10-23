@@ -10,8 +10,8 @@ export class QuestionRepository extends Repository<QuestionEntity> {
     private readonly SELECT_QUESTION_SCOPE = [
         'question',
         'author.id',
-        'author.name',
         'author.avatarUrl',
+        'author.name',
         'author.roles',
         'author.type',
         'tag.id',
@@ -19,8 +19,8 @@ export class QuestionRepository extends Repository<QuestionEntity> {
         'tag.type',
         'comments',
         'commentAuthor.id',
-        'commentAuthor.name',
         'commentAuthor.avatarUrl',
+        'commentAuthor.name',
         'commentAuthor.roles',
         'commentAuthor.type',
     ];
