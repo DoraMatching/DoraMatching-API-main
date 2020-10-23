@@ -2,7 +2,7 @@ import { EntityResults } from '@/commons/entity-results';
 import { IPagination } from './paginate.interface';
 import { PaginateParams } from './paginate.params';
 
-export function customPaginate<T>({ entities, count }: EntityResults<any>, { route, order, limit, page }: PaginateParams): IPagination<T> {
+export function customPaginate<T>({ entities, count, totalNestedCount, nestedItemsCount }: EntityResults<any>, { route, order, limit, page }: PaginateParams): IPagination<T> {
     const entitiesLength = entities.length;
     const totalPages = Math.ceil(count / limit) || 1;
     const pPrevious = page - 1;
@@ -16,9 +16,9 @@ export function customPaginate<T>({ entities, count }: EntityResults<any>, { rou
             last: `${route}?page=${totalPages}&limit=${limit}&order=${order}`,
         },
         meta: {
-            totalItems: count,
-            itemCount: entitiesLength,
-            itemsPerPage: limit,
+            totalItems: totalNestedCount || count,
+            itemCount: nestedItemsCount || entitiesLength,
+            itemsPerPage: nestedItemsCount ? limit * 3 : limit,
             totalPages,
             currentPage: page,
         },

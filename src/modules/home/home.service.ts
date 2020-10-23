@@ -8,6 +8,7 @@ import { customPaginate, IPagination, PaginateParams } from '@shared/pagination'
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import _ from 'lodash';
 
 @Injectable()
 export class HomeService {
@@ -22,7 +23,8 @@ export class HomeService {
 
     async getAll(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IHomeRO>> {
         let items: IHomeRO[] = [];
-        let counter = 0;
+        const counts: number[] = [];
+        let nestedItemsCount = 0;
         const userPermission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
         const postPermission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, null);
         const questionPermission = grantPermission(this.rolesBuilder, AppResources.QUESTION, 'read', jwtUser, null);
@@ -35,10 +37,10 @@ export class HomeService {
                 const { entities, count } = await this.postRepository.getAllPosts(pagOpts);
                 if (entities.length > 0) {
                     const posts = postPermission.filter(entities);
+                    nestedItemsCount += posts.length;
                     items.push(...posts);
                 }
-                counter += count;
-                console.log('POST', count);
+                counts[0] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -49,10 +51,10 @@ export class HomeService {
                 const { entities, count } = await this.questionRepository.getAllQuestions(pagOpts);
                 if (entities.length > 0) {
                     const questions = questionPermission.filter(entities);
+                    nestedItemsCount += questions.length;
                     items.push(...questions);
                 }
-                counter += count;
-                console.log('QUESTION', count);
+                counts[1] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -63,11 +65,11 @@ export class HomeService {
                 const { entities, count } = await this.userRepository.getAllUsers(pagOpts);
                 if (entities.length > 0) {
                     const users = userPermission.filter(entities);
+                    nestedItemsCount += users.length;
                     const userList = new UserListRO({ userList: users });
                     items.push(userList);
                 }
-                counter += count;
-                console.log('USER', count);
+                counts[2] = count;
             } catch ({ detail }) {
                 throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -75,10 +77,12 @@ export class HomeService {
 
         items = items.sort(() => 0.5 - Math.random()); // shuffle array
 
-        return customPaginate<IHomeRO>({ entities: items, count: counter }, {
-            ...pagOpts,
-            limit: (pagOpts.limit * 3),
-        });
+        return customPaginate<IHomeRO>({
+            entities: items,
+            count: _.max(counts),
+            nestedItemsCount,
+            totalNestedCount: _.sum(counts),
+        }, pagOpts);
     }
 
 }
