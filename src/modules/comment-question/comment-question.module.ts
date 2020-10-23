@@ -7,7 +7,11 @@ import { CommentQuestionController } from './comment-question.controller';
 import { CommentQuestionService } from './comment-question.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRepository, QuestionRepository, CommentQuestionRepository])],
+    imports: [TypeOrmModule.forFeature([
+        CommentQuestionRepository,
+        QuestionRepository,
+        UserRepository,
+    ])],
     controllers: [CommentQuestionController],
     providers: [CommentQuestionService],
 })

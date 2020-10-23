@@ -56,4 +56,7 @@ export class PostEntity extends BaseEntity implements IPostModel {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ type: 'text', default: 'post', nullable: false })
+    type: string;
 }

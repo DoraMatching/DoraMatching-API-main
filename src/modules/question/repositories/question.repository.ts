@@ -1,7 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm';
 import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import { Logger } from '@nestjs/common';
 import { PaginateParams } from '@shared/pagination';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(QuestionEntity)
 export class QuestionRepository extends Repository<QuestionEntity> {
@@ -10,16 +10,19 @@ export class QuestionRepository extends Repository<QuestionEntity> {
     private readonly SELECT_QUESTION_SCOPE = [
         'question',
         'author.id',
-        'author.name',
         'author.avatarUrl',
+        'author.name',
         'author.roles',
+        'author.type',
         'tag.id',
         'tag.name',
+        'tag.type',
         'comments',
         'commentAuthor.id',
-        'commentAuthor.name',
         'commentAuthor.avatarUrl',
+        'commentAuthor.name',
         'commentAuthor.roles',
+        'commentAuthor.type',
     ];
 
     async getAllQuestions({ order, limit, page }: Partial<PaginateParams>) {

@@ -1,5 +1,6 @@
 import { CommentPostModule } from '@comment-post/comment-post.module';
 import { CommentQuestionModule } from '@comment-question/comment-question.module';
+import { HomeModule } from '@home-modules/home.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -32,6 +33,7 @@ import { TagQuestionModule } from './modules/tag-question/tag-question.module';
         CommentPostModule,
         CommentQuestionModule,
         TagQuestionModule,
+        HomeModule,
     ],
     controllers: [AppController],
     providers: [],
