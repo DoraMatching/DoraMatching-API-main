@@ -4,7 +4,6 @@ import { PostEntity } from '@/modules/post/entities/post.entity';
 import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { AvatarGenerator } from 'random-avatar-generator';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -68,9 +67,7 @@ export class UserEntity implements IUserModel {
 
     @BeforeInsert()
     setDefaultAvatar(): void {
-        const generator = new AvatarGenerator();
-        generator.generateRandomAvatar();
-        this.avatarUrl = this.avatarUrl || generator.generateRandomAvatar(this.username);
+        this.avatarUrl = `https://robohash.org/${this.username}`;
     }
 
     toResponseObject(showToken = true): UserRO {
@@ -86,7 +83,7 @@ export class UserEntity implements IUserModel {
             avatarUrl,
             posts,
             questions,
-            type 
+            type
         };
         if (showToken) {
             responseObject.token = token;
