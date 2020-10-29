@@ -102,5 +102,15 @@ roles
   .extend(AppRoles.TRAINEE)
   .grant(AppRoles.ADMIN)
   .extend(AppRoles.TRAINER)
-  .deleteAny(AppResources.COMMENT_QUESTION);
+  .deleteAny(AppResources.COMMENT_QUESTION)
+
+  // Resource TAG_QUESTION
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TAG_QUESTION)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER);
 
