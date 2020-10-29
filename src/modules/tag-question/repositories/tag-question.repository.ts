@@ -7,11 +7,7 @@ import { TagQuestionEntity } from '../entities/tag-question.entity';
 export class TagQuestionRepository extends Repository<TagQuestionEntity> {
     private readonly SELECT_TAG_QUESTION_SCOPE = [
         'tag',
-        'post.id',
-        'post.featuredImage',
-        'post.subTitle',
-        'post.title',
-        'post.type',
+        'question',
         'author.id',
         'author.avatarUrl',
         'author.name',
