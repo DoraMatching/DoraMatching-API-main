@@ -7,8 +7,7 @@ import { TopicEntity } from '@topic/entities/topic.entity';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateTopicDTO } from './dto/create-topic.dto';
-import { ITopicRO, TopicRO } from './dto/response-topic.dto';
+import { CreateTopicDTO, ITopicRO, TopicRO } from './dto';
 import { TopicRepository } from './repositories/topic.repository';
 
 @Injectable()

@@ -6,8 +6,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '../user/dto';
 import { User } from '../user/user.decorator';
-import { CreateTopicDTO } from './dto/create-topic.dto';
-import { ITopicRO, TopicRO } from './dto/response-topic.dto';
+import { CreateTopicDTO, ITopicRO, TopicRO } from './dto';
 import { TopicService } from './topic.service';
 
 @ApiTags('topic')
