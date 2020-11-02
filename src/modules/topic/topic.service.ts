@@ -35,4 +35,15 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository>{
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
+
+    async getTopicById(id: string, jwtUser: JwtUser): Promise<ITopicRO> {
+        const foundTopic = await this.topicRepository.getTopicById(id);
+        if (!foundTopic) throw new HttpException(`Topic with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+        else {
+            const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'read', jwtUser, foundTopic.author.id);
+            if (permission.granted) {
+                return permission.filter(foundTopic);
+            } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+        }
+    }
 }

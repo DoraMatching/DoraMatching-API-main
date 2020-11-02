@@ -28,4 +28,16 @@ export class TopicRepository extends Repository<TopicEntity> {
             console.error(e);
         }
     }
+
+    async getTopicById(id: string): Promise<TopicEntity> {
+        try {
+            return await this.createQueryBuilder('topic')
+                .leftJoinAndSelect('topic.author', 'author')
+                .select(this.SELECT_TOPIC_SCOPE)
+                .where('topic.id = :id', { id })
+                .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }
