@@ -20,7 +20,8 @@
       "@tag-post/*": ["src/modules/tag-post/*"],
       "@comment-post/*": ["src/modules/comment-post/*"],
       "@comment-question/*": ["src/modules/comment-question/*"],
-      "@home-modules/*": ["src/modules/home/*"]
+      "@home-modules/*": ["src/modules/home/*"],
+      "@topic/*": ["src/modules/topic/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

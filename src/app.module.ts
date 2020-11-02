@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from '@post/post.module';
 import { QuestionModule } from '@question/question.module';
 import { TagPostModule } from '@tag-post/tag-post.module';
+import { TopicModule } from '@topic/topic.module';
 import { UserModule } from '@user/user.module';
 import { AccessControlModule } from 'nest-access-control';
 import { AutomapperModule } from 'nestjsx-automapper';
@@ -34,6 +35,7 @@ import { TagQuestionModule } from './modules/tag-question/tag-question.module';
         CommentQuestionModule,
         TagQuestionModule,
         HomeModule,
+        TopicModule,
     ],
     controllers: [AppController],
     providers: [],
