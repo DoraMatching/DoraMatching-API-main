@@ -7,6 +7,7 @@ import { TopicEntity } from '@topic/entities/topic.entity';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { CreateTopicDTO } from './dto/create-topic.dto';
 import { ITopicRO, TopicRO } from './dto/response-topic.dto';
 import { TopicRepository } from './repositories/topic.repository';
 
@@ -45,5 +46,29 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository>{
                 return permission.filter(foundTopic);
             } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
         }
+    }
+
+    async createTopic(data: CreateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'create', jwtUser, null);
+        if (permission.granted) {
+            const user = await this.userRepository.findOne({
+                where: { id: jwtUser.id },
+                select: ['id', 'name', 'username', 'email'],
+            });
+            if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            data = permission.filter(data);
+            const newTopic = this.topicRepository.create({
+                ...data,
+                author: user
+            });
+
+            try {
+                const _topic = await this.topicRepository.save(newTopic);
+                return await this.topicRepository.getTopicById(_topic.id);
+            } catch ({ detail }) {
+                throw new HttpException(detail || `OOPS! Can't create topic`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }
