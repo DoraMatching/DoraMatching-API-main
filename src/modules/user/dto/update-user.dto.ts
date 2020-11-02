@@ -4,7 +4,7 @@ import { RolesValidator } from '@shared/validation/roles.validate';
 import { ArrayUnique, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
 import { IUserModel } from './user.model';
 
-export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions'>;
+export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics'>;
 
 export class UpdateUser implements IUpdateUser {
     @ApiProperty()
@@ -39,10 +39,10 @@ export class UpdateUser implements IUpdateUser {
     @MinLength(8)
     @MaxLength(20)
     @Matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      {
-          message: 'Too weak password. Require minimum 8 characters, at least 1 letter, 1 number and 1 special character',
-      },
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        {
+            message: 'Too weak password. Require minimum 8 characters, at least 1 letter, 1 number and 1 special character',
+        },
     )
     password: string;
 

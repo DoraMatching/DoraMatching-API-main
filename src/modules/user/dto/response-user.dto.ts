@@ -1,4 +1,5 @@
 import { AppRoles } from '@/app.roles';
+import { TopicRO } from '@/modules/topic/dto/response-topic.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostRO } from '@post/dto';
 import { QuestionRO } from '@question/dto';
@@ -31,6 +32,9 @@ export class UserRO implements IUserRO {
 
     @ApiProperty({ type: () => PostRO, isArray: true })
     posts: PostRO[];
+
+    @ApiProperty({ type: () => TopicRO, isArray: true })
+    topics: TopicRO[];
 
     @ApiProperty({ type: () => QuestionRO, isArray: true })
     questions: QuestionRO[];
