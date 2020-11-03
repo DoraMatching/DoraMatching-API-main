@@ -21,7 +21,8 @@
       "@comment-post/*": ["src/modules/comment-post/*"],
       "@comment-question/*": ["src/modules/comment-question/*"],
       "@home-modules/*": ["src/modules/home/*"],
-      "@topic/*": ["src/modules/topic/*"]
+      "@topic/*": ["src/modules/topic/*"],
+      "@classe/*": ["src/modules/classe/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

@@ -1,3 +1,4 @@
+import { ClasseModule } from '@classe/classe.module';
 import { CommentPostModule } from '@comment-post/comment-post.module';
 import { CommentQuestionModule } from '@comment-question/comment-question.module';
 import { HomeModule } from '@home-modules/home.module';
@@ -36,6 +37,7 @@ import { TagQuestionModule } from './modules/tag-question/tag-question.module';
         TagQuestionModule,
         HomeModule,
         TopicModule,
+        ClasseModule,
     ],
     controllers: [AppController],
     providers: [],
