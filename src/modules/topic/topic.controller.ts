@@ -2,9 +2,9 @@ import { apiUrl } from '@/config';
 import { Auth } from '@/shared/auth/auth.decorator';
 import { PaginateParams } from '@/shared/pagination';
 import { FindOneParams } from '@/shared/pipes/find-one.params';
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IPostRO, PostRO } from '@post/dto';
+import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from './dto';
@@ -37,15 +37,24 @@ export class TopicController {
     @ApiOperation({ summary: 'Create topic', description: 'Return topic created' })
     @ApiResponse({ type: TopicRO, status: 201 })
     @Post('topic')
-    createPost(@Body() data: CreateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {
+    createTopic(@Body() data: CreateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {
         return this.topicService.createTopic(data, jwtUser);
     }
 
     @Auth()
     @ApiOperation({ summary: 'Update topic', description: 'Return topic updated' })
-    @ApiResponse({ type: PostRO, status: 201 })
+    @ApiResponse({ type: TopicRO, status: 201 })
     @Patch('topic/:id')
-    updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdateTopicDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
+    updateTopicById(@Param() { id }: FindOneParams, @Body() data: UpdateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {
         return this.topicService.updateTopicById(id, data, jwtUser);
+    }
+
+    @Auth()
+    @ApiOperation({ summary: 'Delete topic by :id', description: 'Return a delete status message' })
+    @ApiResponse({ type: DeleteResultDTO, status: 204 })
+    @HttpCode(HttpStatus.ACCEPTED)
+    @Delete('topic/:id')
+    deleteTopicById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        return this.topicService.deleteTopicById(id, jwtUser);
     }
 }

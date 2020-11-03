@@ -2,9 +2,14 @@ import { UserModel } from '@/modules/user/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel } from '@topic/dto/topic.model';
 
-export type ITopicRO = ITopicModel;
+export interface ITopicRO extends ITopicModel {
+    id: string;
+}
 
 export class TopicRO implements ITopicRO {
+    @ApiProperty()
+    id: string;
+
     @ApiProperty()
     name: string;
 

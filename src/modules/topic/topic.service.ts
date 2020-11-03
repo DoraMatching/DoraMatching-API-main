@@ -3,6 +3,7 @@ import { BaseService } from '@/commons/base-service';
 import { grantPermission } from '@/shared/access-control/grant-permission';
 import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@/shared/pagination';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { IDeleteResultDTO } from '@shared/dto';
 import { TopicEntity } from '@topic/entities/topic.entity';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
@@ -71,7 +72,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async updateTopicById(id: string, data: UpdateTopicDTO, jwtUser: JwtUser) {
+    async updateTopicById(id: string, data: UpdateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
         const topic = await this.getTopicById(id, jwtUser);
         if (!topic) throw new HttpException(`Topic with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.id);
@@ -85,6 +86,17 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
             } catch ({ detail, message }) {
                 this.logger.error(message);
                 throw new HttpException(detail || `OOPS! Can't update topic`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async deleteTopicById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        const foundTopic = await this.getTopicById(id, jwtUser);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.id);
+        if(permission.granted) {
+            await this.topicRepository.delete(id);
+            return {
+                message: `Deleted topic with id: ${foundTopic.id}.`,
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }

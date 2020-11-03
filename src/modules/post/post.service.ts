@@ -30,7 +30,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async deletePostById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundPost = await this.getPostById(id, jwtUser);
-
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
         if (permission.granted) {
             await this.postRepository.delete(id);
