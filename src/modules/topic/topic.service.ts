@@ -7,18 +7,18 @@ import { TopicEntity } from '@topic/entities/topic.entity';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateTopicDTO, ITopicRO, TopicRO } from './dto';
+import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from './dto';
 import { TopicRepository } from './repositories/topic.repository';
 
 @Injectable()
-export class TopicService extends BaseService<TopicEntity, TopicRepository>{
+export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     private readonly logger: Logger = new Logger(TopicService.name);
 
     constructor(
-        private readonly topicRepository: TopicRepository,
-        private readonly userRepository: UserRepository,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder
+      private readonly topicRepository: TopicRepository,
+      private readonly userRepository: UserRepository,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
     ) {
         super(topicRepository);
     }
@@ -58,7 +58,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository>{
             data = permission.filter(data);
             const newTopic = this.topicRepository.create({
                 ...data,
-                author: user
+                author: user,
             });
 
             try {
@@ -68,6 +68,24 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository>{
                 throw new HttpException(detail || `OOPS! Can't create topic`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async updateTopicById(id: string, data: UpdateTopicDTO, jwtUser: JwtUser) {
+        const topic = await this.getTopicById(id, jwtUser);
+        if (!topic) throw new HttpException(`Topic with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.id);
+        if (permission.granted) {
+            try {
+                data = permission.filter(data);
+                Object.assign(topic, data);
+                await this.topicRepository.save(topic);
+                const result = await this.topicRepository.getTopicById(id);
+                return permission.filter(result);
+            } catch ({ detail, message }) {
+                this.logger.error(message);
+                throw new HttpException(detail || `OOPS! Can't update topic`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }

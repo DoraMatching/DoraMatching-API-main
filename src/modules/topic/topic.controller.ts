@@ -2,11 +2,12 @@ import { apiUrl } from '@/config';
 import { Auth } from '@/shared/auth/auth.decorator';
 import { PaginateParams } from '@/shared/pagination';
 import { FindOneParams } from '@/shared/pipes/find-one.params';
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtUser } from '../user/dto';
-import { User } from '../user/user.decorator';
-import { CreateTopicDTO, ITopicRO, TopicRO } from './dto';
+import { IPostRO, PostRO } from '@post/dto';
+import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
+import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from './dto';
 import { TopicService } from './topic.service';
 
 @ApiTags('topic')
@@ -21,7 +22,7 @@ export class TopicController {
     @ApiResponse({ type: [TopicRO], status: 200 })
     @Get('topics')
     index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
-        return this.topicService.getAllTopics({ ...pagOpts, route: `${apiUrl}/topics` }, jwtUser)
+        return this.topicService.getAllTopics({ ...pagOpts, route: `${apiUrl}/topics` }, jwtUser);
     }
 
     @Auth()
@@ -38,5 +39,13 @@ export class TopicController {
     @Post('topic')
     createPost(@Body() data: CreateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {
         return this.topicService.createTopic(data, jwtUser);
+    }
+
+    @Auth()
+    @ApiOperation({ summary: 'Update topic', description: 'Return topic updated' })
+    @ApiResponse({ type: PostRO, status: 201 })
+    @Patch('post/:id')
+    updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdateTopicDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
+        return this.topicService.updateTopicById(id, data, jwtUser);
     }
 }

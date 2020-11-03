@@ -91,7 +91,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         }
     }
 
-    async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
+    async updatePostById(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
         if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);

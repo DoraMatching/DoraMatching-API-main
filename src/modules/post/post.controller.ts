@@ -46,7 +46,7 @@ export class PostController {
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
-    async deletePostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+    deletePostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         return this.postService.deletePostById(id, jwtUser);
     }
 
@@ -63,6 +63,6 @@ export class PostController {
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
     updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
-        return this.postService.updatePost(id, data, jwtUser);
+        return this.postService.updatePostById(id, data, jwtUser);
     }
 }
