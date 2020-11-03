@@ -1,7 +1,8 @@
 import { AppRoles } from '@/app.roles';
 import { jwtExpiresIn, jwtSecretKey } from '@/config';
-import { PostEntity } from '@/modules/post/entities/post.entity';
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
+import { ClasseEntity } from '@classe/entities/classe.entity';
+import { PostEntity } from '@post/entities/post.entity';
+import { QuestionEntity } from '@question/entities/question.entity';
 import { TopicEntity } from '@topic/entities/topic.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -49,6 +50,9 @@ export class UserEntity implements IUserModel {
     @OneToMany(() => QuestionEntity, question => question.author)
     questions: QuestionEntity[];
 
+    @OneToMany(() => ClasseEntity, classe => classe.members)
+    classes: ClasseEntity[];
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -75,7 +79,7 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, topics, questions, type } = this;
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, topics, questions, classes, type } = this;
         const responseObject: UserRO = {
             id,
             createdAt,
@@ -88,6 +92,7 @@ export class UserEntity implements IUserModel {
             posts,
             topics,
             questions,
+            classes,
             type
         };
         if (showToken) {

@@ -1,16 +1,16 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
+import { QuestionEntity } from '@question/entities/question.entity';
 import { QuestionRepository } from '@question/repositories/question.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { IDeleteResultDTO } from '@shared/dto';
 import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
+import { TagQuestionRepository } from '@tag-question/repositories/tag-question.repository';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { TagQuestionRepository } from '../tag-question/repositories/tag-question.repository';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionEntity, QuestionRepository> {

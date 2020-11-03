@@ -8,12 +8,12 @@ import {
     Post, Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UpdatePostDTO } from '@post/dto/update-post.dto';
+import { UpdatePostDTO } from '@post/dto';
 import { Auth } from '@shared/auth/auth.decorator';
-import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto/';
-import { IPagination, PaginateParams } from '@shared/pagination/';
+import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto';
+import { IPagination, PaginateParams } from '@shared/pagination';
 import { FindOneParams } from '@shared/pipes/find-one.params';
-import { JwtUser } from '@user/dto/';
+import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { CreatePostDTO, IPostRO, PostRO } from './dto';
 import { PostService } from './post.service';

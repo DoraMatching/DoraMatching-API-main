@@ -1,8 +1,9 @@
 import { AppRoles } from '@/app.roles';
+import { ClasseModel, IClasseModel } from '@classe/dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IPostModel, PostModel } from '@post/dto/post.model';
+import { IPostModel, PostModel } from '@post/dto';
 import { IQuestionModel, QuestionModel } from '@question/dto';
-import { ITopicModel } from '@topic/dto/topic.model';
+import { ITopicModel } from '@topic/dto';
 import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from 'class-validator';
 
 export interface IUserModel {
@@ -13,9 +14,10 @@ export interface IUserModel {
     avatarUrl: string;
     roles: AppRoles[];
     password: string;
-    posts: IPostModel[];
-    topics: ITopicModel[];
-    questions: IQuestionModel[];
+    posts: Partial<IPostModel>[];
+    topics: Partial<ITopicModel>[];
+    classes: Partial<IClasseModel>[];
+    questions: Partial<IQuestionModel>[];
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -62,6 +64,9 @@ export class UserModel implements IUserModel {
 
     @ApiProperty()
     questions: QuestionModel[];
+
+    @ApiProperty()
+    classes: ClasseModel[];
 
     @ApiProperty()
     createdAt: Date;

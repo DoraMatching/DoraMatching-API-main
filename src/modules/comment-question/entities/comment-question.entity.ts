@@ -1,6 +1,6 @@
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
 import { ICommentQuestionModel } from '@comment-question/dto';
+import { QuestionEntity } from '@question/entities/question.entity';
+import { UserEntity } from '@user/entities/user.entity';
 import {
     BaseEntity,
     Column,

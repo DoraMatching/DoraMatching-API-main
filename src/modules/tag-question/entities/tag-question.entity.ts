@@ -1,5 +1,5 @@
-import { ITagQuestionModel } from '@/modules/tag-question/dto';
 import { QuestionEntity } from '@question/entities/question.entity';
+import { ITagQuestionModel } from '@tag-question/dto';
 import {
     BaseEntity,
     Column,

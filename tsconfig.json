@@ -18,11 +18,13 @@
       "@shared/*": ["src/shared/*"],
       "@question/*": ["src/modules/question/*"],
       "@tag-post/*": ["src/modules/tag-post/*"],
+      "@tag-question/*": ["src/modules/tag-question/*"],
       "@comment-post/*": ["src/modules/comment-post/*"],
       "@comment-question/*": ["src/modules/comment-question/*"],
       "@home-modules/*": ["src/modules/home/*"],
       "@topic/*": ["src/modules/topic/*"],
-      "@classe/*": ["src/modules/classe/*"]
+      "@classe/*": ["src/modules/classe/*"],
+      "@trainer/*": ["src/modules/trainer/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

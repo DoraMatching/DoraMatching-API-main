@@ -1,18 +1,18 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons/base-service';
-import { CommentPostEntity } from '@/modules/comment-post/entities/comment-post.entity';
 import {
     CommentPostParam,
     CreateCommentPostDTO,
     ICommentPostRO,
     UpdateCommentPostDTO
 } from '@comment-post/dto';
+import { CommentPostEntity } from '@comment-post/entities/comment-post.entity';
 import { CommentPostRepository } from '@comment-post/repositories/comment-post.repository,ts';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { IPostRO } from '@post/dto';
 import { PostRepository } from '@post/repositories/post.repository';
 import { grantPermission } from '@shared/access-control/grant-permission';
-import { IDeleteResultDTO } from '@shared/dto/';
+import { IDeleteResultDTO } from '@shared/dto';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories/user.repository';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
