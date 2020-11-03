@@ -44,7 +44,7 @@ export class TopicController {
     @Auth()
     @ApiOperation({ summary: 'Update topic', description: 'Return topic updated' })
     @ApiResponse({ type: PostRO, status: 201 })
-    @Patch('post/:id')
+    @Patch('topic/:id')
     updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdateTopicDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
         return this.topicService.updateTopicById(id, data, jwtUser);
     }
