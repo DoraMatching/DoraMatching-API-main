@@ -1,13 +1,11 @@
-import { ClasseEntity } from '@classe/entities/classe.entity';
+import { TrainerEntity } from '@/modules/trainer/entites/trainer.entity';
 import { ITopicModel } from '@topic/dto';
-import { UserEntity } from '@user/entities/user.entity';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, JoinTable,
-    ManyToOne,
-    OneToMany,
+    Entity,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
@@ -26,13 +24,8 @@ export class TopicEntity extends BaseEntity implements ITopicModel {
     @Column({ type: 'text', nullable: false })
     featuredImage: string;
 
-    @ManyToOne(() => UserEntity, author => author.topics, { cascade: true, nullable: false })
-    @JoinTable()
-    author: UserEntity;
-
-    @OneToMany(() => ClasseEntity, classe => classe.topic)
-    @JoinTable()
-    classes: ClasseEntity[];
+    @OneToOne(() => TrainerEntity)
+    author: TrainerEntity;
 
     @CreateDateColumn()
     createdAt: Date;

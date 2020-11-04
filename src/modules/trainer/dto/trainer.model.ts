@@ -1,11 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { UserModel } from "@user/dto";
+import { TopicModel } from "@/modules/topic/dto";
 
 export interface ITrainerModel {
-    userEntity: Partial<UserModel>;
+    user: UserModel;
+    topics: TopicModel[];
 }
 
 export class TrainerModel implements ITrainerModel{
     @ApiProperty()
-    userEntity: UserModel;
+    user: UserModel;
+
+    @ApiProperty()
+    topics: TopicModel[];
 }

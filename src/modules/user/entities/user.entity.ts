@@ -44,14 +44,8 @@ export class UserEntity implements IUserModel {
     @OneToMany(() => PostEntity, post => post.author)
     posts: PostEntity[];
 
-    @OneToMany(() => TopicEntity, topic => topic.author)
-    topics: TopicEntity[];
-
     @OneToMany(() => QuestionEntity, question => question.author)
     questions: QuestionEntity[];
-
-    @OneToMany(() => ClasseEntity, classe => classe.members)
-    classes: ClasseEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
@@ -79,7 +73,7 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, topics, questions, classes, type } = this;
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions, type } = this;
         const responseObject: UserRO = {
             id,
             createdAt,
@@ -90,9 +84,7 @@ export class UserEntity implements IUserModel {
             roles,
             avatarUrl,
             posts,
-            topics,
             questions,
-            classes,
             type
         };
         if (showToken) {

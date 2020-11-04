@@ -1,11 +1,15 @@
+import { TopicModel } from '@/modules/topic/dto';
+import { ITrainerModel } from '@/modules/trainer/dto';
+import { UserModel } from '@/modules/user/dto';
 import { IClasseModel } from '@classe/dto';
-import { TopicEntity } from '@topic/entities/topic.entity';
-import { TrainerEntity } from '@trainer/entites/trainer.entity';
 import { UserEntity } from '@user/entities/user.entity';
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel{
+    topic: Partial<TopicModel>;
+    trainers: ITrainerModel[];
+    members: UserModel[];
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -26,16 +30,6 @@ export class ClasseEntity extends BaseEntity implements IClasseModel{
 
     @Column({ type: 'integer', nullable: false })
     duration: number;
-
-    @ManyToOne(() => TopicEntity, topic => topic.classes)
-    @JoinTable()
-    topic: TopicEntity;
-
-    @ManyToMany(() => TrainerEntity)
-    trainers: TrainerEntity[];
-
-    @ManyToMany(() => UserEntity, user => user.classes)
-    members: UserEntity[];
 
     author: UserEntity;
 

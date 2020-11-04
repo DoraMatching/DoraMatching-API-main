@@ -34,12 +34,6 @@ export class UserRO implements IUserRO {
     @ApiProperty({ type: () => PostRO, isArray: true })
     posts: PostRO[];
 
-    @ApiProperty({ type: () => TopicRO, isArray: true })
-    topics: TopicRO[];
-
-    @ApiProperty({type: () => ClasseRO, isArray: true})
-    classes: ClasseRO[];
-
     @ApiProperty({ type: () => QuestionRO, isArray: true })
     questions: QuestionRO[];
 

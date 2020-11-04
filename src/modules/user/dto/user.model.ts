@@ -15,8 +15,6 @@ export interface IUserModel {
     roles: AppRoles[];
     password: string;
     posts: Partial<IPostModel>[];
-    topics: Partial<ITopicModel>[];
-    classes: Partial<IClasseModel>[];
     questions: Partial<IQuestionModel>[];
     createdAt?: Date;
     updatedAt?: Date;
@@ -60,13 +58,7 @@ export class UserModel implements IUserModel {
     posts: PostModel[];
 
     @ApiProperty()
-    topics: ITopicModel[];
-
-    @ApiProperty()
     questions: QuestionModel[];
-
-    @ApiProperty()
-    classes: ClasseModel[];
 
     @ApiProperty()
     createdAt: Date;

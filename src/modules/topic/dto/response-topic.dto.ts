@@ -1,3 +1,4 @@
+import { TrainerModel } from '@/modules/trainer/dto';
 import { ClasseModel } from '@classe/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel } from '@topic/dto';
@@ -21,7 +22,7 @@ export class TopicRO implements ITopicRO {
     featuredImage: string;
 
     @ApiProperty({ type: () => UserModel })
-    author: Partial<UserModel>;
+    author: TrainerModel;
 
     @ApiProperty({type: () => ClasseModel, isArray: true})
     classes: Partial<ClasseModel>[];

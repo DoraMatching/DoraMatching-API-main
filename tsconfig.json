@@ -24,7 +24,8 @@
       "@home-modules/*": ["src/modules/home/*"],
       "@topic/*": ["src/modules/topic/*"],
       "@classe/*": ["src/modules/classe/*"],
-      "@trainer/*": ["src/modules/trainer/*"]
+      "@trainer/*": ["src/modules/trainer/*"],
+      "@trainee/*": ["src/modules/trainee/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

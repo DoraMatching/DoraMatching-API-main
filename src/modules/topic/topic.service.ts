@@ -75,7 +75,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     async updateTopicById(id: string, data: UpdateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
         const topic = await this.getTopicById(id, jwtUser);
         if (!topic) throw new HttpException(`Topic with id: ${id} not found`, HttpStatus.NOT_FOUND);
-        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.id);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.user.id);
         if (permission.granted) {
             try {
                 data = permission.filter(data);
@@ -92,7 +92,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
 
     async deleteTopicById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundTopic = await this.getTopicById(id, jwtUser);
-        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.id);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.user.id);
         if(permission.granted) {
             await this.topicRepository.delete(id);
             return {
