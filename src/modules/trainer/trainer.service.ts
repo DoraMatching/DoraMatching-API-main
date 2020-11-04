@@ -5,7 +5,6 @@ import { TrainerRepository } from '@trainer/repository/trainer.repository';
 import { JwtUser } from '@user/dto';
 import { grantPermission } from '@shared/access-control/grant-permission';
 import { AppResources, AppRoles } from '@/app.roles';
-import { rolesFilter } from '@shared/access-control/roles-filter';
 
 @Injectable()
 export class TrainerService {
@@ -17,20 +16,27 @@ export class TrainerService {
     ) {
     }
 
+    async getAllTrainers(jwtUser: JwtUser) {
+        return await this.trainerRepository.getAllTrainers();
+    }
+
     async registerTrainer(jwtUser: JwtUser) {
-        const user = await this.userRepository.getUserById(jwtUser.id);
+        const userId = jwtUser.id;
+        const user = await this.userRepository.findOne(userId);
         if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         const permission = grantPermission(this.rolesBuilder, AppResources.TRAINER, 'create', jwtUser, null);
         if (permission.granted) {
+            user.roles = [AppRoles.TRAINEE, AppRoles.TRAINER];
             const trainer = this.trainerRepository.create({
                 user,
             });
+            console.log(trainer)
             try {
-                const [newUser, newTrainer] = await Promise.all([
+                await Promise.all([
                     this.userRepository.save(user),
                     this.trainerRepository.save(trainer),
                 ]);
-                return (await this.userRepository.findOne({ id: jwtUser.id })).toResponseObject(false);
+                return (await this.userRepository.findOne({ id: userId })).toResponseObject(false);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't register trainer`, HttpStatus.INTERNAL_SERVER_ERROR);
             }

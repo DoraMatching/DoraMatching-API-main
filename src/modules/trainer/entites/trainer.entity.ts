@@ -6,7 +6,7 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, JoinTable,
+    Entity, JoinColumn, JoinTable,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
@@ -15,11 +15,11 @@ import {
 
 @Entity('trainer')
 export class TrainerEntity extends BaseEntity implements TrainerModel {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @OneToOne(() => UserEntity)
-    @JoinTable()
+    @JoinColumn({ name: 'user' })
     user: UserEntity;
 
     @OneToMany(() => TopicEntity, topic => topic.author)
