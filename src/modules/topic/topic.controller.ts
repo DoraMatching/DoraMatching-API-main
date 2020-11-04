@@ -1,14 +1,11 @@
-import { apiUrl } from '@/config';
-import { Auth } from '@/shared/auth/auth.decorator';
-import { PaginateParams } from '@/shared/pagination';
-import { FindOneParams } from '@/shared/pipes/find-one.params';
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto';
-import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
-import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from './dto';
-import { TopicService } from './topic.service';
+import { Auth, DeleteResultDTO, FindOneParams, IDeleteResultDTO, PaginateParams } from '@/shared';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { TopicService } from '@topic/topic.service';
+import { apiUrl } from '@/config';
+import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from '@topic/dto';
+import { JwtUser } from '@user/dto';
 
 @ApiTags('topic')
 @Controller()

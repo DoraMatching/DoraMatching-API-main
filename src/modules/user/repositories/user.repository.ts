@@ -1,7 +1,7 @@
-import { EntityResults } from '@/commons/entity-results';
-import { PaginateParams } from '@shared/pagination';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
+import { PaginateParams } from '@/shared';
+import { EntityResults } from '@/commons';
+import { UserEntity } from '@user/entities';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {

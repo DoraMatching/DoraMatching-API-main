@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { TrainerController } from './trainer.controller';
-import { TrainerService } from './trainer.service';
+import { TrainerRepository } from '@trainer/repositories';
+import { UserRepository } from '@user/repositories';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from '@user/repositories/user.repository';
-import { TrainerRepository } from '@trainer/repository/trainer.repository';
+import { TrainerController } from '@trainer/trainer.controller';
+import { TrainerService } from '@trainer/trainer.service';
+import { Module } from '@nestjs/common';
 
 @Module({
     imports: [

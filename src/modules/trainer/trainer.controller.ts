@@ -1,30 +1,32 @@
-
-import { Controller, Get } from '@nestjs/common';
 import { User } from '@user/user.decorator';
-import { JwtUser } from '@user/dto';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { CreateTrainerDTO, TrainerRO } from '@trainer/dto';
 import { TrainerService } from '@trainer/trainer.service';
-import { Auth } from '@shared/auth/auth.decorator';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PostRO } from '@post/dto';
+import { apiUrl } from '@/config';
+import { Auth, PaginateParams } from '@/shared';
+import { JwtUser } from '@user/dto';
 
 @Controller()
 export class TrainerController {
     constructor(
-      private readonly trainerService: TrainerService
+      private readonly trainerService: TrainerService,
     ) {
     }
 
     @Auth()
+    @ApiOperation({ summary: 'Get all posts', description: 'Return 1 page of posts' })
+    @ApiResponse({ type: [TrainerRO], status: 200 })
     @Get('trainers')
-    getAllTrainers(@User() jwtUser: JwtUser) {
-        return this.trainerService.getAllTrainers(jwtUser);
+    getAllTrainers(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
+        return this.trainerService.getAllTrainers({ ...pagOpts, route: `${apiUrl}/trainers` }, jwtUser);
     }
 
     @Auth()
     @ApiOperation({ summary: 'Register trainer', description: 'Return trainer relisted' })
-    @ApiResponse({ type: PostRO, status: 200 })
-    @Get('trainer/register')
-    registerTrainer(@User() jwtUser: JwtUser) {
-        return this.trainerService.registerTrainer(jwtUser);
+    @ApiResponse({ type: TrainerRO, status: 200 })
+    @Post('trainer/register')
+    registerTrainer(@Body() data: CreateTrainerDTO, @User() jwtUser: JwtUser) {
+        return this.trainerService.registerTrainer(data, jwtUser);
     }
 }

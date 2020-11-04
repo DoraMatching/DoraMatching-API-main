@@ -1,22 +1,24 @@
-import { ClasseEntity } from '@/modules/classe/entities/classe.entity';
-import { TopicEntity } from '@/modules/topic/entities/topic.entity';
-import { ITrainerModel, TrainerModel } from '@trainer/dto';
-import { UserEntity } from '@user/entities/user.entity';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, JoinColumn, JoinTable,
+    Entity, JoinColumn,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
+import { TrainerModel } from '@trainer/dto';
+import { TopicEntity } from '@topic/entities';
+import { UserEntity } from '@user/entities';
 
 @Entity('trainer')
 export class TrainerEntity extends BaseEntity implements TrainerModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    @Column({ type: 'text', nullable: true })
+    trainerProfile: string;
 
     @OneToOne(() => UserEntity)
     @JoinColumn({ name: 'user' })

@@ -15,7 +15,6 @@
       "@/*": ["src/*"],
       "@user/*": ["src/modules/user/*"],
       "@post/*": ["src/modules/post/*"],
-      "@shared/*": ["src/shared/*"],
       "@question/*": ["src/modules/question/*"],
       "@tag-post/*": ["src/modules/tag-post/*"],
       "@tag-question/*": ["src/modules/tag-question/*"],

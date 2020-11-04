@@ -1,22 +1,11 @@
-import { apiUrl } from '@/config';
-import {
-    Body, Controller, Delete,
-    Get, HttpCode,
-    HttpStatus,
-    Param,
-    Patch,
-    Post, Query
-} from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UpdatePostDTO } from '@post/dto';
-import { Auth } from '@shared/auth/auth.decorator';
-import { DeleteResultDTO, IDeleteResultDTO } from '@shared/dto';
-import { IPagination, PaginateParams } from '@shared/pagination';
-import { FindOneParams } from '@shared/pipes/find-one.params';
-import { JwtUser } from '@user/dto';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { User } from '@user/user.decorator';
-import { CreatePostDTO, IPostRO, PostRO } from './dto';
-import { PostService } from './post.service';
+import { PostService } from '@post/post.service';
+import { Auth, DeleteResultDTO, FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/shared';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { apiUrl } from '@/config';
+import { CreatePostDTO, IPostRO, PostRO, UpdatePostDTO } from '@post/dto';
+import { JwtUser } from '@user/dto';
 
 @ApiTags('post')
 @Controller()

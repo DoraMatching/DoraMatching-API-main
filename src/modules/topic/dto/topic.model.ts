@@ -1,5 +1,5 @@
-import { ITrainerModel, TrainerModel } from '@/modules/trainer/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { ITrainerModel, TrainerModel } from '@trainer/dto';
 import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 export interface ITopicModel {

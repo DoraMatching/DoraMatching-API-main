@@ -1,6 +1,6 @@
 import { ICommentPostModel } from '@comment-post/dto';
-import { PostEntity } from '@post/entities/post.entity';
-import { UserEntity } from '@user/entities/user.entity';
+import { PostEntity } from '@post/entities';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,

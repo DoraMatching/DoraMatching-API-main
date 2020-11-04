@@ -1,9 +1,9 @@
-import { TopicModel } from '@/modules/topic/dto';
-import { ITrainerModel } from '@/modules/trainer/dto';
-import { UserModel } from '@/modules/user/dto';
+import { TopicModel } from '@topic/dto';
+import { ITrainerModel } from '@trainer/dto';
 import { IClasseModel } from '@classe/dto';
-import { UserEntity } from '@user/entities/user.entity';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserModel } from '@user/dto';
+import { UserEntity } from '@user/entities';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel{

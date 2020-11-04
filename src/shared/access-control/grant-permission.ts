@@ -4,7 +4,6 @@ import { Permission } from 'accesscontrol';
 import { RolesBuilder } from 'nest-access-control';
 
 export type Action = 'read' | 'create' | 'update' | 'delete';
-export type Possion = 'Any' | 'Own';
 
 /**
  *

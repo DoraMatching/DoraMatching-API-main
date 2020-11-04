@@ -1,7 +1,3 @@
-import { CommentQuestionEntity } from '@comment-question/entities/comment-question.entity';
-import { IQuestionModel } from '@question/dto';
-import { TagQuestionEntity } from '@tag-question/entities/tag-question.entity';
-import { UserEntity } from '@user/entities/user.entity';
 import {
     BaseEntity,
     Column,
@@ -12,6 +8,10 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
+import { TagQuestionEntity } from '@tag-question/entities';
+import { IQuestionModel } from '@question/dto';
+import { UserEntity } from '@user/entities';
+import { CommentQuestionEntity } from '@comment-question/entities';
 
 @Entity('question')
 export class QuestionEntity extends BaseEntity implements IQuestionModel {

@@ -1,18 +1,17 @@
-import { CommentPostEntity } from '@comment-post/entities/comment-post.entity';
-import { TagPostEntity } from '@tag-post/entities/tag-post.entity';
-import { UserEntity } from '@user/entities/user.entity';
 import {
     BaseEntity,
-    Column,
-    CreateDateColumn,
+    Column, CreateDateColumn,
     Entity,
     JoinTable,
     ManyToMany,
-    ManyToOne, OneToMany,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn, UpdateDateColumn,
 } from 'typeorm';
-import { IPostModel } from '../dto';
+import { IPostModel } from '@post/dto';
+import { UserEntity } from '@user/entities';
+import { CommentPostEntity } from '@comment-post/entities';
+import { TagPostEntity } from '@tag-post/entities';
 
 @Entity('post')
 export class PostEntity extends BaseEntity implements IPostModel {

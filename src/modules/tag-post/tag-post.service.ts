@@ -1,13 +1,12 @@
-import { AppResources } from '@/app.roles';
-import { BaseService } from '@/commons/base-service';
-import { TagPostEntity } from '@/modules/tag-post/entities/tag-post.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { grantPermission } from '@shared/access-control/grant-permission';
-import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
-import { JwtUser } from '@user/dto';
+import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
+import { ITagPostRO, TagPostRO } from '@tag-post/dto';
+import { TagPostRepository } from '@tag-post/repositories';
+import { AppResources } from '@/app.roles';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { ITagPostRO, TagPostRO } from './dto';
-import { TagPostRepository } from './repositories/tag-post.repository';
+import { TagPostEntity } from '@tag-post/entities';
+import { JwtUser } from '@user/dto';
+import { BaseService } from '@/commons';
 
 @Injectable()
 export class TagPostService extends BaseService<TagPostEntity, TagPostRepository> {

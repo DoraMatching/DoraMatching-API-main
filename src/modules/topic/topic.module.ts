@@ -1,16 +1,18 @@
-import { Module } from '@nestjs/common';
+import { TrainerRepository } from '@trainer/repositories';
+import { TopicController } from '@topic/topic.controller';
+import { TopicService } from '@topic/topic.service';
+import { UserRepository } from '@user/repositories';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from '@user/repositories/user.repository';
-import { TopicRepository } from './repositories/topic.repository';
-import { TopicController } from './topic.controller';
-import { TopicResolver } from './topic.resolver';
-import { TopicService } from './topic.service';
+import { TopicRepository } from '@topic/repositories';
+import { TopicResolver } from '@topic/topic.resolver';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository, TopicRepository])
-  ],
-  controllers: [TopicController],
-  providers: [TopicService, TopicResolver]
+    imports: [
+        TypeOrmModule.forFeature([UserRepository, TopicRepository, TrainerRepository]),
+    ],
+    controllers: [TopicController],
+    providers: [TopicService, TopicResolver],
 })
-export class TopicModule { }
+export class TopicModule {
+}

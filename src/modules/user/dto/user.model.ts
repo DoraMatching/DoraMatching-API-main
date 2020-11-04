@@ -1,9 +1,7 @@
 import { AppRoles } from '@/app.roles';
-import { ClasseModel, IClasseModel } from '@classe/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel, PostModel } from '@post/dto';
 import { IQuestionModel, QuestionModel } from '@question/dto';
-import { ITopicModel } from '@topic/dto';
 import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from 'class-validator';
 
 export interface IUserModel {

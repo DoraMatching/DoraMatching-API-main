@@ -1,30 +1,33 @@
-import { AppResources } from '@/app.roles';
-import { feUrl, isEnableCache, mailAddress } from '@/config';
-import { grantPermission } from '@/shared/access-control/grant-permission';
-import { rolesFilter } from '@/shared/access-control/roles-filter';
-import { ghQuery } from '@/shared/graphql/github.graphql';
-import { MailerService } from '@nestjs-modules/mailer';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
-import { JwtUser } from '@user/dto';
-import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
-import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { paginate } from 'nestjs-typeorm-paginate';
+import * as pwGenerator from 'generate-password';
+import { feUrl, isEnableCache, mailAddress } from '@/config';
 import {
     CreateUserDTO,
-    IGithubSchema,
-    IGithubUserLangs,
+    IGithubSchema, IGithubUserLangs,
     IUserRO,
     IViewer,
+    JwtUser,
     LoginUserDTO,
     UpdateUser,
     UserModel,
-    UserRO
-} from './dto';
-import { UserEntity } from './entities/user.entity';
-import { UserRepository } from './repositories/user.repository';
+    UserRO,
+} from '@user/dto';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { MailerService } from '@nestjs-modules/mailer';
+import { UserRepository } from '@user/repositories';
+import {
+    ghQuery,
+    grantPermission,
+    IPagination,
+    paginateFilter,
+    paginateOrder,
+    PaginateParams,
+    rolesFilter,
+} from '@/shared';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { AppResources } from '@/app.roles';
+import { UserEntity } from '@user/entities';
 
 @Injectable()
 export class UserService {

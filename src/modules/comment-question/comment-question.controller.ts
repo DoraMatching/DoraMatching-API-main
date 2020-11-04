@@ -1,18 +1,16 @@
-import { CommentQuestionService } from '@comment-question/comment-question.service';
 import {
     CommentQuestionParam,
     CreateCommentQuestionDTO,
     ICommentQuestionRO,
-    UpdateCommentQuestionDTO
+    UpdateCommentQuestionDTO,
 } from '@comment-question/dto';
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { IQuestionRO } from '@question/dto';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IDeleteResultDTO } from '@shared/dto';
-import { FindOneParams } from '@shared/pipes/find-one.params';
-import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
+import { IQuestionRO } from '@question/dto';
+import { CommentQuestionService } from '@comment-question/comment-question.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Auth, FindOneParams, IDeleteResultDTO } from '@/shared';
+import { JwtUser } from '@user/dto';
 
 @ApiTags('question')
 @Controller()

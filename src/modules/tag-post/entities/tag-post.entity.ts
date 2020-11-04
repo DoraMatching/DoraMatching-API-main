@@ -1,5 +1,3 @@
-import { PostEntity } from '@post/entities/post.entity';
-import { ITagPostModel } from '@tag-post/dto';
 import {
     BaseEntity,
     Column,
@@ -9,6 +7,8 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
+import { ITagPostModel } from '@tag-post/dto';
+import { PostEntity } from '@post/entities';
 
 @Entity('tag-post')
 export class TagPostEntity extends BaseEntity implements ITagPostModel {

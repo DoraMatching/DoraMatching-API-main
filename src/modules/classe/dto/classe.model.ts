@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TopicModel } from '@topic/dto';
-import { ITrainerModel, TrainerModel } from '@trainer/dto';
 import { UserModel } from '@user/dto';
+import { ITrainerModel, TrainerModel } from '@trainer/dto';
 
 export interface IClasseModel {
     name: string;

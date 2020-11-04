@@ -1,6 +1,6 @@
 import { ICommentQuestionModel } from '@comment-question/dto';
-import { QuestionEntity } from '@question/entities/question.entity';
-import { UserEntity } from '@user/entities/user.entity';
+import { QuestionEntity } from '@question/entities';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,

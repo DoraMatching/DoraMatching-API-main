@@ -1,19 +1,10 @@
-import { apiUrl } from '@/config';
-import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Patch,
-    Post, Query
-} from '@nestjs/common';
+import { Auth, FindOneParams, IPagination, PaginateParams } from '@/shared';
+import { User } from '@user/user.decorator';
+import { UserService } from '@user/user.service';
+import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from '@user/dto';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, PaginateParams } from '@shared/pagination';
-import { FindOneParams } from '@shared/pipes/find-one.params';
-import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
-import { User } from './user.decorator';
-import { UserService } from './user.service';
+import { apiUrl } from '@/config';
 
 @Controller()
 @ApiTags('user')

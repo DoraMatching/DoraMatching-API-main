@@ -1,8 +1,8 @@
-import { EntityResults } from '@/commons/entity-results';
-import { PaginateParams } from '@/shared/pagination';
-import { Logger } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { PostEntity } from '../entities/post.entity';
+import { PaginateParams } from '@/shared';
+import { EntityResults } from '@/commons';
+import { Logger } from '@nestjs/common';
+import { PostEntity } from '@post/entities';
 
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
