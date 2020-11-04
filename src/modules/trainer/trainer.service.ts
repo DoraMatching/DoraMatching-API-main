@@ -55,4 +55,13 @@ export class TrainerService {
             }
         }
     }
+
+    async getTrainerById(id: string, jwtUser: JwtUser): Promise<TrainerRO> {
+        const trainer = await this.trainerRepository.getTrainerById(id);
+        if (!trainer) throw new HttpException(`Trainer with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TRAINER, 'read', jwtUser, trainer.user.id);
+        if (permission.granted) {
+            return permission.filter(trainer);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
 }

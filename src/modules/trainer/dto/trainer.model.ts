@@ -1,14 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { TopicModel } from "@topic/dto";
-import { UserModel } from "@user/dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { ITopicModel, TopicModel } from '@topic/dto';
+import { IUserModel, UserModel } from '@user/dto';
+import { ClasseModel, IClasseModel } from '@classe/dto';
 
 export interface ITrainerModel {
     trainerProfile: string;
-    user: UserModel;
-    topics: TopicModel[];
+    user: IUserModel;
+    topics: ITopicModel[];
+    classes: IClasseModel[];
 }
 
-export class TrainerModel implements ITrainerModel{
+export class TrainerModel implements ITrainerModel {
     @ApiProperty()
     trainerProfile: string;
 
@@ -17,4 +19,7 @@ export class TrainerModel implements ITrainerModel{
 
     @ApiProperty()
     topics: TopicModel[];
+
+    @ApiProperty()
+    classes: ClasseModel[];
 }

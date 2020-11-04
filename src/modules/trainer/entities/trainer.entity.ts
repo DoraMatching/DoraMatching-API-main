@@ -1,3 +1,4 @@
+import { ClasseEntity } from '@classe/entities';
 import { TopicEntity } from '@topic/entities';
 import { TrainerModel } from '@trainer/dto';
 import { UserEntity } from '@user/entities';
@@ -27,11 +28,14 @@ export class TrainerEntity extends BaseEntity implements TrainerModel {
     @OneToMany(() => TopicEntity, topic => topic.author)
     topics: TopicEntity[];
 
+    @OneToMany(() => ClasseEntity, classe => classe.trainer)
+    classes: ClasseEntity[];
+
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
-    updatedDate: Date;
+    updatedAt: Date;
 
     @Column({ type: 'text', nullable: false, default: 'trainer' })
     type: string;

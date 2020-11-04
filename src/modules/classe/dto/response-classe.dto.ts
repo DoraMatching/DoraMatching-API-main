@@ -1,7 +1,7 @@
-import { TopicModel } from "@topic/dto";
-import { ITrainerModel } from "@trainer/dto";
-import { UserModel } from "@user/dto";
-import { IClasseModel } from "./classe.model";
+import { TopicModel } from '@topic/dto';
+import { TrainerModel } from '@trainer/dto';
+import { UserModel } from '@user/dto';
+import { IClasseModel } from './classe.model';
 
 export interface IClasseRO extends IClasseModel {
     id: string;
@@ -15,8 +15,8 @@ export class ClasseRO implements IClasseRO {
     startTime: Date;
     endTime?: Date;
     duration: number;
-    topic: Partial<TopicModel>;
-    trainers: ITrainerModel[];
+    topic: TopicModel;
+    trainer: TrainerModel;
     members: UserModel[];
     author: Partial<UserModel>;
     createdAt?: Date;

@@ -1,15 +1,13 @@
 import { IClasseModel } from '@classe/dto';
-import { TopicModel } from '@topic/dto';
-import { ITrainerModel } from '@trainer/dto';
+import { TopicEntity } from '@topic/entities';
+import { TrainerEntity } from '@trainer/entities';
 import { UserModel } from '@user/dto';
 import { UserEntity } from '@user/entities';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('classe')
-export class ClasseEntity extends BaseEntity implements IClasseModel{
-    topic: Partial<TopicModel>;
-    trainers: ITrainerModel[];
-    members: UserModel[];
+export class ClasseEntity extends BaseEntity implements IClasseModel {
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -30,6 +28,15 @@ export class ClasseEntity extends BaseEntity implements IClasseModel{
 
     @Column({ type: 'integer', nullable: false })
     duration: number;
+
+    @ManyToOne(() => TopicEntity)
+    @JoinColumn({ name: 'topic' })
+    topic: TopicEntity;
+
+    @ManyToOne(() => TrainerEntity, trainer => trainer.classes)
+    trainer: TrainerEntity;
+
+    members: UserModel[];
 
     author: UserEntity;
 
