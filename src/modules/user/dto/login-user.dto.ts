@@ -1,6 +1,6 @@
-import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IUserModel } from '@user/dto';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 
 export type ILoginUserDTO = Pick<IUserModel, 'username' | 'email' | 'password'>;
 

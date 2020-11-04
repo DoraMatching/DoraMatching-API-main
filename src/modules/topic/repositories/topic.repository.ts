@@ -1,7 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { TopicEntity } from '@topic/entities';
-import { PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { TopicEntity } from '@topic/entities';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(TopicEntity)
 export class TopicRepository extends Repository<TopicEntity> {

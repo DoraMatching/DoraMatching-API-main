@@ -1,4 +1,5 @@
 import { ITopicModel } from '@topic/dto';
+import { TrainerEntity } from '@trainer/entities';
 import {
     BaseEntity,
     Column,
@@ -7,7 +8,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { TrainerEntity } from '@trainer/entities';
 
 @Entity('topic')
 export class TopicEntity extends BaseEntity implements ITopicModel {

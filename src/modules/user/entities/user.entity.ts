@@ -1,3 +1,8 @@
+import { AppRoles } from '@/app.roles';
+import { jwtExpiresIn, jwtSecretKey } from '@/config';
+import { PostEntity } from '@post/entities';
+import { QuestionEntity } from '@question/entities';
+import { IUserModel, JwtUser, UserRO } from '@user/dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -10,11 +15,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { AppRoles } from '@/app.roles';
-import { jwtExpiresIn, jwtSecretKey } from '@/config';
-import { IUserModel, JwtUser, UserRO } from '@user/dto';
-import { QuestionEntity } from '@question/entities';
-import { PostEntity } from '@post/entities';
 
 @Entity('user')
 export class UserEntity implements IUserModel {

@@ -1,12 +1,13 @@
-import { Auth, IPagination, PaginateParams } from '@/shared';
-import { User } from '@user/user.decorator';
-import { PostRO } from '@post/dto';
+import { apiUrl } from '@/config';
+import { IPagination, PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
+import { IHomeRO } from '@home-modules/dto';
+import { HomeService } from '@home-modules/home.service';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { apiUrl } from '@/config';
-import { HomeService } from '@home-modules/home.service';
-import { IHomeRO } from '@home-modules/dto';
+import { PostRO } from '@post/dto';
 import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
 
 @ApiTags('home')
 @Controller('home')

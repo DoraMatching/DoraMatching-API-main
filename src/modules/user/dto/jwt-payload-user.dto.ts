@@ -1,5 +1,5 @@
-import { UserModel } from '@user/dto';
 import { AppRoles } from '@/app.roles';
+import { UserModel } from '@user/dto';
 
 export type IJwtUser = Pick<UserModel, 'id' | 'username' | 'roles' | 'email'>
 

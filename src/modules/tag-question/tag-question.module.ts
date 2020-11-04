@@ -1,10 +1,10 @@
-import { TagQuestionRepository } from '@tag-question/repositories';
-import { UserRepository } from '@user/repositories';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuestionRepository } from '@question/repositories';
-import { TagQuestionService } from '@tag-question/tag-question.service';
+import { TagQuestionRepository } from '@tag-question/repositories';
 import { TagQuestionController } from '@tag-question/tag-question.controller';
-import { Module } from '@nestjs/common';
+import { TagQuestionService } from '@tag-question/tag-question.service';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TagQuestionRepository, QuestionRepository, UserRepository])],

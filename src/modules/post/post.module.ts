@@ -1,11 +1,11 @@
-import { PostController } from '@post/post.controller';
-import { UserRepository } from '@user/repositories';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostService } from '@post/post.service';
-import { PostResolver } from '@post/post.resolver';
-import { TagPostRepository } from '@tag-post/repositories';
-import { PostRepository } from '@post/repositories';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostController } from '@post/post.controller';
+import { PostResolver } from '@post/post.resolver';
+import { PostService } from '@post/post.service';
+import { PostRepository } from '@post/repositories';
+import { TagPostRepository } from '@tag-post/repositories';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [

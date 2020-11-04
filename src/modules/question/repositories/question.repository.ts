@@ -1,7 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { QuestionEntity } from '@question/entities';
 import { PaginateParams } from '@/shared';
 import { Logger } from '@nestjs/common';
+import { QuestionEntity } from '@question/entities';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(QuestionEntity)
 export class QuestionRepository extends Repository<QuestionEntity> {

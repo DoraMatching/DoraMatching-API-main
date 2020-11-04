@@ -1,21 +1,21 @@
-import { TrainerRepository } from '@trainer/repositories';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { AppResources } from '@/app.roles';
+import { BaseService } from '@/commons';
 import {
     customPaginate,
     grantPermission,
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams,
+    PaginateParams
 } from '@/shared';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from '@topic/dto';
 import { TopicEntity } from '@topic/entities';
-import { AppResources } from '@/app.roles';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { UserRepository } from '@user/repositories';
-import { JwtUser } from '@user/dto';
 import { TopicRepository } from '@topic/repositories';
-import { BaseService } from '@/commons';
+import { TrainerRepository } from '@trainer/repositories';
+import { JwtUser } from '@user/dto';
+import { UserRepository } from '@user/repositories';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class TopicService extends BaseService<TopicEntity, TopicRepository> {

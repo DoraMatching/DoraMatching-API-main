@@ -1,11 +1,12 @@
-import { User } from '@user/user.decorator';
+import { apiUrl } from '@/config';
+import { PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTrainerDTO, TrainerRO } from '@trainer/dto';
 import { TrainerService } from '@trainer/trainer.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { apiUrl } from '@/config';
-import { Auth, PaginateParams } from '@/shared';
 import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
 
 @Controller()
 export class TrainerController {

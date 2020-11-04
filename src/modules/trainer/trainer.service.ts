@@ -1,11 +1,11 @@
-import { TrainerRepository } from '@trainer/repositories';
 import { AppResources, AppRoles } from '@/app.roles';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrainerDTO, ITrainerRO, TrainerRO } from '@trainer/dto';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { UserRepository } from '@user/repositories';
+import { TrainerRepository } from '@trainer/repositories';
 import { IUserModel, JwtUser } from '@user/dto';
+import { UserRepository } from '@user/repositories';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class TrainerService {

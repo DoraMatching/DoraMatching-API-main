@@ -8,16 +8,16 @@ export enum AppRoles {
 }
 
 export enum AppResources {
-    USER = 'USER',
-    TOPIC = 'TOPIC',
-    POST = 'POST',
-    TAG_POST = 'TAG_POST',
-    COMMENT_POST = 'COMMENT_POST',
-    QUESTION = 'QUESTION',
-    COMMENT_QUESTION = 'COMMENT_QUESTION',
-    TAG_QUESTION = 'TAG_QUESTION',
     CLASSE = 'CLASSE',
-    TRAINER = 'TRAINER'
+    COMMENT_POST = 'COMMENT_POST',
+    COMMENT_QUESTION = 'COMMENT_QUESTION',
+    POST = 'POST',
+    QUESTION = 'QUESTION',
+    TAG_POST = 'TAG_POST',
+    TAG_QUESTION = 'TAG_QUESTION',
+    TOPIC = 'TOPIC',
+    TRAINER = 'TRAINER',
+    USER = 'USER',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();

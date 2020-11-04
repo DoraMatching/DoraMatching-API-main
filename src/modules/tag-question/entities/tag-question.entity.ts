@@ -1,3 +1,5 @@
+import { QuestionEntity } from '@question/entities';
+import { ITagQuestionModel } from '@tag-question/dto';
 import {
     BaseEntity,
     Column,
@@ -7,8 +9,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { ITagQuestionModel } from '@tag-question/dto';
-import { QuestionEntity } from '@question/entities';
 
 @Entity('tag-question')
 export class TagQuestionEntity extends BaseEntity implements ITagQuestionModel {

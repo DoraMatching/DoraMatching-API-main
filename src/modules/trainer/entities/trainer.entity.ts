@@ -1,3 +1,6 @@
+import { TopicEntity } from '@topic/entities';
+import { TrainerModel } from '@trainer/dto';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,
@@ -8,9 +11,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { TrainerModel } from '@trainer/dto';
-import { TopicEntity } from '@topic/entities';
-import { UserEntity } from '@user/entities';
 
 @Entity('trainer')
 export class TrainerEntity extends BaseEntity implements TrainerModel {

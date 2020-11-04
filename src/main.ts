@@ -1,11 +1,11 @@
 import 'dotenv/config';
 
+import { environment } from '@/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
-import { environment } from '@/config';
 
 const port = process.env.PORT || 8080;
 

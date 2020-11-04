@@ -1,20 +1,20 @@
+import { AppResources } from '@/app.roles';
+import { BaseService } from '@/commons/base-service';
+import { grantPermission, IDeleteResultDTO } from '@/shared';
 import {
     CommentQuestionParam,
     CreateCommentQuestionDTO,
     ICommentQuestionRO,
-    UpdateCommentQuestionDTO,
+    UpdateCommentQuestionDTO
 } from '@comment-question/dto';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IQuestionRO } from '@question/dto';
-import { AppResources } from '@/app.roles';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CommentQuestionEntity } from '@comment-question/entities';
 import { CommentQuestionRepository } from '@comment-question/repositories';
-import { UserRepository } from '@user/repositories';
-import { grantPermission, IDeleteResultDTO } from '@/shared';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { IQuestionRO } from '@question/dto';
 import { QuestionRepository } from '@question/repositories';
 import { JwtUser } from '@user/dto';
-import { BaseService } from '@/commons/base-service';
+import { UserRepository } from '@user/repositories';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class CommentQuestionService extends BaseService<CommentQuestionEntity, CommentQuestionRepository> {

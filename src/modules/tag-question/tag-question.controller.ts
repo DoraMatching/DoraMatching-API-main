@@ -1,11 +1,12 @@
-import { TagQuestionService } from '@tag-question/tag-question.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@user/user.decorator';
 import { apiUrl } from '@/config';
-import { Auth, PaginateParams } from '@/shared';
+import { PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { Controller, Get, Query } from '@nestjs/common';
-import { JwtUser } from '@user/dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TagQuestionRO } from '@tag-question/dto';
+import { TagQuestionService } from '@tag-question/tag-question.service';
+import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
 
 @ApiTags('tag-question')
 @Controller()

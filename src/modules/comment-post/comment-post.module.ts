@@ -1,10 +1,10 @@
-import { UserRepository } from '@user/repositories';
 import { CommentPostController } from '@comment-post/comment-post.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommentPostRepository } from '@comment-post/repositories';
 import { CommentPostService } from '@comment-post/comment-post.service';
-import { PostRepository } from '@post/repositories';
+import { CommentPostRepository } from '@comment-post/repositories';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostRepository } from '@post/repositories';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [

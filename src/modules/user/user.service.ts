@@ -1,6 +1,16 @@
-import { gql } from 'graphql-request';
-import * as pwGenerator from 'generate-password';
+import { AppResources } from '@/app.roles';
 import { feUrl, isEnableCache, mailAddress } from '@/config';
+import {
+    ghQuery,
+    grantPermission,
+    IPagination,
+    paginateFilter,
+    paginateOrder,
+    PaginateParams,
+    rolesFilter
+} from '@/shared';
+import { MailerService } from '@nestjs-modules/mailer';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
     CreateUserDTO,
     IGithubSchema, IGithubUserLangs,
@@ -10,24 +20,14 @@ import {
     LoginUserDTO,
     UpdateUser,
     UserModel,
-    UserRO,
+    UserRO
 } from '@user/dto';
-import { paginate } from 'nestjs-typeorm-paginate';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { MailerService } from '@nestjs-modules/mailer';
-import { UserRepository } from '@user/repositories';
-import {
-    ghQuery,
-    grantPermission,
-    IPagination,
-    paginateFilter,
-    paginateOrder,
-    PaginateParams,
-    rolesFilter,
-} from '@/shared';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AppResources } from '@/app.roles';
 import { UserEntity } from '@user/entities';
+import { UserRepository } from '@user/repositories';
+import * as pwGenerator from 'generate-password';
+import { gql } from 'graphql-request';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class UserService {

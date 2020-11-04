@@ -1,7 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { TagQuestionEntity } from '@tag-question/entities';
-import { PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { TagQuestionEntity } from '@tag-question/entities';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(TagQuestionEntity)
 export class TagQuestionRepository extends Repository<TagQuestionEntity> {
