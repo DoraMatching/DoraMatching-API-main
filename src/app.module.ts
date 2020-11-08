@@ -19,6 +19,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
+import { AdminisModule } from './modules/adminis/adminis.module';
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { mailerConfig } from './config';
         ClasseModule,
         TrainerModule,
         TraineeModule,
+        AdminisModule,
     ],
     controllers: [AppController],
     providers: [],

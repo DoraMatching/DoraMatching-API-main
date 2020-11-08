@@ -13,18 +13,19 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"],
-      "@user/*": ["src/modules/user/*"],
+      "@adminis/*": ["src/modules/adminis/*"],
+      "@classe/*": ["src/modules/classe/*"],
+      "@comment-post/*": ["src/modules/comment-post/*"],
+      "@comment-question/*": ["src/modules/comment-question/*"],
+      "@home-modules/*": ["src/modules/home/*"],
       "@post/*": ["src/modules/post/*"],
       "@question/*": ["src/modules/question/*"],
       "@tag-post/*": ["src/modules/tag-post/*"],
       "@tag-question/*": ["src/modules/tag-question/*"],
-      "@comment-post/*": ["src/modules/comment-post/*"],
-      "@comment-question/*": ["src/modules/comment-question/*"],
-      "@home-modules/*": ["src/modules/home/*"],
       "@topic/*": ["src/modules/topic/*"],
-      "@classe/*": ["src/modules/classe/*"],
+      "@trainee/*": ["src/modules/trainee/*"],
       "@trainer/*": ["src/modules/trainer/*"],
-      "@trainee/*": ["src/modules/trainee/*"]
+      "@user/*": ["src/modules/user/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],

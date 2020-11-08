@@ -7,8 +7,8 @@ import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateU
 import { User } from '@user/user.decorator';
 import { UserService } from '@user/user.service';
 
-@Controller()
 @ApiTags('user')
+@Controller()
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
@@ -64,6 +64,7 @@ export class UserController {
         return this.userService.githubLangs(accessToken);
     }
 
+    @Auth()
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(
