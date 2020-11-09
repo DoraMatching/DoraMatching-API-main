@@ -1,7 +1,17 @@
-import { ClasseEntity } from "@/modules/classe/entities";
-import { UserEntity } from "@/modules/user/entities";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ITraineeModel } from "../dto/trainee.model";
+import { ClasseEntity } from '@classe/entities';
+import { UserEntity } from '@user/entities';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
+import { ITraineeModel } from '@trainee/dto';
 
 @Entity('trainee')
 export class TraineeEntity extends BaseEntity implements ITraineeModel {
@@ -24,6 +34,6 @@ export class TraineeEntity extends BaseEntity implements ITraineeModel {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @Column({type: 'text', nullable: false, default: 'trainee'})
+    @Column({ type: 'text', nullable: false, default: 'trainee' })
     type: string;
 }

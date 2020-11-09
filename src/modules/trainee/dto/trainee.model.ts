@@ -1,4 +1,4 @@
-import { IUserModel, UserModel } from '@/modules/user/dto';
+import { IUserModel, UserModel } from '@user/dto';
 import { IClasseModel } from '@classe/dto';
 
 export interface ITraineeModel {

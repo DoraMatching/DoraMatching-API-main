@@ -1,6 +1,6 @@
-import { IClasseModel } from "@/modules/classe/dto";
-import { IUserModel } from "@/modules/user/dto";
-import { ITraineeModel } from "./trainee.model";
+import { IClasseModel } from '@classe/dto';
+import { IUserModel } from '@user/dto';
+import { ITraineeModel } from './trainee.model';
 
 export type ITraineeRO = ITraineeModel;
 

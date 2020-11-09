@@ -1,4 +1,4 @@
-import { ITraineeModel, TraineeModel } from '@/modules/trainee/dto/trainee.model';
+import { ITraineeModel, TraineeModel } from '@trainee/dto/trainee.model';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel, TopicModel } from '@topic/dto';
 import { ITrainerModel, TrainerModel } from '@trainer/dto';
