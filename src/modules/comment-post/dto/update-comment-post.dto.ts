@@ -1,4 +1,4 @@
-import { ICommentPostModel } from '@comment-post/dto/comment-post.model';
+import { ICommentPostModel } from '@comment-post/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 

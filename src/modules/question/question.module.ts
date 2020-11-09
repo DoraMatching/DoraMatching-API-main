@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QuestionRepository } from '@question/repositories/question.repository';
-import { UserRepository } from '@user/repositories/user.repository';
-import { TagQuestionRepository } from '../tag-question/repositories/tag-question.repository';
-import { QuestionController } from './question.controller';
-import { QuestionService } from './question.service';
+import { QuestionController } from '@question/question.controller';
+import { QuestionService } from '@question/question.service';
+import { QuestionRepository } from '@question/repositories';
+import { TagQuestionRepository } from '@tag-question/repositories';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [

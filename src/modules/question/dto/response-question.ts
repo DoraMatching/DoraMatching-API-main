@@ -1,7 +1,7 @@
-import { CommentQuestionRO } from '@/modules/comment-question/dto';
-import { TagQuestionRO } from '@/modules/tag-question/dto';
+import { CommentQuestionRO } from '@comment-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IQuestionModel } from '@question/dto/question.model';
+import { IQuestionModel } from '@question/dto';
+import { TagQuestionRO } from '@tag-question/dto';
 import { UserModel } from '@user/dto';
 
 export type IQuestionRO = IQuestionModel;

@@ -1,10 +1,10 @@
 import { AppRoles } from '@/app.roles';
+import { RolesValidator } from '@/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { RolesValidator } from '@shared/validation/roles.validate';
+import { IUserModel } from '@user/dto';
 import { ArrayUnique, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
-import { IUserModel } from './user.model';
 
-export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics'>;
+export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics' | 'classes'>;
 
 export class UpdateUser implements IUpdateUser {
     @ApiProperty()

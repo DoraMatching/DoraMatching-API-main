@@ -1,8 +1,8 @@
 import { AppRoles } from '@/app.roles';
 import { jwtExpiresIn, jwtSecretKey } from '@/config';
-import { PostEntity } from '@/modules/post/entities/post.entity';
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
-import { TopicEntity } from '@topic/entities/topic.entity';
+import { PostEntity } from '@post/entities';
+import { QuestionEntity } from '@question/entities';
+import { IUserModel, JwtUser, UserRO } from '@user/dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -15,7 +15,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { IUserModel, JwtUser, UserRO } from '../dto';
 
 @Entity('user')
 export class UserEntity implements IUserModel {
@@ -42,9 +41,6 @@ export class UserEntity implements IUserModel {
 
     @OneToMany(() => PostEntity, post => post.author)
     posts: PostEntity[];
-
-    @OneToMany(() => TopicEntity, topic => topic.author)
-    topics: TopicEntity[];
 
     @OneToMany(() => QuestionEntity, question => question.author)
     questions: QuestionEntity[];
@@ -75,7 +71,7 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, topics, questions, type } = this;
+        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions, type } = this;
         const responseObject: UserRO = {
             id,
             createdAt,
@@ -86,7 +82,6 @@ export class UserEntity implements IUserModel {
             roles,
             avatarUrl,
             posts,
-            topics,
             questions,
             type
         };

@@ -2,7 +2,7 @@ import { AppRoles } from '@/app.roles';
 import { jwtSecretKey } from '@/config';
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { UserRepository } from '@user/repositories/user.repository';
+import { UserRepository } from '@user/repositories';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()

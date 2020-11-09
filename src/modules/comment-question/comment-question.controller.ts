@@ -1,3 +1,5 @@
+import { FindOneParams, IDeleteResultDTO } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { CommentQuestionService } from '@comment-question/comment-question.service';
 import {
     CommentQuestionParam,
@@ -8,9 +10,6 @@ import {
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IQuestionRO } from '@question/dto';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IDeleteResultDTO } from '@shared/dto';
-import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 

@@ -1,10 +1,9 @@
 import { AppRoles } from '@/app.roles';
-import { TopicRO } from '@/modules/topic/dto/response-topic.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostRO } from '@post/dto';
 import { QuestionRO } from '@question/dto';
+import { IUserModel } from '@user/dto';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
-import { IUserModel } from './user.model';
 
 export type IUserRO = Omit<IUserModel, 'password'>;
 
@@ -32,9 +31,6 @@ export class UserRO implements IUserRO {
 
     @ApiProperty({ type: () => PostRO, isArray: true })
     posts: PostRO[];
-
-    @ApiProperty({ type: () => TopicRO, isArray: true })
-    topics: TopicRO[];
 
     @ApiProperty({ type: () => QuestionRO, isArray: true })
     questions: QuestionRO[];

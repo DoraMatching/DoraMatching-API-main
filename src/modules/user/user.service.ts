@@ -1,30 +1,33 @@
-import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+import { AppResources } from '@/app.roles';
 import { feUrl, isEnableCache, mailAddress } from '@/config';
-import { ghQuery } from '@/shared/graphql/github.graphql';
+import {
+    ghQuery,
+    grantPermission,
+    IPagination,
+    paginateFilter,
+    paginateOrder,
+    PaginateParams,
+    rolesFilter
+} from '@/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IPagination, paginateFilter, paginateOrder, PaginateParams } from '@shared/pagination';
-import * as pwGenerator from 'generate-password';
-import { gql } from 'graphql-request';
-import { paginate } from 'nestjs-typeorm-paginate';
 import {
     CreateUserDTO,
-    IGithubSchema,
-    IGithubUserLangs,
+    IGithubSchema, IGithubUserLangs,
     IUserRO,
     IViewer,
+    JwtUser,
     LoginUserDTO,
     UpdateUser,
     UserModel,
-    UserRO,
-} from './dto';
-import { UserEntity } from './entities/user.entity';
-import { UserRepository } from './repositories/user.repository';
-import { JwtUser } from './dto/jwt-payload-user.dto';
+    UserRO
+} from '@user/dto';
+import { UserEntity } from '@user/entities';
+import { UserRepository } from '@user/repositories';
+import * as pwGenerator from 'generate-password';
+import { gql } from 'graphql-request';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { AppResources } from '@/app.roles';
-import { grantPermission } from '@/shared/access-control/grant-permission';
-import { rolesFilter } from '@/shared/access-control/roles-filter';
+import { paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class UserService {
@@ -55,10 +58,11 @@ export class UserService {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getUser({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
+    async getUserById({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, id);
         if (permission.granted) {
-            const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
+            // const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
+            const user = await this.userRepository.getUserById(id);
             if (user) {
                 const result = user.toResponseObject(false);
                 return permission.filter(result);

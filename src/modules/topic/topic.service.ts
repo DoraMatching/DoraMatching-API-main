@@ -1,15 +1,21 @@
 import { AppResources } from '@/app.roles';
-import { BaseService } from '@/commons/base-service';
-import { grantPermission } from '@/shared/access-control/grant-permission';
-import { customPaginate, IPagination, paginateFilter, PaginateParams } from '@/shared/pagination';
+import { BaseService } from '@/commons';
+import {
+    customPaginate,
+    grantPermission,
+    IDeleteResultDTO,
+    IPagination,
+    paginateFilter,
+    PaginateParams
+} from '@/shared';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { IDeleteResultDTO } from '@shared/dto';
-import { TopicEntity } from '@topic/entities/topic.entity';
+import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from '@topic/dto';
+import { TopicEntity } from '@topic/entities';
+import { TopicRepository } from '@topic/repositories';
+import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
-import { UserRepository } from '@user/repositories/user.repository';
+import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from './dto';
-import { TopicRepository } from './repositories/topic.repository';
 
 @Injectable()
 export class TopicService extends BaseService<TopicEntity, TopicRepository> {
@@ -18,6 +24,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     constructor(
       private readonly topicRepository: TopicRepository,
       private readonly userRepository: UserRepository,
+      private readonly trainerRepository: TrainerRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -51,15 +58,12 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     async createTopic(data: CreateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'create', jwtUser, null);
         if (permission.granted) {
-            const user = await this.userRepository.findOne({
-                where: { id: jwtUser.id },
-                select: ['id', 'name', 'username', 'email'],
-            });
-            if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             data = permission.filter(data);
             const newTopic = this.topicRepository.create({
                 ...data,
-                author: user,
+                author: trainer,
             });
 
             try {
@@ -75,7 +79,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     async updateTopicById(id: string, data: UpdateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
         const topic = await this.getTopicById(id, jwtUser);
         if (!topic) throw new HttpException(`Topic with id: ${id} not found`, HttpStatus.NOT_FOUND);
-        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.id);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'update', jwtUser, topic.author.user.id);
         if (permission.granted) {
             try {
                 data = permission.filter(data);
@@ -92,7 +96,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
 
     async deleteTopicById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundTopic = await this.getTopicById(id, jwtUser);
-        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.id);
+        const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.user.id);
         if(permission.granted) {
             await this.topicRepository.delete(id);
             return {

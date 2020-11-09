@@ -1,6 +1,5 @@
 import { EntityResults } from '@/commons/entity-results';
-import { IPagination } from './paginate.interface';
-import { PaginateParams } from './paginate.params';
+import { IPagination, PaginateParams } from '@/shared';
 
 export function customPaginate<T>({ entities, count, totalNestedCount, nestedItemsCount }: EntityResults<any>, { route, order, limit, page }: PaginateParams): IPagination<T> {
     const entitiesLength = entities.length;

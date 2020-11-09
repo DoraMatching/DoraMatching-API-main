@@ -1,6 +1,6 @@
+import { apiUrl } from '@/config';
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { apiUrl } from './config';
 
 @Controller()
 export class AppController {
