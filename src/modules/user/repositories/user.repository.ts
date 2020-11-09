@@ -11,6 +11,8 @@ export class UserRepository extends Repository<UserEntity> {
         'user.email',
         'user.avatarUrl',
         'user.roles',
+        'user.createdAt',
+        'user.updatedAt',
         'user.type',
         'post.id',
         'post.title',
@@ -42,8 +44,8 @@ export class UserRepository extends Repository<UserEntity> {
             const [entities, count] = await this.createQueryBuilder('user')
               .leftJoinAndSelect('user.questions', 'question')
               .leftJoinAndSelect('user.posts', 'post')
-              .leftJoinAndSelect('post.tags', 'postTag')
-              .leftJoinAndSelect('question.tags', 'tagQuestion')
+              .leftJoinAndSelect('post.tags', 'pTag')
+              .leftJoinAndSelect('question.tags', 'qTag')
               .select(this.SELECT_USER_SCOPE)
               .orderBy('user.createdAt', order)
               .skip(limit * (page - 1))
