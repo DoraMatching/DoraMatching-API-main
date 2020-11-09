@@ -6,7 +6,7 @@ import { User } from '@user/user.decorator';
 import { JwtUser } from '@user/dto';
 import { CreateClasseDTO } from '@classe/dto';
 
-@ApiTags()
+@ApiTags('classe')
 @Controller()
 export class ClasseController {
     constructor(
@@ -18,6 +18,6 @@ export class ClasseController {
     @Post('classe')
     createClasse(@Body() data: CreateClasseDTO, @User() jwtUser: JwtUser) {
         console.log(data);
-        return {};
+        return this.classeService.createClasse(data, jwtUser);
     }
 }
