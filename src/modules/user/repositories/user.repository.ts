@@ -16,6 +16,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.type',
         'post.id',
         'post.title',
+        'post.featuredImage',
         'post.createdAt',
         'post.updatedAt',
         'question.id',
