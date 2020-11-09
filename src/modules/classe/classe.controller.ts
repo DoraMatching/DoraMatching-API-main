@@ -17,7 +17,6 @@ export class ClasseController {
     @Auth()
     @Post('classe')
     createClasse(@Body() data: CreateClasseDTO, @User() jwtUser: JwtUser) {
-        console.log(data);
         return this.classeService.createClasse(data, jwtUser);
     }
 }

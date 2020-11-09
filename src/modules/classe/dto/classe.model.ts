@@ -14,7 +14,6 @@ export interface IClasseModel {
     topic: ITopicModel;
     trainer: ITrainerModel;
     members: ITraineeModel[];
-    author: Partial<UserModel>;
     createdAt?: Date;
     updatedAt?: Date;
     type?: string;
@@ -47,9 +46,6 @@ export class ClasseModel implements IClasseModel {
 
     @ApiProperty()
     members: TraineeModel[];
-
-    @ApiProperty()
-    author: Partial<UserModel>;
 
     @ApiProperty()
     createdAt?: Date;

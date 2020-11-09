@@ -19,7 +19,6 @@ export class ClasseRO implements IClasseRO {
     topic: TopicModel;
     trainer: TrainerModel;
     members: TraineeRO[];
-    author: Partial<UserModel>;
     createdAt?: Date;
     updatedAt?: Date;
     type?: string;

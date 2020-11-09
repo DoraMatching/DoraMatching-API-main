@@ -1,4 +1,4 @@
-import { IClasseModel } from '@classe/dto/classe.model';
+import { IClasseModel } from '@classe/dto';
 import { TopicRO } from '@topic/dto';
 import { Type } from 'class-transformer';
 import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';

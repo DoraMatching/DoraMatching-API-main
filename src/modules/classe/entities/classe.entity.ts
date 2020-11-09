@@ -32,7 +32,7 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @Column({ type: 'timestamp', nullable: false, default: new Date() })
     startTime: Date;
 
-    @Column({ type: 'timestamp', nullable: false })
+    @Column({ type: 'timestamp', nullable: true })
     endTime?: Date;
 
     @Column({ type: 'integer', nullable: false })
@@ -48,9 +48,6 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @ManyToMany(() => TraineeEntity, trainee => trainee.classes)
     @JoinTable()
     members: TraineeEntity[];
-
-    @ManyToOne(() => TrainerEntity, trainer => trainer.classes)
-    author: TrainerEntity;
 
     @CreateDateColumn()
     createdAt: Date;
