@@ -1,3 +1,5 @@
+import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+
 import { AppResources } from '@/app.roles';
 import { feUrl, isEnableCache, mailAddress } from '@/config';
 import {
