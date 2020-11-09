@@ -12,23 +12,38 @@ export class UserRepository extends Repository<UserEntity> {
         'user.avatarUrl',
         'user.roles',
         'user.type',
+        'post.id',
+        'post.title',
+        'post.createdAt',
+        'post.updatedAt',
+        'question.id',
+        'question.title',
+        'question.createdAt',
+        'question.updatedAt',
+        'pTag.id',
+        'pTag.name',
+        'qTag.id',
+        'qTag.name',
     ];
 
     getUserById(id: string) {
-        return this.createQueryBuilder()
-          .select([
-              'id',
-              'name',
-              'roles',
-              'type',
-          ])
-          .where('id = :id', { id })
-          .execute();
+        return this.createQueryBuilder('user')
+          .leftJoinAndSelect('user.questions', 'question')
+          .leftJoinAndSelect('user.posts', 'post')
+          .leftJoinAndSelect('post.tags', 'pTag')
+          .leftJoinAndSelect('question.tags', 'qTag')
+          .select(this.SELECT_USER_SCOPE)
+          .where('user.id = :id', { id })
+          .getOne();
     }
 
     async getAllUsers({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<UserEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('user')
+              .leftJoinAndSelect('user.questions', 'question')
+              .leftJoinAndSelect('user.posts', 'post')
+              .leftJoinAndSelect('post.tags', 'postTag')
+              .leftJoinAndSelect('question.tags', 'tagQuestion')
               .select(this.SELECT_USER_SCOPE)
               .orderBy('user.createdAt', order)
               .skip(limit * (page - 1))

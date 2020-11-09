@@ -25,7 +25,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
     getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
-        return this.userService.getUser({ id }, jwtUser);
+        return this.userService.getUserById({ id }, jwtUser);
     }
 
     @Auth()

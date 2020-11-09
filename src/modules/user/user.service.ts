@@ -58,10 +58,11 @@ export class UserService {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getUser({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
+    async getUserById({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, id);
         if (permission.granted) {
-            const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
+            // const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
+            const user = await this.userRepository.getUserById(id);
             if (user) {
                 const result = user.toResponseObject(false);
                 return permission.filter(result);
