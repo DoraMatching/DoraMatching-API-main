@@ -1,8 +1,7 @@
 import { IClasseModel } from '@classe/dto/classe.model';
-import { ITopicModel, TopicRO } from '@topic/dto';
-import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
+import { TopicRO } from '@topic/dto';
 import { Type } from 'class-transformer';
-import { CreateTagPostDTO } from '@tag-post/dto';
+import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
 export type ICreateClasseDTO = Pick<IClasseModel, 'name' | 'description' | 'featuredImage' | 'startTime' | 'endTime' | 'topic' | 'duration'>;
 

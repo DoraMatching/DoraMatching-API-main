@@ -1,10 +1,10 @@
+import { Auth } from '@/shared/auth';
+import { ClasseService } from '@classe/classe.service';
+import { CreateClasseDTO } from '@classe/dto';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ClasseService } from '@classe/classe.service';
-import { Auth } from '@/shared/auth';
-import { User } from '@user/user.decorator';
 import { JwtUser } from '@user/dto';
-import { CreateClasseDTO } from '@classe/dto';
+import { User } from '@user/user.decorator';
 
 @ApiTags('classe')
 @Controller()

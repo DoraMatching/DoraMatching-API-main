@@ -1,12 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { AppResources } from '@/app.roles';
+import { BaseService } from '@/commons';
+import { grantPermission } from '@/shared';
+import { CreateClasseDTO } from '@classe/dto';
 import { ClasseEntity } from '@classe/entities';
 import { ClasseRepository } from '@classe/repositories';
-import { BaseService } from '@/commons';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateClasseDTO } from '@classe/dto';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtUser } from '@user/dto';
-import { grantPermission } from '@/shared';
-import { AppResources } from '@/app.roles';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
