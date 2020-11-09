@@ -1,3 +1,5 @@
+import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
+
 import { AppResources } from '@/app.roles';
 import { feUrl, isEnableCache, mailAddress } from '@/config';
 import {
@@ -7,7 +9,7 @@ import {
     paginateFilter,
     paginateOrder,
     PaginateParams,
-    rolesFilter
+    rolesFilter,
 } from '@/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -20,7 +22,7 @@ import {
     LoginUserDTO,
     UpdateUser,
     UserModel,
-    UserRO
+    UserRO,
 } from '@user/dto';
 import { UserEntity } from '@user/entities';
 import { UserRepository } from '@user/repositories';

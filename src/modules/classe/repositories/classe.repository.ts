@@ -1,4 +1,7 @@
+import { EntityRepository, Repository } from 'typeorm';
+import { ClasseEntity } from '@classe/entities';
 
-export class ClasseRepository {
+@EntityRepository(ClasseEntity)
+export class ClasseRepository extends Repository<ClasseEntity>{
 
 }

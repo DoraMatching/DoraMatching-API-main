@@ -7,6 +7,7 @@ import { EntityRepository, Repository } from 'typeorm';
 export class UserRepository extends Repository<UserEntity> {
     private readonly SELECT_USER_SCOPE = [
         'user.id',
+        'user.username',
         'user.name',
         'user.email',
         'user.avatarUrl',
@@ -16,6 +17,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.type',
         'post.id',
         'post.title',
+        'post.featuredImage',
         'post.createdAt',
         'post.updatedAt',
         'question.id',
