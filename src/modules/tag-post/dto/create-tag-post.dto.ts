@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-valid
 
 export type ICreateTagPostDTO = Pick<ITagPostModel, 'name'>;
 
-export class CreateTagPostDto implements ICreateTagPostDTO {
+export class CreateTagPostDTO implements ICreateTagPostDTO {
     @ApiProperty({ example: 'java' })
     @IsNotEmpty()
     @IsString()
