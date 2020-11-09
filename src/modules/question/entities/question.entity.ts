@@ -1,7 +1,7 @@
-import { CommentQuestionEntity } from '@/modules/comment-question/entities/comment-question.entity';
-import { TagQuestionEntity } from '@/modules/tag-question/entities/tag-question.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CommentQuestionEntity } from '@comment-question/entities';
 import { IQuestionModel } from '@question/dto';
+import { TagQuestionEntity } from '@tag-question/entities';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,

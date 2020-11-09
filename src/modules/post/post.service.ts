@@ -1,18 +1,21 @@
 import { AppResources } from '@/app.roles';
-import { BaseService } from '@/commons/base-service';
-import { grantPermission } from '@/shared/access-control/grant-permission';
-import { customPaginate } from '@/shared/pagination/paginate-custom';
+import { BaseService } from '@/commons';
+import {
+    customPaginate,
+    grantPermission,
+    IDeleteResultDTO,
+    IPagination,
+    paginateFilter,
+    PaginateParams
+} from '@/shared';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { UpdatePostDTO } from '@post/dto/update-post.dto';
-import { IDeleteResultDTO } from '@shared/dto/';
-import { IPagination, paginateFilter, PaginateParams } from '@shared/pagination';
-import { TagPostRepository } from '@tag-post/repositories/tag-post.repository';
-import { JwtUser } from '@user/dto/';
-import { UserRepository } from '@user/repositories/user.repository';
+import { CreatePostDTO, IPostRO, PostRO, UpdatePostDTO } from '@post/dto';
+import { PostEntity } from '@post/entities';
+import { PostRepository } from '@post/repositories';
+import { TagPostRepository } from '@tag-post/repositories';
+import { JwtUser } from '@user/dto';
+import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreatePostDTO, IPostRO, PostRO } from './dto';
-import { PostEntity } from './entities/post.entity';
-import { PostRepository } from './repositories/post.repository';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
@@ -30,7 +33,6 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async deletePostById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundPost = await this.getPostById(id, jwtUser);
-
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
         if (permission.granted) {
             await this.postRepository.delete(id);
@@ -91,7 +93,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         }
     }
 
-    async updatePost(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
+    async updatePostById(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
         if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);

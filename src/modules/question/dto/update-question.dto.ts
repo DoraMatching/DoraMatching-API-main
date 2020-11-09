@@ -1,6 +1,6 @@
-import { CreateTagQuestionDTO } from '@/modules/tag-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IQuestionModel } from '@question/dto/question.model';
+import { IQuestionModel } from '@question/dto';
+import { CreateTagQuestionDTO } from '@tag-question/dto';
 import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export type IUpdateQuestionDTO = Pick<IQuestionModel, 'content'>;

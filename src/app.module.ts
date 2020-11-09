@@ -1,3 +1,4 @@
+import { ClasseModule } from '@classe/classe.module';
 import { CommentPostModule } from '@comment-post/comment-post.module';
 import { CommentQuestionModule } from '@comment-question/comment-question.module';
 import { HomeModule } from '@home-modules/home.module';
@@ -8,13 +9,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from '@post/post.module';
 import { QuestionModule } from '@question/question.module';
 import { TagPostModule } from '@tag-post/tag-post.module';
+import { TagQuestionModule } from '@tag-question/tag-question.module';
+import { TopicModule } from '@topic/topic.module';
+import { TraineeModule } from '@trainee/trainee.module';
+import { TrainerModule } from '@trainer/trainer.module';
 import { UserModule } from '@user/user.module';
 import { AccessControlModule } from 'nest-access-control';
 import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { TagQuestionModule } from './modules/tag-question/tag-question.module';
+import { AdminisModule } from './modules/adminis/adminis.module';
 
 @Module({
     imports: [
@@ -34,6 +39,11 @@ import { TagQuestionModule } from './modules/tag-question/tag-question.module';
         CommentQuestionModule,
         TagQuestionModule,
         HomeModule,
+        TopicModule,
+        ClasseModule,
+        TrainerModule,
+        TraineeModule,
+        AdminisModule,
     ],
     controllers: [AppController],
     providers: [],
