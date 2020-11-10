@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from '@user/repositories';
 import { TrainerRepository } from '@trainer/repositories';
 import { TopicRepository } from '@topic/repositories';
+import { TraineeRepository } from '@trainee/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserRepository, ClasseRepository, TrainerRepository, TopicRepository]),
+        TypeOrmModule.forFeature([UserRepository, ClasseRepository, TrainerRepository, TopicRepository, TraineeRepository]),
     ],
     controllers: [ClasseController],
     providers: [ClasseService],

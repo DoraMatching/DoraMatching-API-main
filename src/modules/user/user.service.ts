@@ -30,12 +30,14 @@ import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { paginate } from 'nestjs-typeorm-paginate';
+import { TraineeRepository } from '@trainee/repositories';
 
 @Injectable()
 export class UserService {
     constructor(
       private readonly userRepository: UserRepository,
       private readonly mailerService: MailerService,
+      private readonly traineeRepository: TraineeRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -100,6 +102,10 @@ export class UserService {
             }
             user = this.userRepository.create(data);
             user = await this.userRepository.save(user);
+            const trainee = this.traineeRepository.create({
+                user,
+            });
+            await this.traineeRepository.save(trainee);
             return user.toResponseObject();
 
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
@@ -164,7 +170,12 @@ export class UserService {
             const password = pwGenerator.generate({ length: 10, strict: true });
             user = this.userRepository.create({ avatarUrl, email, username: login, name, password });
 
-            await this.userRepository.save(user);
+            user = await this.userRepository.save(user);
+
+            const trainee = this.traineeRepository.create({
+                user
+            });
+            await this.traineeRepository.save(trainee);
 
             await this.mailerService.sendMail({
                 to: email,

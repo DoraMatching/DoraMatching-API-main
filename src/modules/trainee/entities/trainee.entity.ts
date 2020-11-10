@@ -21,7 +21,7 @@ export class TraineeEntity extends BaseEntity implements ITraineeModel {
     @ManyToMany(() => ClasseEntity, classe => classe.members)
     classes: ClasseEntity[];
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     traineeProfile: string;
 
     @OneToOne(() => UserEntity)

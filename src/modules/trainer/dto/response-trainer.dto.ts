@@ -10,12 +10,12 @@ export class TrainerRO implements ITrainerRO {
     @ApiProperty()
     trainerProfile: string;
 
-    @ApiProperty({type: () => TopicRO, isArray: true})
+    @ApiProperty({ type: () => TopicRO, isArray: true })
     topics: TopicModel[];
 
-    @ApiProperty({type: () => UserRO})
+    @ApiProperty({ type: () => UserRO })
     user: UserModel;
 
-    @ApiProperty({type: () => ClasseRO, isArray: true})
+    @ApiProperty({ type: () => ClasseRO, isArray: true })
     classes: ClasseModel[];
 }

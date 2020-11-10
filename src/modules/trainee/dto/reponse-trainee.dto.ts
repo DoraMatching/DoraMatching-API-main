@@ -1,11 +1,23 @@
-import { IClasseModel } from '@classe/dto';
-import { IUserModel } from '@user/dto';
+import { ClasseRO, IClasseModel } from '@classe/dto';
+import { IUserModel, UserModel, UserRO } from '@user/dto';
 import { ITraineeModel } from './trainee.model';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
-export type ITraineeRO = ITraineeModel;
+export interface ITraineeRO extends ITraineeModel {
+    id: string;
+}
 
 export class TraineeRO implements ITraineeRO {
+    @IsNotEmpty()
+    id: string;
+
+    @ApiProperty()
     traineeProfile: string;
-    user: IUserModel;
-    classes: IClasseModel[];
+
+    @ApiProperty({ type: () => UserModel })
+    user: UserModel;
+
+    @ApiProperty({ type: () => ClasseRO, isArray: true })
+    classes: ClasseRO[];
 }

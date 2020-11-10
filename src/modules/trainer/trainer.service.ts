@@ -53,7 +53,7 @@ export class TrainerService {
             } catch ({ detail, ...e }) {
                 throw new HttpException(detail || `OOPS! Can't register trainer`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async getTrainerById(id: string, jwtUser: JwtUser): Promise<TrainerRO> {
