@@ -42,7 +42,7 @@ export class TrainerController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get trainer by id', description: 'Return a trainer with :id' })
+    @ApiOperation({ summary: 'Get trainer by userId', description: 'Return a trainer with :id' })
     @ApiResponse({ type: TrainerRO, status: 200 })
     @Get('trainer')
     getTrainerByUserId(@Query() { userId }: UserQuery, @User() jwtUser: JwtUser): Promise<TrainerRO>  {
