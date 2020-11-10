@@ -17,6 +17,7 @@ export enum AppResources {
     TAG_QUESTION = 'TAG_QUESTION',
     TOPIC = 'TOPIC',
     TRAINER = 'TRAINER',
+    TRAINEE = 'TRAINEE',
     USER = 'USER',
     REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER'
 }
@@ -164,5 +165,17 @@ roles
 
   // Resource REGISTER_CLASSE_MEMBER
   .grant(AppRoles.TRAINEE)
-  .createAny(AppResources.REGISTER_CLASSE_MEMBER);
+  .createAny(AppResources.REGISTER_CLASSE_MEMBER)
+
+  // Resource TRAINEE
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TRAINEE)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .updateOwn(AppResources.TRAINEE)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .updateAny(AppResources.TRAINEE)
+  .deleteAny(AppResources.TRAINEE);
 

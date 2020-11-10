@@ -1,8 +1,8 @@
-import { ClasseRO, IClasseModel } from '@classe/dto';
-import { IUserModel, UserModel, UserRO } from '@user/dto';
-import { ITraineeModel } from './trainee.model';
+import { ClasseRO } from '@classe/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserModel } from '@user/dto';
 import { IsNotEmpty } from 'class-validator';
+import { ITraineeModel } from './trainee.model';
 
 export interface ITraineeRO extends ITraineeModel {
     id: string;

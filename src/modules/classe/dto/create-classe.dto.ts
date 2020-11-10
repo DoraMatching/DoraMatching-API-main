@@ -1,10 +1,9 @@
 import { IClasseModel } from '@classe/dto';
+import { ApiProperty } from '@nestjs/swagger';
 import { TopicRO } from '@topic/dto';
+import { TraineeRO } from '@trainee/dto';
 import { Type } from 'class-transformer';
 import { IsArray, IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
-import { TraineeRO } from '@trainee/dto';
-import { ApiProperty } from '@nestjs/swagger';
-import { UserRO } from '@user/dto';
 
 export type ICreateClasseDTO = Pick<IClasseModel, 'name' | 'description' | 'featuredImage' | 'startTime' | 'endTime' | 'topic' | 'duration' | 'members'>;
 
