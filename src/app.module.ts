@@ -20,6 +20,7 @@ import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
 import { AdminisModule } from '@adminis/adminis.module';
+import { LessonModule } from '@lesson/lesson.module';
 
 @Module({
     imports: [
@@ -44,6 +45,7 @@ import { AdminisModule } from '@adminis/adminis.module';
         TrainerModule,
         TraineeModule,
         AdminisModule,
+        LessonModule,
     ],
     controllers: [AppController],
     providers: [],

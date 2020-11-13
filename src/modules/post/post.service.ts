@@ -6,7 +6,7 @@ import {
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams
+    PaginateParams,
 } from '@/shared';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreatePostDTO, IPostRO, PostRO, UpdatePostDTO } from '@post/dto';
@@ -62,7 +62,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
             try {
                 const _post = await this.postRepository.save(newPost);
-                return await this.postRepository.getPostById(_post.id)
+                return await this.postRepository.getPostById(_post.id);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -95,18 +95,18 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
 
     async updatePostById(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
-        if(!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        if (!post) throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'update', jwtUser, post.author.id);
         if (permission.granted) {
-            try {
-                data = permission.filter(data);
-                Object.assign(post, data);
+            data = permission.filter(data);
+            Object.assign(post, data);
+            if (data.tags)
                 post.tags = await this.tagPostRepository.findManyAndCreateIfNotExisted(data.tags.map(tag => tag.name));
+            try {
                 await this.postRepository.save(post);
                 const result = await this.postRepository.getPostById(id);
                 return permission.filter(result);
-            } catch ({ detail, message }) {
-                this.logger.error(message);
+            } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't update post`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);

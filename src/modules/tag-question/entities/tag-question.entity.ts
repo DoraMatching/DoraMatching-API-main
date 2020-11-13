@@ -7,7 +7,7 @@ import {
     Entity,
     ManyToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('tag-question')
@@ -18,7 +18,7 @@ export class TagQuestionEntity extends BaseEntity implements ITagQuestionModel {
     @Column({ type: 'text', nullable: false })
     name: string;
 
-    @ManyToMany(() => QuestionEntity, question => question.tags)
+    @ManyToMany(() => QuestionEntity, question => question.tags, { cascade: true, onDelete: 'CASCADE' })
     questions: QuestionEntity[];
 
     @CreateDateColumn()

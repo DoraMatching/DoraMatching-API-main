@@ -25,7 +25,8 @@
       "@topic/*": ["src/modules/topic/*"],
       "@trainee/*": ["src/modules/trainee/*"],
       "@trainer/*": ["src/modules/trainer/*"],
-      "@user/*": ["src/modules/user/*"]
+      "@user/*": ["src/modules/user/*"],
+      "@lesson/*": ["src/modules/lesson/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],
