@@ -8,6 +8,7 @@ export class TrainerRepository extends Repository<TrainerEntity> {
     private readonly SELECT_TRAINER_SCOPE = [
         'trainer',
         'user.id',
+        'user.username',
         'user.name',
         'user.email',
         'user.avatarUrl',

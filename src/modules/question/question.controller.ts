@@ -44,7 +44,7 @@ export class QuestionController {
     @ApiResponse({ type: QuestionRO, status: 201 })
     @Patch('question/:id')
     updateQuestion(@Param() { id }: FindOneParams, @Body() data: UpdateQuestionDTO, @User() jwtUser: JwtUser): Promise<IQuestionRO> {
-        return this.questionService.updateQuestion(id, data, jwtUser);
+        return this.questionService.updateQuestionById(id, data, jwtUser);
     }
 
     @Auth()
@@ -52,6 +52,6 @@ export class QuestionController {
     @ApiResponse({ type: QuestionRO, status: 202 })
     @Delete('question/:id')
     deleteQuestion(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
-        return this.questionService.deleteQuestion(id, jwtUser);
+        return this.questionService.deleteQuestionById(id, jwtUser);
     }
 }

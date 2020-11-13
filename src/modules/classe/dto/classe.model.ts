@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel, TopicModel } from '@topic/dto';
+import { ITraineeModel, TraineeModel } from '@trainee/dto/trainee.model';
 import { ITrainerModel, TrainerModel } from '@trainer/dto';
-import { UserModel } from '@user/dto';
 
 export interface IClasseModel {
     name: string;
@@ -12,8 +12,7 @@ export interface IClasseModel {
     duration: number;
     topic: ITopicModel;
     trainer: ITrainerModel;
-    members: UserModel[];
-    author: Partial<UserModel>;
+    members: ITraineeModel[];
     createdAt?: Date;
     updatedAt?: Date;
     type?: string;
@@ -45,10 +44,7 @@ export class ClasseModel implements IClasseModel {
     trainer: TrainerModel;
 
     @ApiProperty()
-    members: UserModel[];
-
-    @ApiProperty()
-    author: Partial<UserModel>;
+    members: TraineeModel[];
 
     @ApiProperty()
     createdAt?: Date;

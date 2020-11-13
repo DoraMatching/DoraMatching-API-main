@@ -17,7 +17,9 @@ export enum AppResources {
     TAG_QUESTION = 'TAG_QUESTION',
     TOPIC = 'TOPIC',
     TRAINER = 'TRAINER',
+    TRAINEE = 'TRAINEE',
     USER = 'USER',
+    REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -133,7 +135,7 @@ roles
 
   //  Resource CLASSE
   .grant(AppRoles.GUEST)
-  .readAny(AppResources.CLASSE)
+  .readAny(AppResources.CLASSE, '*, !members')
   .grant(AppRoles.TRAINEE)
   .extend(AppRoles.GUEST)
   .grant(AppRoles.TRAINER)
@@ -159,5 +161,21 @@ roles
   .grant(AppRoles.ADMIN)
   .extend(AppRoles.TRAINER)
   .updateAny(AppResources.TRAINER)
-  .deleteAny(AppResources.TRAINER);
+  .deleteAny(AppResources.TRAINER)
+
+  // Resource REGISTER_CLASSE_MEMBER
+  .grant(AppRoles.TRAINEE)
+  .createAny(AppResources.REGISTER_CLASSE_MEMBER)
+
+  // Resource TRAINEE
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TRAINEE)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .updateOwn(AppResources.TRAINEE)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .updateAny(AppResources.TRAINEE)
+  .deleteAny(AppResources.TRAINEE);
 

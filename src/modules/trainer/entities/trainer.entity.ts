@@ -1,6 +1,6 @@
 import { ClasseEntity } from '@classe/entities';
 import { TopicEntity } from '@topic/entities';
-import { TrainerModel } from '@trainer/dto';
+import { ITrainerModel } from '@trainer/dto';
 import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 
 @Entity('trainer')
-export class TrainerEntity extends BaseEntity implements TrainerModel {
+export class TrainerEntity extends BaseEntity implements ITrainerModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

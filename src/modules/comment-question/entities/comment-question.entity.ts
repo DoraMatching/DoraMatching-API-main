@@ -8,7 +8,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('comment-question')
@@ -22,7 +22,7 @@ export class CommentQuestionEntity extends BaseEntity implements ICommentQuestio
     @ManyToOne(() => UserEntity, { nullable: false })
     author: UserEntity;
 
-    @ManyToOne(() => QuestionEntity)
+    @ManyToOne(() => QuestionEntity, { cascade: true, onDelete: 'CASCADE' })
     question: QuestionEntity;
 
     @CreateDateColumn()

@@ -1,9 +1,18 @@
 import { IClasseModel } from '@classe/dto';
 import { TopicEntity } from '@topic/entities';
+import { TraineeEntity } from '@trainee/entities';
 import { TrainerEntity } from '@trainer/entities';
-import { UserModel } from '@user/dto';
-import { UserEntity } from '@user/entities';
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    PrimaryGeneratedColumn, UpdateDateColumn
+} from 'typeorm';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel {
@@ -23,7 +32,7 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @Column({ type: 'timestamp', nullable: false, default: new Date() })
     startTime: Date;
 
-    @Column({ type: 'timestamp', nullable: false })
+    @Column({ type: 'timestamp', nullable: true })
     endTime?: Date;
 
     @Column({ type: 'integer', nullable: false })
@@ -36,13 +45,16 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @ManyToOne(() => TrainerEntity, trainer => trainer.classes)
     trainer: TrainerEntity;
 
-    members: UserModel[];
+    @ManyToMany(() => TraineeEntity, trainee => trainee.classes)
+    @JoinTable()
+    members: TraineeEntity[];
 
-    author: UserEntity;
-
+    @CreateDateColumn()
     createdAt: Date;
 
+    @UpdateDateColumn()
     updatedAt: Date;
 
+    @Column({ type: 'text', nullable: false, default: 'classe' })
     type: string;
 }
