@@ -10,7 +10,7 @@ import {
     ManyToMany,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn, UpdateDateColumn
+    PrimaryGeneratedColumn, UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('post')
@@ -33,16 +33,11 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToMany(() => TagPostEntity, tag => tag.posts, {
-        cascade: ['insert', 'update', 'remove'],
-        eager: true,
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-    })
+    @ManyToMany(() => TagPostEntity, tag => tag.posts)
     @JoinTable()
     tags: TagPostEntity[];
 
-    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, nullable: false })
+    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, onDelete: 'CASCADE', nullable: false })
     @JoinTable()
     author: UserEntity;
 

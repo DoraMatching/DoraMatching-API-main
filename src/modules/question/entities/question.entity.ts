@@ -10,7 +10,7 @@ import {
     JoinTable, ManyToMany,
     ManyToOne, OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('question')
@@ -32,7 +32,7 @@ export class QuestionEntity extends BaseEntity implements IQuestionModel {
     @JoinTable()
     comments: CommentQuestionEntity[];
 
-    @ManyToMany(() => TagQuestionEntity, tag => tag.questions, { cascade: true })
+    @ManyToMany(() => TagQuestionEntity, tag => tag.questions)
     @JoinTable()
     tags: TagQuestionEntity[];
 
