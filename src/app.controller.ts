@@ -1,12 +1,11 @@
-import { apiUrl } from '@/config';
-import { Controller, Get, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 
 @Controller()
 export class AppController {
 
     @Get()
-    getHello(@Res() res?: Response) {
-        return res.redirect(`${apiUrl}/docs`);
+    getHello(@Res() res?: Response, @Req() req?: Request) {
+        return res.redirect(`${req.headers.host}/docs`);
     }
 }
