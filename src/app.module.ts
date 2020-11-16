@@ -1,7 +1,9 @@
+import { AdminisModule } from '@adminis/adminis.module';
 import { ClasseModule } from '@classe/classe.module';
 import { CommentPostModule } from '@comment-post/comment-post.module';
 import { CommentQuestionModule } from '@comment-question/comment-question.module';
 import { HomeModule } from '@home-modules/home.module';
+import { LessonModule } from '@lesson/lesson.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -9,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from '@post/post.module';
 import { QuestionModule } from '@question/question.module';
 import { TagPostModule } from '@tag-post/tag-post.module';
+import { TagPredictModule } from '@tag-predict/tag-predict.module';
 import { TagQuestionModule } from '@tag-question/tag-question.module';
 import { TopicModule } from '@topic/topic.module';
 import { TraineeModule } from '@trainee/trainee.module';
@@ -19,9 +22,6 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { AdminisModule } from '@adminis/adminis.module';
-import { LessonModule } from '@lesson/lesson.module';
-import { TagPredictModule } from './modules/tag-predict/tag-predict.module';
 
 @Module({
     imports: [
