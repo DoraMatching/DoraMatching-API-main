@@ -5,13 +5,13 @@ import { ClasseModel, ClasseRO, CreateClasseDTO, IClasseRO } from '@classe/dto';
 import { ClasseEntity } from '@classe/entities';
 import { ClasseRepository } from '@classe/repositories';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { JwtUser } from '@user/dto';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { TrainerRepository } from '@trainer/repositories';
 import { TopicRepository } from '@topic/repositories';
-import moment from 'moment';
 import { TraineeRepository } from '@trainee/repositories';
+import { TrainerRepository } from '@trainer/repositories';
+import { JwtUser } from '@user/dto';
 import _ from 'lodash';
+import moment from 'moment';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {

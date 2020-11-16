@@ -21,6 +21,7 @@ import { roles } from './app.roles';
 import { mailerConfig } from './config';
 import { AdminisModule } from '@adminis/adminis.module';
 import { LessonModule } from '@lesson/lesson.module';
+import { TagPredictModule } from './modules/tag-predict/tag-predict.module';
 
 @Module({
     imports: [
@@ -46,6 +47,7 @@ import { LessonModule } from '@lesson/lesson.module';
         TraineeModule,
         AdminisModule,
         LessonModule,
+        TagPredictModule,
     ],
     controllers: [AppController],
     providers: [],

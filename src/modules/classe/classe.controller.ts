@@ -1,3 +1,5 @@
+import { apiUrl } from '@/config';
+import { FindOneParams, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { ClasseService } from '@classe/classe.service';
 import { CreateClasseDTO } from '@classe/dto';
@@ -5,8 +7,6 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
-import { FindOneParams, PaginateParams } from '@/shared';
-import { apiUrl } from '@/config';
 
 @ApiTags('classe')
 @Controller()

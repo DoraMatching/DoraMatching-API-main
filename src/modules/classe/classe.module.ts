@@ -3,10 +3,10 @@ import { ClasseService } from '@classe/classe.service';
 import { ClasseRepository } from '@classe/repositories';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from '@user/repositories';
-import { TrainerRepository } from '@trainer/repositories';
 import { TopicRepository } from '@topic/repositories';
 import { TraineeRepository } from '@trainee/repositories';
+import { TrainerRepository } from '@trainer/repositories';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [

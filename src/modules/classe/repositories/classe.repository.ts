@@ -1,8 +1,7 @@
+import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
 import { ClasseEntity } from '@classe/entities';
 import { EntityRepository, Repository } from 'typeorm';
-import { PaginateParams } from '@/shared';
-import { EntityResults } from '@/commons';
-import { TrainerEntity } from '@trainer/entities';
 
 @EntityRepository(ClasseEntity)
 export class ClasseRepository extends Repository<ClasseEntity> {

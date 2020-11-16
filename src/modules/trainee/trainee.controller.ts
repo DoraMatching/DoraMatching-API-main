@@ -1,13 +1,13 @@
+import { apiUrl } from '@/config';
+import { FindOneParams, PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { TraineeService } from '@trainee/trainee.service';
-import { JwtUser, UserRO } from '@user/dto';
-import { User } from '@user/user.decorator';
-import { Auth } from '@/shared/auth';
-import { FindOneParams, PaginateParams } from '@/shared';
-import { apiUrl } from '@/config';
-import { UserQuery } from '@user/user.query';
 import { TraineeRO } from '@trainee/dto';
+import { TraineeService } from '@trainee/trainee.service';
+import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
+import { UserQuery } from '@user/user.query';
 
 @ApiTags('trainee')
 @Controller()
