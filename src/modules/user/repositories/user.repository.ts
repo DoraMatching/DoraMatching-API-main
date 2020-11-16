@@ -31,15 +31,19 @@ export class UserRepository extends Repository<UserEntity> {
         'qTag.name',
     ];
 
-    getUserById(id: string) {
-        return this.createQueryBuilder('user')
-          .leftJoinAndSelect('user.questions', 'question')
-          .leftJoinAndSelect('user.posts', 'post')
-          .leftJoinAndSelect('post.tags', 'pTag')
-          .leftJoinAndSelect('question.tags', 'qTag')
-          .select(this.SELECT_USER_SCOPE)
-          .where('user.id = :id', { id })
-          .getOne();
+    getUserById(id: string): Promise<UserEntity> {
+        try {
+            return this.createQueryBuilder('user')
+              .leftJoinAndSelect('user.questions', 'question')
+              .leftJoinAndSelect('user.posts', 'post')
+              .leftJoinAndSelect('post.tags', 'pTag')
+              .leftJoinAndSelect('question.tags', 'qTag')
+              .select(this.SELECT_USER_SCOPE)
+              .where('user.id = :id', { id })
+              .getOne();
+        }catch (e) {
+            console.error(e);
+        }
     }
 
     async getAllUsers({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<UserEntity>> {
