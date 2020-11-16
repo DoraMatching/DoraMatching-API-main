@@ -35,11 +35,11 @@ import { TraineeRepository } from '@trainee/repositories';
 @Injectable()
 export class UserService {
     constructor(
-      private readonly userRepository: UserRepository,
-      private readonly mailerService: MailerService,
-      private readonly traineeRepository: TraineeRepository,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+        private readonly userRepository: UserRepository,
+        private readonly mailerService: MailerService,
+        private readonly traineeRepository: TraineeRepository,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder,
     ) {
     }
 
@@ -117,7 +117,8 @@ export class UserService {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', jwtUser, id);
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
-            updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
+            if (updateUser.roles)
+                updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
 
             const foundUser = await this.userRepository.findOne({ id });
 
@@ -141,7 +142,7 @@ export class UserService {
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
-      const query = gql`
+        const query = gql`
           query {
               viewer {
                   login
@@ -197,7 +198,7 @@ export class UserService {
     }
 
     async githubLangs(accessToken: string) {
-      const query = gql`
+        const query = gql`
           {
               viewer {
                   repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {

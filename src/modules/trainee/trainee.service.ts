@@ -1,12 +1,12 @@
+import { AppResources } from '@/app.roles';
+import { BaseService } from '@/commons';
+import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { ITraineeRO, TraineeRO } from '@trainee/dto';
 import { TraineeEntity } from '@trainee/entities';
 import { TraineeRepository } from '@trainee/repositories';
-import { BaseService } from '@/commons';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
 import { JwtUser } from '@user/dto';
-import { ITraineeRO, TraineeRO } from '@trainee/dto';
-import { AppResources } from '@/app.roles';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class TraineeService extends BaseService<TraineeEntity, TraineeRepository> {

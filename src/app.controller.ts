@@ -1,4 +1,3 @@
-import { apiUrl } from '@/config';
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -7,6 +6,6 @@ export class AppController {
 
     @Get()
     getHello(@Res() res?: Response) {
-        return res.redirect(`${apiUrl}/docs`);
+        return res.redirect(`/docs`);
     }
 }

@@ -1,4 +1,5 @@
 import { ClasseEntity } from '@classe/entities';
+import { ITraineeModel } from '@trainee/dto';
 import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
@@ -9,9 +10,8 @@ import {
     ManyToMany,
     OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
-import { ITraineeModel } from '@trainee/dto';
 
 @Entity('trainee')
 export class TraineeEntity extends BaseEntity implements ITraineeModel {

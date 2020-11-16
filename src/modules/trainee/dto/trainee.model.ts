@@ -1,5 +1,5 @@
-import { IUserModel, UserModel } from '@user/dto';
 import { IClasseModel } from '@classe/dto';
+import { IUserModel, UserModel } from '@user/dto';
 
 export interface ITraineeModel {
     traineeProfile: string;

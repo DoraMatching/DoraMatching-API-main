@@ -26,7 +26,8 @@
       "@trainee/*": ["src/modules/trainee/*"],
       "@trainer/*": ["src/modules/trainer/*"],
       "@user/*": ["src/modules/user/*"],
-      "@lesson/*": ["src/modules/lesson/*"]
+      "@lesson/*": ["src/modules/lesson/*"],
+      "@tag-predict/*": ["src/modules/tag-predict/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],
