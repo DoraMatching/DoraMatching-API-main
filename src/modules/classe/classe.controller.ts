@@ -39,4 +39,10 @@ export class ClasseController {
     registerClasse(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
         return this.classeService.registerClasse(id, jwtUser);
     }
+
+    @Auth()
+    @Get('classe/:id/deregister')
+    deregisterClasse(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
+        return this.classeService.registerClasse(id, jwtUser, true);
+    }
 }

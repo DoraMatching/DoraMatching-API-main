@@ -84,25 +84,28 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async registerClasse(id: string, jwtUser: JwtUser) {
-        const permission = grantPermission(this.rolesBuilder, AppResources.REGISTER_CLASSE_MEMBER, 'create', jwtUser, null);
+    async registerClasse(id: string, jwtUser: JwtUser, opposite = false) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.REGISTER_CLASSE_MEMBER, 'create', jwtUser, null); //same role with action: 'create' -> (don't need define new one)
         if (permission.granted) {
+            const action = opposite ? 'deregister' : 'register';
             const [trainee, classe] = await Promise.all([
                 this.traineeRepository.getTraineeByUserId(jwtUser.id),
                 this.classeRepository.getClasseById(id),
             ]);
             if (!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
-            if (classe.trainer.user.id === jwtUser.id) throw new HttpException(`OOPS! You can't register the classe you are trainer`, HttpStatus.CONFLICT);
+            if (classe.trainer.user.id === jwtUser.id) throw new HttpException(`OOPS! You can't ${action} the classe you are trainer`, HttpStatus.CONFLICT);
             let members = classe.members;
-            members.push(trainee);
+            if (opposite) {
+                members = members.filter(_trainee => _trainee.id !== trainee.id);
+            } else members.push(trainee);
             members = _.uniqBy(members, 'id');
             classe.members = members;
             try {
                 await this.classeRepository.save(classe);
                 return await this.classeRepository.getClasseById(id);
             } catch ({ detail }) {
-                throw new HttpException(detail || `OOPS! Can't register classe`, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || `OOPS! Can't ${action} classe`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
