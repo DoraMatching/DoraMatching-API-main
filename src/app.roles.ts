@@ -136,6 +136,7 @@ roles
   //  Resource CLASSE
   .grant(AppRoles.GUEST)
   .readAny(AppResources.CLASSE, '*, !members')
+  .readOwn(AppResources.CLASSE, '*')
   .grant(AppRoles.TRAINEE)
   .extend(AppRoles.GUEST)
   .grant(AppRoles.TRAINER)
@@ -169,7 +170,8 @@ roles
 
   // Resource TRAINEE
   .grant(AppRoles.GUEST)
-  .readAny(AppResources.TRAINEE)
+  .readAny(AppResources.TRAINEE, '*, !classes')
+  .readOwn(AppResources.TRAINEE, '*')
   .grant(AppRoles.TRAINEE)
   .extend(AppRoles.GUEST)
   .updateOwn(AppResources.TRAINEE)

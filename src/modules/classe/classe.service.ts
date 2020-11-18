@@ -33,6 +33,19 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         if (endTime.isBefore(startTime)) throw new HttpException(`OOPS! Invalid startTime or endTime`, HttpStatus.BAD_REQUEST);
     }
 
+    async getClasseById(id: string, jwtUser: JwtUser) {
+        const [trainer, classe] = await Promise.all([
+            this.trainerRepository.getTrainerByUserId(jwtUser.id),
+            this.classeRepository.getClasseById(id),
+        ]);
+        if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, classe.trainer.user.id);
+        if (permission.granted) {
+            return permission.filter(classe);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
     async getAllClasses(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IClasseRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, null);
         if (permission.granted) {
@@ -78,18 +91,19 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
                 this.traineeRepository.getTraineeByUserId(jwtUser.id),
                 this.classeRepository.getClasseById(id),
             ]);
-            if(!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-            if(!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+            if (!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+            if (classe.trainer.user.id === jwtUser.id) throw new HttpException(`OOPS! You can't register the classe you are trainer`, HttpStatus.CONFLICT);
             let members = classe.members;
             members.push(trainee);
             members = _.uniqBy(members, 'id');
             classe.members = members;
             try {
                 await this.classeRepository.save(classe);
+                return await this.classeRepository.getClasseById(id);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't register classe`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }
-
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }

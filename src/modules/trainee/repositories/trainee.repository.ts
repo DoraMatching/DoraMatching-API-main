@@ -14,12 +14,14 @@ export class TraineeRepository extends Repository<TraineeEntity> {
         'user.avatarUrl',
         'user.roles',
         'user.type',
+        'classe',
     ];
 
     async getAllTrainees({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TraineeEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
+              .leftJoinAndSelect('trainee.classes', 'classe')
               .select(this.SELECT_TRAINEE_SCOPE)
               .orderBy('trainee.createdAt', order)
               .skip(limit * (page - 1))
@@ -35,6 +37,7 @@ export class TraineeRepository extends Repository<TraineeEntity> {
         try {
             return this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
+              .leftJoinAndSelect('trainee.classes', 'classe')
               .where('trainee.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();
@@ -47,6 +50,7 @@ export class TraineeRepository extends Repository<TraineeEntity> {
         try {
             return this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
+              .leftJoinAndSelect('trainee.classes', 'classe')
               .where('user.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();

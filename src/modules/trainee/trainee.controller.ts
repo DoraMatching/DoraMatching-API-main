@@ -1,13 +1,14 @@
 import { apiUrl } from '@/config';
 import { FindOneParams, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TraineeRO } from '@trainee/dto';
 import { TraineeService } from '@trainee/trainee.service';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { UserQuery } from '@user/user.query';
+import { ClasseRO } from '@classe/dto';
 
 @ApiTags('trainee')
 @Controller()
@@ -18,7 +19,7 @@ export class TraineeController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get all trainees', description: 'Return 1 one page of trainees' })
+    @ApiOperation({ summary: 'Get all trainees', description: 'Return 1 page of trainees' })
     @ApiResponse({ type: TraineeRO, status: 200 })
     @Get('trainees')
     getAllTrainees(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
@@ -29,7 +30,7 @@ export class TraineeController {
     @ApiOperation({ summary: 'Get trainee by id', description: 'Return a trainee with :id' })
     @ApiResponse({ type: TraineeRO, status: 200 })
     @Get('trainee/:id')
-    getTraineeById(@Query() { id }: FindOneParams, @User() jwtUser: JwtUser) {
+    getTraineeById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
         return this.traineeService.getTraineeById(id, jwtUser);
     }
 

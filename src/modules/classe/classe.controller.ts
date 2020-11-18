@@ -2,9 +2,9 @@ import { apiUrl } from '@/config';
 import { FindOneParams, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { ClasseService } from '@classe/classe.service';
-import { CreateClasseDTO } from '@classe/dto';
+import { ClasseRO, CreateClasseDTO } from '@classe/dto';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 
@@ -29,7 +29,13 @@ export class ClasseController {
     }
 
     @Auth()
-    @Post('classe/:id/register')
+    @Get('classe/:id')
+    getClasseById(@Param() {id}: FindOneParams, @User() jwtUser: JwtUser) {
+        return this.classeService.getClasseById(id, jwtUser);
+    }
+
+    @Auth()
+    @Get('classe/:id/register')
     registerClasse(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
         return this.classeService.registerClasse(id, jwtUser);
     }
