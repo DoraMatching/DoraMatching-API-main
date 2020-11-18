@@ -10,9 +10,10 @@ import {
     JoinColumn,
     JoinTable,
     ManyToMany,
-    ManyToOne,
-    PrimaryGeneratedColumn, UpdateDateColumn
+    ManyToOne, OneToMany,
+    PrimaryGeneratedColumn, UpdateDateColumn,
 } from 'typeorm';
+import { LessonEntity } from '@lesson/entities';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel {
@@ -37,6 +38,9 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
 
     @Column({ type: 'integer', nullable: false })
     duration: number;
+
+    @OneToMany(() => LessonEntity, lesson => lesson.classe)
+    lessons: LessonEntity[];
 
     @ManyToOne(() => TopicEntity)
     @JoinColumn({ name: 'topic' })
