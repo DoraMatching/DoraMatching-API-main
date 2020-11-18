@@ -15,6 +15,14 @@ export class TraineeRepository extends Repository<TraineeEntity> {
         'user.roles',
         'user.type',
         'classe',
+        'cTrainer',
+        'tUser.id',
+        'tUser.username',
+        'tUser.name',
+        'tUser.email',
+        'tUser.avatarUrl',
+        'tUser.roles',
+        'tUser.type',
     ];
 
     async getAllTrainees({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TraineeEntity>> {
@@ -22,6 +30,8 @@ export class TraineeRepository extends Repository<TraineeEntity> {
             const [entities, count] = await this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
               .leftJoinAndSelect('trainee.classes', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'cTrainer')
+              .leftJoinAndSelect('cTrainer.user', 'tUser')
               .select(this.SELECT_TRAINEE_SCOPE)
               .orderBy('trainee.createdAt', order)
               .skip(limit * (page - 1))
@@ -38,6 +48,8 @@ export class TraineeRepository extends Repository<TraineeEntity> {
             return this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
               .leftJoinAndSelect('trainee.classes', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'cTrainer')
+              .leftJoinAndSelect('cTrainer.user', 'tUser')
               .where('trainee.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();
@@ -51,6 +63,8 @@ export class TraineeRepository extends Repository<TraineeEntity> {
             return this.createQueryBuilder('trainee')
               .leftJoinAndSelect('trainee.user', 'user')
               .leftJoinAndSelect('trainee.classes', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'cTrainer')
+              .leftJoinAndSelect('cTrainer.user', 'tUser')
               .where('user.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();
