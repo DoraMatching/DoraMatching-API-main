@@ -22,6 +22,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
     imports: [
@@ -48,6 +49,7 @@ import { mailerConfig } from './config';
         AdminisModule,
         LessonModule,
         TagPredictModule,
+        SearchModule,
     ],
     controllers: [AppController],
     providers: [],
