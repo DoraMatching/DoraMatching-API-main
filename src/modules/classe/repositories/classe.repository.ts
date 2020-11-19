@@ -28,6 +28,8 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         'uTrainee.type',
         'uTrainee.createdAt',
         'uTrainee.updatedAt',
+
+        'lesson'
     ];
 
     async getAllClasses({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<ClasseEntity>> {
@@ -38,6 +40,7 @@ export class ClasseRepository extends Repository<ClasseEntity> {
               .leftJoinAndSelect('classe.topic', 'topic')
               .leftJoinAndSelect('trainer.user', 'uTrainer')
               .leftJoinAndSelect('trainee.user', 'uTrainee')
+              .leftJoinAndSelect('classe.lessons', 'lesson')
               .orderBy('classe.createdAt', order)
               .skip(limit * (page - 1))
               .take(limit)
@@ -57,6 +60,7 @@ export class ClasseRepository extends Repository<ClasseEntity> {
               .leftJoinAndSelect('classe.topic', 'topic')
               .leftJoinAndSelect('trainer.user', 'uTrainer')
               .leftJoinAndSelect('trainee.user', 'uTrainee')
+              .leftJoinAndSelect('classe.lessons', 'lesson')
               .where('classe.id = :id', { id })
               .select(this.SELECT_CLASSE_SCOPE)
               .getOne();

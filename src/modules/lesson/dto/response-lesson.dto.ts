@@ -20,7 +20,10 @@ export class LessonRO implements ILessonRO {
     name: string;
 
     @ApiProperty()
-    timeStart: Date;
+    startTime: Date;
+
+    @ApiProperty({ default: 'lesson' })
+    type: string;
 
     @ApiProperty()
     createdAt: Date;

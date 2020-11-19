@@ -20,6 +20,7 @@ export class UpdateUser implements IUpdateUser {
     @IsEmail()
     email: string;
 
+    @ApiProperty()
     @IsString()
     @IsOptional()
     name: string;

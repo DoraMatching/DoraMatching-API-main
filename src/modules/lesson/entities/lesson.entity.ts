@@ -19,13 +19,16 @@ export class LessonEntity extends BaseEntity implements ILessonModel {
     classe: ClasseEntity;
 
     @Column({ type: 'timestamp', nullable: false, default: new Date() })
-    timeStart: Date;
+    startTime: Date;
 
     @Column({ type: 'int', nullable: false, default: 60 })
     duration: number;
 
     @Column({ type: 'text', nullable: false })
     name: string;
+
+    @Column({ type: 'text', nullable: false, default: 'lesson'})
+    type: string;
 
     @CreateDateColumn()
     createdAt: Date;

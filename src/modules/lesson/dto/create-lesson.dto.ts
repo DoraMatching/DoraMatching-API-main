@@ -18,5 +18,5 @@ export class CreateLessonDTO implements ICreateLessonDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsDateString()
-    timeStart: Date;
+    startTime: Date;
 }
