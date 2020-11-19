@@ -6,15 +6,20 @@ import { User } from '@user/user.decorator';
 import { CreateLessonDTO } from '@lesson/dto/create-lesson.dto';
 import { FindOneParams } from '@/shared';
 import { LessonParam } from '@lesson/lesson.param';
+import { LessonService } from '@lesson/lesson.service';
 
 @ApiTags('lesson')
 @Controller()
 export class LessonController {
+    constructor(
+      private readonly lessonService: LessonService,
+    ) {
+    }
 
     @Auth()
     @Post('classe/:id/lesson')
     createLessonByClasseId(@Param() { id }: FindOneParams, @Body() data: CreateLessonDTO, @User() jwtUser: JwtUser) {
-
+        return this.lessonService.createLessonByClasseId(id, data, jwtUser);
     }
 
     @Auth()
