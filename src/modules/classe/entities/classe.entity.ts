@@ -1,4 +1,5 @@
 import { IClasseModel } from '@classe/dto';
+import { LessonEntity } from '@lesson/entities';
 import { TopicEntity } from '@topic/entities';
 import { TraineeEntity } from '@trainee/entities';
 import { TrainerEntity } from '@trainer/entities';
@@ -11,9 +12,8 @@ import {
     JoinTable,
     ManyToMany,
     ManyToOne, OneToMany,
-    PrimaryGeneratedColumn, UpdateDateColumn,
+    PrimaryGeneratedColumn, UpdateDateColumn
 } from 'typeorm';
-import { LessonEntity } from '@lesson/entities';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel {

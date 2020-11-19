@@ -4,7 +4,7 @@ import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateP
 import { ClasseModel, ClasseRO, CreateClasseDTO, IClasseRO } from '@classe/dto';
 import { ClasseEntity } from '@classe/entities';
 import { ClasseRepository } from '@classe/repositories';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TopicRepository } from '@topic/repositories';
 import { TraineeRepository } from '@trainee/repositories';
 import { TrainerRepository } from '@trainer/repositories';

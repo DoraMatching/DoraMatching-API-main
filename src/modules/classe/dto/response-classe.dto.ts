@@ -1,8 +1,8 @@
 import { TopicModel } from '@topic/dto';
 import { TraineeRO } from '@trainee/dto';
 import { TrainerModel } from '@trainer/dto';
-import { IClasseModel } from './classe.model';
 import { IsNotEmpty } from 'class-validator';
+import { IClasseModel } from './classe.model';
 
 export interface IClasseRO extends IClasseModel {
     id: string;

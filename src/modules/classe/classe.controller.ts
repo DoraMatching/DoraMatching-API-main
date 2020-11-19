@@ -2,9 +2,9 @@ import { apiUrl } from '@/config';
 import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { ClasseService } from '@classe/classe.service';
-import { ClasseRO, CreateClasseDTO, IClasseRO } from '@classe/dto';
+import { CreateClasseDTO, IClasseRO } from '@classe/dto';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 
