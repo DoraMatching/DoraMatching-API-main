@@ -15,7 +15,6 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
-    private readonly logger: Logger = new Logger(ClasseService.name);
 
     constructor(
       private readonly classeRepository: ClasseRepository,
@@ -33,7 +32,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         if (endTime.isBefore(startTime)) throw new HttpException(`OOPS! Invalid startTime or endTime`, HttpStatus.BAD_REQUEST);
     }
 
-    async getClasseById(id: string, jwtUser: JwtUser) {
+    async getClasseById(id: string, jwtUser: JwtUser): Promise<IClasseRO> {
         const [trainer, classe] = await Promise.all([
             this.trainerRepository.getTrainerByUserId(jwtUser.id),
             this.classeRepository.getClasseById(id),
@@ -55,7 +54,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async createClasse(data: CreateClasseDTO, jwtUser: JwtUser) {
+    async createClasse(data: CreateClasseDTO, jwtUser: JwtUser): Promise<IClasseRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'create', jwtUser, null);
         if (permission.granted) {
             const [trainer, topic] = await Promise.all([
@@ -84,7 +83,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async registerClasse(id: string, jwtUser: JwtUser, opposite = false) {
+    async registerClasse(id: string, jwtUser: JwtUser, opposite = false): Promise<IClasseRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.REGISTER_CLASSE_MEMBER, 'create', jwtUser, null); //same role with action: 'create' -> (don't need define new one)
         if (permission.granted) {
             const action = opposite ? 'deregister' : 'register';
