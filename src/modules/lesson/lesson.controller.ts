@@ -1,9 +1,9 @@
-import { FindOneParams } from '@/shared';
+import { FindOneParams, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { CreateLessonDTO } from '@lesson/dto';
 import { LessonParam } from '@lesson/lesson.param';
 import { LessonService } from '@lesson/lesson.service';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
@@ -24,8 +24,8 @@ export class LessonController {
 
     @Auth()
     @Get('classe/:id/lessons')
-    getAllLessonByClasseId(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-
+    getAllLessonByClasseId(@Param() { id }: FindOneParams, @Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
+        return this.lessonService.getAllLessonsByClasseId(id, pagOpts, jwtUser);
     }
 
     @Auth()
