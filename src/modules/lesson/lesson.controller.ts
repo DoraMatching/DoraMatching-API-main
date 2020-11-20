@@ -1,6 +1,7 @@
-import { FindOneParams, PaginateParams } from '@/shared';
+import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
-import { CreateLessonDTO } from '@lesson/dto';
+import { IClasseRO } from '@classe/dto';
+import { CreateLessonDTO, ILessonRO } from '@lesson/dto';
 import { LessonParam } from '@lesson/lesson.param';
 import { LessonService } from '@lesson/lesson.service';
 import { TimeRangeQuery } from '@lesson/time-range.params';
@@ -19,31 +20,31 @@ export class LessonController {
 
     @Auth()
     @Post('classe/:id/lesson')
-    createLessonByClasseId(@Param() { id }: FindOneParams, @Body() data: CreateLessonDTO, @User() jwtUser: JwtUser) {
+    createLessonByClasseId(@Param() { id }: FindOneParams, @Body() data: CreateLessonDTO, @User() jwtUser: JwtUser): Promise<IClasseRO> {
         return this.lessonService.createLessonByClasseId(id, data, jwtUser);
     }
 
     @Auth()
     @Get('classe/:id/lessons')
-    getAllLessonByClasseId(@Param() { id }: FindOneParams, @Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
+    getAllLessonByClasseId(@Param() { id }: FindOneParams, @Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<ILessonRO>> {
         return this.lessonService.getAllLessonsByClasseId(id, pagOpts, jwtUser);
     }
 
     @Auth()
-    @Get('lesson/:lessonId')
+    @Get('lesson/:id')
     getLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
     @Patch('lesson/:id')
-    updateLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    updateLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
     @Delete('lesson/:id')
-    deleteLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    deleteLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
