@@ -30,20 +30,20 @@ export class LessonController {
     }
 
     @Auth()
-    @Get('classe/:id/lesson/:lessonId')
-    getLessonByLessonId(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
+    @Get('lesson/:lessonId')
+    getLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
-    @Patch('classe/:id/lesson/:lessonId')
-    updateLessonByLessonId(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    @Patch('lesson/:id')
+    updateLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
-    @Delete('classe/:id/lesson/:lessonId')
-    deleteLessonByLessonId(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    @Delete('lesson/:id')
+    deleteLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
 
     }
 
