@@ -2,8 +2,8 @@ import { AppRoles } from '@/app.roles';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostRO } from '@post/dto';
 import { QuestionRO } from '@question/dto';
+import { IUserModel } from '@user/dto';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
-import { IUserModel } from './user.model';
 
 export type IUserRO = Omit<IUserModel, 'password'>;
 

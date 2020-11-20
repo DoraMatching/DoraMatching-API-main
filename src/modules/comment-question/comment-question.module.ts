@@ -1,10 +1,10 @@
-import { CommentQuestionRepository } from '@comment-question/repositories/comment-question.repository';
+import { CommentQuestionController } from '@comment-question/comment-question.controller';
+import { CommentQuestionService } from '@comment-question/comment-question.service';
+import { CommentQuestionRepository } from '@comment-question/repositories';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QuestionRepository } from '@question/repositories/question.repository';
-import { UserRepository } from '@user/repositories/user.repository';
-import { CommentQuestionController } from './comment-question.controller';
-import { CommentQuestionService } from './comment-question.service';
+import { QuestionRepository } from '@question/repositories';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [TypeOrmModule.forFeature([

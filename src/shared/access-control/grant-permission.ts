@@ -1,10 +1,9 @@
 import { AppResources } from '@/app.roles';
-import { IJwtUser } from '@user/dto/jwt-payload-user.dto';
+import { IJwtUser } from '@user/dto';
 import { Permission } from 'accesscontrol';
 import { RolesBuilder } from 'nest-access-control';
 
 export type Action = 'read' | 'create' | 'update' | 'delete';
-export type Possion = 'Any' | 'Own';
 
 /**
  *

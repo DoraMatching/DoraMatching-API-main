@@ -1,11 +1,11 @@
 import 'dotenv/config';
 
+import { environment } from '@/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
-import { environment } from './config/app.config';
 
 const port = process.env.PORT || 8080;
 
@@ -30,6 +30,7 @@ async function bootstrap() {
           .setDescription('Dora-matching API')
           .setVersion('1.0')
           .addBearerAuth()
+          .addServer('https://dora.doramatching.tk')
           .addServer('http://localhost:4000')
           .addServer('https://api.dev.doramatching.tk')
           .addServer('http://192.168.21.207:4000')

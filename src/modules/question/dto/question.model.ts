@@ -1,6 +1,6 @@
-import { ITagQuestionModel, TagQuestionModel } from '@/modules/tag-question/dto';
 import { CommentQuestionModel, ICommentQuestionModel } from '@comment-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { ITagQuestionModel, TagQuestionModel } from '@tag-question/dto';
 import { IUserModel, UserModel } from '@user/dto';
 import { IsArray, IsString } from 'class-validator';
 

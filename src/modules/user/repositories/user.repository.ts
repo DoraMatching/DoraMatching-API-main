@@ -1,34 +1,58 @@
-import { EntityResults } from '@/commons/entity-results';
-import { PaginateParams } from '@shared/pagination';
+import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { UserEntity } from '@user/entities';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
     private readonly SELECT_USER_SCOPE = [
         'user.id',
+        'user.username',
         'user.name',
         'user.email',
         'user.avatarUrl',
         'user.roles',
+        'user.createdAt',
+        'user.updatedAt',
         'user.type',
+        'post.id',
+        'post.title',
+        'post.subTitle',
+        'post.featuredImage',
+        'post.createdAt',
+        'post.updatedAt',
+        'question.id',
+        'question.title',
+        'question.createdAt',
+        'question.updatedAt',
+        'pTag.id',
+        'pTag.name',
+        'qTag.id',
+        'qTag.name',
     ];
 
-    getUserById(id: string) {
-        return this.createQueryBuilder()
-          .select([
-              'id',
-              'name',
-              'roles',
-              'type',
-          ])
-          .where('id = :id', { id })
-          .execute();
+    getUserById(id: string): Promise<UserEntity> {
+        try {
+            return this.createQueryBuilder('user')
+              .leftJoinAndSelect('user.questions', 'question')
+              .leftJoinAndSelect('user.posts', 'post')
+              .leftJoinAndSelect('post.tags', 'pTag')
+              .leftJoinAndSelect('question.tags', 'qTag')
+              .select(this.SELECT_USER_SCOPE)
+              .where('user.id = :id', { id })
+              .getOne();
+        }catch (e) {
+            console.error(e);
+        }
     }
 
     async getAllUsers({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<UserEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('user')
+              .leftJoinAndSelect('user.questions', 'question')
+              .leftJoinAndSelect('user.posts', 'post')
+              .leftJoinAndSelect('post.tags', 'pTag')
+              .leftJoinAndSelect('question.tags', 'qTag')
               .select(this.SELECT_USER_SCOPE)
               .orderBy('user.createdAt', order)
               .skip(limit * (page - 1))

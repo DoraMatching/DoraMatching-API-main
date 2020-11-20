@@ -1,6 +1,6 @@
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
 import { ICommentQuestionModel } from '@comment-question/dto';
+import { QuestionEntity } from '@question/entities';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,
@@ -8,7 +8,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('comment-question')
@@ -22,7 +22,7 @@ export class CommentQuestionEntity extends BaseEntity implements ICommentQuestio
     @ManyToOne(() => UserEntity, { nullable: false })
     author: UserEntity;
 
-    @ManyToOne(() => QuestionEntity)
+    @ManyToOne(() => QuestionEntity, { cascade: true, onDelete: 'CASCADE' })
     question: QuestionEntity;
 
     @CreateDateColumn()

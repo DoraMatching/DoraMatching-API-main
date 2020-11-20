@@ -8,14 +8,19 @@ export enum AppRoles {
 }
 
 export enum AppResources {
-    USER = 'USER',
-    TOPIC = 'TOPIC',
-    POST = 'POST',
-    TAG_POST = 'TAG_POST',
+    CLASSE = 'CLASSE',
     COMMENT_POST = 'COMMENT_POST',
-    QUESTION = 'QUESTION',
     COMMENT_QUESTION = 'COMMENT_QUESTION',
-    TAG_QUESTION = 'TAG_QUESTION'
+    POST = 'POST',
+    QUESTION = 'QUESTION',
+    TAG_POST = 'TAG_POST',
+    TAG_QUESTION = 'TAG_QUESTION',
+    TOPIC = 'TOPIC',
+    TRAINER = 'TRAINER',
+    TRAINEE = 'TRAINEE',
+    USER = 'USER',
+    REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER',
+    LESSON = 'LESSON'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -27,7 +32,7 @@ roles
   .createAny(AppResources.USER, '*, !roles')
   .grant(AppRoles.TRAINEE)
   .readAny(AppResources.USER, '*, !password')
-  .updateOwn(AppResources.USER)
+  .updateOwn(AppResources.USER, '*, !roles')
   .grant(AppRoles.TRAINER)
   .extend(AppRoles.TRAINEE)
   .grant(AppRoles.ADMIN)
@@ -112,5 +117,83 @@ roles
   .grant(AppRoles.TRAINER)
   .extend(AppRoles.TRAINEE)
   .grant(AppRoles.ADMIN)
-  .extend(AppRoles.TRAINER);
+  .extend(AppRoles.TRAINER)
+
+  // Resource TOPIC
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TOPIC)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .createAny(AppResources.TOPIC)
+  .updateOwn(AppResources.TOPIC)
+  .deleteOwn(AppResources.TOPIC)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER)
+  .updateAny(AppResources.TOPIC)
+  .deleteAny(AppResources.TOPIC)
+
+  //  Resource CLASSE
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.CLASSE, '*, !members')
+  .readOwn(AppResources.CLASSE, '*')
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .createAny(AppResources.CLASSE)
+  .updateOwn(AppResources.CLASSE)
+  .deleteOwn(AppResources.CLASSE)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER)
+  .updateAny(AppResources.CLASSE)
+  .deleteAny(AppResources.CLASSE)
+
+  // Resource TRAINER
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TRAINER)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .createAny(AppResources.TRAINER)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .updateOwn(AppResources.TRAINER)
+  .deleteOwn(AppResources.TRAINER)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER)
+  .updateAny(AppResources.TRAINER)
+  .deleteAny(AppResources.TRAINER)
+
+  // Resource REGISTER_CLASSE_MEMBER
+  .grant(AppRoles.TRAINEE)
+  .createAny(AppResources.REGISTER_CLASSE_MEMBER)
+
+  // Resource TRAINEE
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.TRAINEE, '*, !classes')
+  .readOwn(AppResources.TRAINEE, '*')
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .updateOwn(AppResources.TRAINEE)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .grant(AppRoles.ADMIN)
+  .updateAny(AppResources.TRAINEE)
+  .deleteAny(AppResources.TRAINEE)
+
+  // Resource LESSON
+  .grant(AppRoles.GUEST)
+  .readAny(AppResources.LESSON)
+  .grant(AppRoles.TRAINEE)
+  .extend(AppRoles.GUEST)
+  .grant(AppRoles.TRAINER)
+  .extend(AppRoles.TRAINEE)
+  .createAny(AppResources.LESSON)
+  .updateOwn(AppResources.LESSON)
+  .deleteOwn(AppResources.LESSON)
+  .grant(AppRoles.ADMIN)
+  .extend(AppRoles.TRAINER)
+  .updateAny(AppResources.LESSON)
+  .deleteAny(AppResources.LESSON);
 

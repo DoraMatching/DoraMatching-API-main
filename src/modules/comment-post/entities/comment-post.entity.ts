@@ -1,6 +1,6 @@
-import { PostEntity } from '@/modules/post/entities/post.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
 import { ICommentPostModel } from '@comment-post/dto';
+import { PostEntity } from '@post/entities';
+import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
     Column,
@@ -8,7 +8,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('comment-post')
@@ -22,7 +22,7 @@ export class CommentPostEntity extends BaseEntity implements ICommentPostModel {
     @ManyToOne(() => UserEntity, { nullable: false })
     author: UserEntity;
 
-    @ManyToOne(() => PostEntity)
+    @ManyToOne(() => PostEntity, { cascade: true, onDelete: 'CASCADE' })
     post: PostEntity;
 
     @CreateDateColumn()
