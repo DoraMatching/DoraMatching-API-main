@@ -24,7 +24,7 @@ export class CreateClasseDTO implements ICreateClasseDTO {
     featuredImage: string;
 
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsInt()
     duration: number;
 

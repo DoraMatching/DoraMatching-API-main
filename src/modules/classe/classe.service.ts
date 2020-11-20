@@ -4,7 +4,7 @@ import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateP
 import { ClasseModel, ClasseRO, CreateClasseDTO, IClasseRO } from '@classe/dto';
 import { ClasseEntity } from '@classe/entities';
 import { ClasseRepository } from '@classe/repositories';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TopicRepository } from '@topic/repositories';
 import { TraineeRepository } from '@trainee/repositories';
 import { TrainerRepository } from '@trainer/repositories';
@@ -15,7 +15,6 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
-    private readonly logger: Logger = new Logger(ClasseService.name);
 
     constructor(
       private readonly classeRepository: ClasseRepository,
@@ -33,6 +32,19 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         if (endTime.isBefore(startTime)) throw new HttpException(`OOPS! Invalid startTime or endTime`, HttpStatus.BAD_REQUEST);
     }
 
+    async getClasseById(id: string, jwtUser: JwtUser): Promise<IClasseRO> {
+        const [trainer, classe] = await Promise.all([
+            this.trainerRepository.getTrainerByUserId(jwtUser.id),
+            this.classeRepository.getClasseById(id),
+        ]);
+        if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, classe.trainer.user.id);
+        if (permission.granted) {
+            return permission.filter(classe);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
     async getAllClasses(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IClasseRO>> {
         const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, null);
         if (permission.granted) {
@@ -42,7 +54,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async createClasse(data: CreateClasseDTO, jwtUser: JwtUser) {
+    async createClasse(data: CreateClasseDTO, jwtUser: JwtUser): Promise<IClasseRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'create', jwtUser, null);
         if (permission.granted) {
             const [trainer, topic] = await Promise.all([
@@ -71,25 +83,29 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async registerClasse(id: string, jwtUser: JwtUser) {
-        const permission = grantPermission(this.rolesBuilder, AppResources.REGISTER_CLASSE_MEMBER, 'create', jwtUser, null);
+    async registerClasse(id: string, jwtUser: JwtUser, opposite = false): Promise<IClasseRO> {
+        const permission = grantPermission(this.rolesBuilder, AppResources.REGISTER_CLASSE_MEMBER, 'create', jwtUser, null); //same role with action: 'create' -> (don't need define new one)
         if (permission.granted) {
+            const action = opposite ? 'deregister' : 'register';
             const [trainee, classe] = await Promise.all([
                 this.traineeRepository.getTraineeByUserId(jwtUser.id),
                 this.classeRepository.getClasseById(id),
             ]);
-            if(!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-            if(!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+            if (!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+            if (classe.trainer.user.id === jwtUser.id) throw new HttpException(`OOPS! You can't ${action} the classe you are trainer`, HttpStatus.CONFLICT);
             let members = classe.members;
-            members.push(trainee);
+            if (opposite) {
+                members = members.filter(_trainee => _trainee.id !== trainee.id);
+            } else members.push(trainee);
             members = _.uniqBy(members, 'id');
             classe.members = members;
             try {
                 await this.classeRepository.save(classe);
+                return await this.classeRepository.getClasseById(id);
             } catch ({ detail }) {
-                throw new HttpException(detail || `OOPS! Can't register classe`, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || `OOPS! Can't ${action} classe`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }
-
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }

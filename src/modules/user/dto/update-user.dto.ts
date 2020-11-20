@@ -10,7 +10,7 @@ export class UpdateUser implements IUpdateUser {
     @ApiProperty()
     @IsOptional()
     @IsString()
-    @Matches(/^[a-zA-Z\-]+$/, {
+    @Matches(/^[a-z0-9_-]{3,16}$/, {
         message: 'Invalid username'
     })
     username: string;
@@ -20,6 +20,7 @@ export class UpdateUser implements IUpdateUser {
     @IsEmail()
     email: string;
 
+    @ApiProperty()
     @IsString()
     @IsOptional()
     name: string;

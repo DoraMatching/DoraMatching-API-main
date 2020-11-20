@@ -1,4 +1,5 @@
 import { IClasseModel } from '@classe/dto';
+import { LessonEntity } from '@lesson/entities';
 import { TopicEntity } from '@topic/entities';
 import { TraineeEntity } from '@trainee/entities';
 import { TrainerEntity } from '@trainer/entities';
@@ -10,7 +11,7 @@ import {
     JoinColumn,
     JoinTable,
     ManyToMany,
-    ManyToOne,
+    ManyToOne, OneToMany,
     PrimaryGeneratedColumn, UpdateDateColumn
 } from 'typeorm';
 
@@ -29,14 +30,17 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @Column({ type: 'text', nullable: false })
     featuredImage: string;
 
-    @Column({ type: 'timestamp', nullable: false, default: new Date() })
+    @Column({ type: 'timestamptz', nullable: false, default: new Date() })
     startTime: Date;
 
-    @Column({ type: 'timestamp', nullable: true })
+    @Column({ type: 'timestamptz', nullable: true })
     endTime?: Date;
 
-    @Column({ type: 'integer', nullable: false })
+    @Column({ type: 'integer', nullable: true })
     duration: number;
+
+    @OneToMany(() => LessonEntity, lesson => lesson.classe)
+    lessons: LessonEntity[];
 
     @ManyToOne(() => TopicEntity)
     @JoinColumn({ name: 'topic' })
