@@ -50,7 +50,6 @@ export class LessonController {
     @Auth()
     @Get('trainer/:id/lessons')
     getTrainerLessons(@Param() { id }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
-        console.log(timeRange);
         return this.lessonService.getTrainerLessons(id, timeRange, jwtUser);
     }
 }
