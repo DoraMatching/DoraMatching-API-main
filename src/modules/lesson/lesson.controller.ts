@@ -3,11 +3,11 @@ import { Auth } from '@/shared/auth';
 import { CreateLessonDTO } from '@lesson/dto';
 import { LessonParam } from '@lesson/lesson.param';
 import { LessonService } from '@lesson/lesson.service';
+import { TimeRangeQuery } from '@lesson/time-range.params';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
-import { TimeRangeQuery } from '@lesson/time-range.params';
 
 @ApiTags('lesson')
 @Controller()

@@ -1,9 +1,9 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { LessonEntity } from '@lesson/entities';
-import { IPagination, PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { LessonEntity } from '@lesson/entities';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import moment from 'moment';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {

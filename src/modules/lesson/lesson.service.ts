@@ -31,7 +31,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
 
     timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonEntity[]) {
         const range = moment.range(timeRange.startTime, timeRange.endTime);
-        let result = [];
+        const result = [];
         lessons.forEach(lesson => {
             if (range.contains(lesson.startTime) || range.contains(_moment(lesson.startTime).add(lesson.duration, 'minutes'))) result.push(lesson);
         });

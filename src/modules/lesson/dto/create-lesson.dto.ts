@@ -1,7 +1,7 @@
 import { ILessonModel } from '@lesson/dto/lesson.model';
-import { IsDate, IsDateString, IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
+import { IsDate, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export type ICreateLessonDTO = Omit<ILessonModel, 'classe'>
 
