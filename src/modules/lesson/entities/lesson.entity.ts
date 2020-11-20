@@ -18,7 +18,7 @@ export class LessonEntity extends BaseEntity implements ILessonModel {
     @ManyToOne(() => ClasseEntity, classe => classe.lessons)
     classe: ClasseEntity;
 
-    @Column({ type: 'timestamp', nullable: false, default: new Date() })
+    @Column({ type: 'timestamptz', nullable: false, default: new Date() })
     startTime: Date;
 
     @Column({ type: 'int', nullable: false, default: 60 })

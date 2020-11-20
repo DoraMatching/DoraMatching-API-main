@@ -30,13 +30,13 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @Column({ type: 'text', nullable: false })
     featuredImage: string;
 
-    @Column({ type: 'timestamp', nullable: false, default: new Date() })
+    @Column({ type: 'timestamptz', nullable: false, default: new Date() })
     startTime: Date;
 
-    @Column({ type: 'timestamp', nullable: true })
+    @Column({ type: 'timestamptz', nullable: true })
     endTime?: Date;
 
-    @Column({ type: 'integer', nullable: false })
+    @Column({ type: 'integer', nullable: true })
     duration: number;
 
     @OneToMany(() => LessonEntity, lesson => lesson.classe)

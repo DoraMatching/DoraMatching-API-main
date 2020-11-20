@@ -2,6 +2,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import { LessonEntity } from '@lesson/entities';
 import { IPagination, PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { TimeRangeQuery } from '@lesson/time-range.params';
+import moment from 'moment';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {
@@ -16,6 +18,23 @@ export class LessonRepository extends Repository<LessonEntity> {
               .take(limit)
               .getManyAndCount();
             return { entities, count };
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery) {
+        try {
+            const lessons = await this.createQueryBuilder('lesson')
+              .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'trainer')
+              .where('trainer.id = :trainerId', { trainerId })
+              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
+              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
+              .orderBy('lesson.startTime', 'ASC')
+              .select('lesson')
+              .getMany();
+            return lessons;
         } catch (e) {
             console.error(e);
         }
