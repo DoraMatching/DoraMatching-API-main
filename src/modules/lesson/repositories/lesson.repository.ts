@@ -23,9 +23,9 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
-    async getOneLessonBeforeOfTrainer(trainerId: string, startTime: Date) {
+    async getOneLessonBeforeOfTrainer(trainerId: string, startTime: Date): Promise<LessonEntity> {
         try {
-            const lesson = await this.createQueryBuilder('lesson')
+            return await this.createQueryBuilder('lesson')
               .leftJoinAndSelect('lesson.classe', 'classe')
               .leftJoinAndSelect('classe.trainer', 'trainer')
               .where('trainer.id = :trainerId', { trainerId })
@@ -33,15 +33,14 @@ export class LessonRepository extends Repository<LessonEntity> {
               .orderBy('lesson.startTime', 'DESC')
               .select(['lesson'])
               .getOne();
-            return lesson;
         } catch (e) {
             console.error(e);
         }
     }
 
-    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery) {
+    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery): Promise<LessonEntity[]> {
         try {
-            const lessons = await this.createQueryBuilder('lesson')
+            return await this.createQueryBuilder('lesson')
               .leftJoinAndSelect('lesson.classe', 'classe')
               .leftJoinAndSelect('classe.trainer', 'trainer')
               .where('trainer.id = :trainerId', { trainerId })
@@ -50,7 +49,6 @@ export class LessonRepository extends Repository<LessonEntity> {
               .orderBy('lesson.startTime', 'DESC')
               .select('lesson')
               .getMany();
-            return lessons;
         } catch (e) {
             console.error(e);
         }

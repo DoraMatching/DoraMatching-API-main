@@ -1,19 +1,19 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons';
-import { customPaginate, grantPermission, paginateFilter, PaginateParams } from '@/shared';
+import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
+import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
-import { CreateLessonDTO, LessonRO } from '@lesson/dto';
+import { CreateLessonDTO, ILessonRO, LessonRO } from '@lesson/dto';
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
+import { TimeRangeQuery } from '@lesson/time-range.params';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { TimeRangeQuery } from '@lesson/time-range.params';
-import * as Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import _moment from 'moment';
 import _ from 'lodash';
+import _moment, * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 const moment = extendMoment(Moment);
 
@@ -29,7 +29,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         super(lessonRepository);
     }
 
-    timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonEntity[]) {
+    timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonEntity[]): LessonEntity[] {
         const range = moment.range(timeRange.startTime, timeRange.endTime);
         const result = [];
         lessons.forEach(lesson => {
@@ -38,7 +38,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         return result;
     };
 
-    checkOverlaps(lessonsInScope: LessonEntity[], newLesson: LessonEntity) {
+    checkOverlaps(lessonsInScope: LessonEntity[], newLesson: LessonEntity): void {
         lessonsInScope.forEach(_lesson => {
             const range1 = moment.range(_lesson.startTime, _moment(_lesson.startTime).add(_lesson.duration, 'minutes'));
             const range2 = moment.range(newLesson.startTime, _moment(newLesson.startTime).add(newLesson.duration, 'minutes'));
@@ -53,7 +53,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         this.checkOverlaps(lessonsInScope, newLesson);
     }
 
-    async createLessonByClasseId(classeId: string, data: CreateLessonDTO, jwtUser: JwtUser) {
+    async createLessonByClasseId(classeId: string, data: CreateLessonDTO, jwtUser: JwtUser): Promise<IClasseRO> {
         const classe = await this.classeRepository.getClasseById(classeId);
         if (!classe) throw new HttpException(`Classe with id: ${classeId} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'create', jwtUser, null);
@@ -79,7 +79,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getAllLessonsByClasseId(classeId: string, pagOpts: PaginateParams, jwtUser: JwtUser) {
+    async getAllLessonsByClasseId(classeId: string, pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<ILessonRO>> {
         const classe = await this.classeRepository.getClasseById(classeId);
         if (!classe) throw new HttpException(`Classe with id: ${classeId} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
@@ -90,7 +90,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getTrainerLessons(trainerId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser) {
+    async getTrainerLessons(trainerId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser): Promise<LessonEntity[]> {
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
         if (permission.granted) {
             try {
