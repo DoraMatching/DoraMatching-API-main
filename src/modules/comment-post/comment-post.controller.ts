@@ -1,9 +1,9 @@
+import { FindOneParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { CommentPostService } from '@comment-post/comment-post.service';
 import { CommentPostParam, CreateCommentPostDTO, UpdateCommentPostDTO } from '@comment-post/dto';
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared/auth/auth.decorator';
-import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 
@@ -11,7 +11,7 @@ import { User } from '@user/user.decorator';
 @Controller()
 export class CommentPostController {
     constructor(
-        private readonly commentPostService: CommentPostService,
+      private readonly commentPostService: CommentPostService,
     ) {
     }
 

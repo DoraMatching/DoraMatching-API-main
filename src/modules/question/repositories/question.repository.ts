@@ -1,6 +1,6 @@
-import { QuestionEntity } from '@/modules/question/entities/question.entity';
+import { PaginateParams } from '@/shared';
 import { Logger } from '@nestjs/common';
-import { PaginateParams } from '@shared/pagination';
+import { QuestionEntity } from '@question/entities';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(QuestionEntity)

@@ -1,5 +1,4 @@
-import { IPagination } from './paginate.interface';
-import { EnumOrder } from './paginate.params';
+import { EnumOrder, IPagination } from '@/shared';
 
 function addOrderQuery(links: any, order: EnumOrder): any {
     const _links = {};

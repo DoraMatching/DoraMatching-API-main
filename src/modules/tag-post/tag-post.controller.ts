@@ -1,8 +1,8 @@
 import { apiUrl } from '@/config';
+import { IPagination, PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, PaginateParams } from '@shared/pagination';
 import { ITagPostRO, TagPostRO } from '@tag-post/dto';
 import { TagPostService } from '@tag-post/tag-post.service';
 import { JwtUser } from '@user/dto';

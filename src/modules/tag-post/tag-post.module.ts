@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostService } from '@post/post.service';
-import { PostRepository } from '@post/repositories/post.repository';
+import { PostRepository } from '@post/repositories';
+import { TagPostRepository } from '@tag-post/repositories';
 import { TagPostController } from '@tag-post/tag-post.controller';
-import { UserRepository } from '@user/repositories/user.repository';
-import { TagPostRepository } from './repositories/tag-post.repository';
-import { TagPostService } from './tag-post.service';
+import { TagPostService } from '@tag-post/tag-post.service';
+import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TagPostRepository, PostRepository, UserRepository])],

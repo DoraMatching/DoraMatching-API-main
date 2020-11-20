@@ -1,4 +1,4 @@
-import { ICommentQuestionModel } from '@comment-question/dto/comment-question.model';
+import { ICommentQuestionModel } from '@comment-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserModel } from '@user/dto';
 

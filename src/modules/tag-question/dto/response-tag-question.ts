@@ -1,5 +1,5 @@
-import { ITagQuestionModel } from '@/modules/tag-question/dto/tag-question.model';
 import { ApiProperty } from '@nestjs/swagger';
+import { ITagQuestionModel } from '@tag-question/dto';
 
 export type ITagQuestionRO = ITagQuestionModel;
 

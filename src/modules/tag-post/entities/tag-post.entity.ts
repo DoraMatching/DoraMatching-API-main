@@ -1,4 +1,4 @@
-import { PostEntity } from '@/modules/post/entities/post.entity';
+import { PostEntity } from '@post/entities';
 import { ITagPostModel } from '@tag-post/dto';
 import {
     BaseEntity,
@@ -7,7 +7,7 @@ import {
     Entity,
     ManyToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('tag-post')
@@ -18,7 +18,7 @@ export class TagPostEntity extends BaseEntity implements ITagPostModel {
     @Column({ type: 'text', nullable: false })
     name: string;
 
-    @ManyToMany(() => PostEntity, post => post.tags)
+    @ManyToMany(() => PostEntity, post => post.tags, { cascade: true, onDelete: 'CASCADE' })
     posts: PostEntity[];
 
     @CreateDateColumn()

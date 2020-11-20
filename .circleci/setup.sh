@@ -2,10 +2,10 @@ echo 'Stopping PM2 system...'
 pm2 stop API.DEV.DORA
 
 echo 'Dropping the database...'
-docker exec 501 bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS doramatching;'"
+docker exec 689 bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS doramatching;'"
 
 echo 'Creating the database...'
-docker exec 501 bash -c "psql -U postgres -c 'CREATE DATABASE doramatching;'"
+docker exec 689 bash -c "psql -U postgres -c 'CREATE DATABASE doramatching;'"
 
 echo "Checkout"
 git checkout dev

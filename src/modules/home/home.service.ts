@@ -1,12 +1,11 @@
 import { AppResources } from '@/app.roles';
+import { customPaginate, grantPermission, IPagination, PaginateParams } from '@/shared';
 import { IHomeRO, UserListRO } from '@home-modules/dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PostRepository } from '@post/repositories/post.repository';
-import { QuestionRepository } from '@question/repositories/question.repository';
-import { grantPermission } from '@shared/access-control/grant-permission';
-import { customPaginate, IPagination, PaginateParams } from '@shared/pagination';
+import { PostRepository } from '@post/repositories';
+import { QuestionRepository } from '@question/repositories';
 import { JwtUser } from '@user/dto';
-import { UserRepository } from '@user/repositories/user.repository';
+import { UserRepository } from '@user/repositories';
 import _ from 'lodash';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 

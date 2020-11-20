@@ -1,7 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IPostRO } from '@post/dto';
 import { IQuestionRO } from '@question/dto';
 import { IUserRO, UserRO } from '@user/dto';
-import { ApiProperty } from '@nestjs/swagger';
 
 export type IHomeRO = IPostRO | IQuestionRO | IUserListRO;
 

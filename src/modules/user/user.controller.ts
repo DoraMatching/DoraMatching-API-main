@@ -1,22 +1,14 @@
 import { apiUrl } from '@/config';
-import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Patch,
-    Post, Query
-} from '@nestjs/common';
+import { FindOneParams, IPagination, PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, PaginateParams } from '@shared/pagination';
-import { FindOneParams } from '@shared/pipes/find-one.params';
-import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from './dto';
-import { User } from './user.decorator';
-import { UserService } from './user.service';
+import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from '@user/dto';
+import { User } from '@user/user.decorator';
+import { UserService } from '@user/user.service';
 
-@Controller()
 @ApiTags('user')
+@Controller()
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
@@ -33,7 +25,7 @@ export class UserController {
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
     getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
-        return this.userService.getUser({ id }, jwtUser);
+        return this.userService.getUserById({ id }, jwtUser);
     }
 
     @Auth()
@@ -72,6 +64,7 @@ export class UserController {
         return this.userService.githubLangs(accessToken);
     }
 
+    @Auth()
     @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
     @Get('viewer')
     viewer(

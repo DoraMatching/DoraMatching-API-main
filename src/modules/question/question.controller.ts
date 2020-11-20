@@ -1,12 +1,10 @@
 import { apiUrl } from '@/config';
-import { IDeleteResultDTO } from '@/shared/dto';
+import { FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/shared';
+import { Auth } from '@/shared/auth';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
 import { QuestionService } from '@question/question.service';
-import { Auth } from '@shared/auth/auth.decorator';
-import { IPagination, PaginateParams } from '@shared/pagination';
-import { FindOneParams } from '@shared/pipes/find-one.params';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 
@@ -46,7 +44,7 @@ export class QuestionController {
     @ApiResponse({ type: QuestionRO, status: 201 })
     @Patch('question/:id')
     updateQuestion(@Param() { id }: FindOneParams, @Body() data: UpdateQuestionDTO, @User() jwtUser: JwtUser): Promise<IQuestionRO> {
-        return this.questionService.updateQuestion(id, data, jwtUser);
+        return this.questionService.updateQuestionById(id, data, jwtUser);
     }
 
     @Auth()
@@ -54,6 +52,6 @@ export class QuestionController {
     @ApiResponse({ type: QuestionRO, status: 202 })
     @Delete('question/:id')
     deleteQuestion(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
-        return this.questionService.deleteQuestion(id, jwtUser);
+        return this.questionService.deleteQuestionById(id, jwtUser);
     }
 }
