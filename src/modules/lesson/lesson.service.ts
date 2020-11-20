@@ -13,6 +13,7 @@ import { TimeRangeQuery } from '@lesson/time-range.params';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _moment from 'moment';
+import _ from 'lodash';
 
 const moment = extendMoment(Moment);
 
@@ -98,7 +99,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                     this.lessonRepository.getAllLessonByTrainerId(trainerId, timeRange),
                 ]);
                 const result = beforeLesson ? [beforeLesson, ...lessons] : lessons;
-                return this.timeContainLessons(timeRange, result);
+                return this.timeContainLessons(timeRange, _.uniqBy(result, 'id'));
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't get the lessons`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
