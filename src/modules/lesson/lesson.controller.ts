@@ -31,20 +31,20 @@ export class LessonController {
     }
 
     @Auth()
-    @Get('lesson/:lessonId')
+    @Get('lesson/:id')
     getLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
     @Patch('lesson/:id')
-    updateLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    updateLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
     @Auth()
     @Delete('lesson/:id')
-    deleteLessonById(@Param() { id }: FindOneParams, @Param() { lessonId }: LessonParam, @User() jwtUser: JwtUser) {
+    deleteLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
 
     }
 
