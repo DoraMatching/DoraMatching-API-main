@@ -43,6 +43,7 @@
     "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.28.0",
+    "moment-range": "^4.0.2",
     "nest-access-control": "^2.0.2",
     "nestjs-typeorm-paginate": "^2.1.1",
     "nestjsx-automapper": "^3.1.3",

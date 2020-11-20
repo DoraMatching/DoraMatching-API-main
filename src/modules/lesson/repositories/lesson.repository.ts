@@ -1,9 +1,9 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { LessonEntity } from '@lesson/entities';
-import { IPagination, PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { LessonEntity } from '@lesson/entities';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import moment from 'moment';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {
@@ -23,15 +23,31 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
+    async getOneLessonBeforeOfTrainer(trainerId: string, startTime: Date) {
+        try {
+            const lesson = await this.createQueryBuilder('lesson')
+              .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'trainer')
+              .where('trainer.id = :trainerId', { trainerId })
+              .andWhere('lesson.startTime < :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
+              .orderBy('lesson.startTime', 'DESC')
+              .select(['lesson'])
+              .getOne();
+            return lesson;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery) {
         try {
             const lessons = await this.createQueryBuilder('lesson')
               .leftJoinAndSelect('lesson.classe', 'classe')
               .leftJoinAndSelect('classe.trainer', 'trainer')
               .where('trainer.id = :trainerId', { trainerId })
-              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
-              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
-              .orderBy('lesson.startTime', 'ASC')
+              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
+              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD HH:mm:ss+07') })
+              .orderBy('lesson.startTime', 'DESC')
               .select('lesson')
               .getMany();
             return lessons;

@@ -7,7 +7,7 @@ module.exports = {
     'database': process.env.DATABASE_NAME,
     'synchronize': true,
     'dropSchema': false,
-    'logging': true,
+    'logging': false,
     'cache': process.env.DATABASE_ENABLE_CACHE ? { 'duration': process.env.DATABASE_CACHE_DURATION } : false,
     'entities': [
         './dist/**/*.entity{.ts,.js}',

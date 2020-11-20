@@ -8,7 +8,6 @@ import { TraineeService } from '@trainee/trainee.service';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { UserQuery } from '@user/user.query';
-import { ClasseRO } from '@classe/dto';
 
 @ApiTags('trainee')
 @Controller()

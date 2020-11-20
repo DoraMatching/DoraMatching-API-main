@@ -1,7 +1,7 @@
-import { IsDate, IsDateString, IsNotEmpty, IsOptional } from 'class-validator';
-import moment from 'moment';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
+import { IsDate, IsOptional } from 'class-validator';
+import moment from 'moment';
 
 export class TimeRangeQuery {
     @ApiProperty()
