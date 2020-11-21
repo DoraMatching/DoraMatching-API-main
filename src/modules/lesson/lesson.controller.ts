@@ -1,8 +1,7 @@
 import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { IClasseRO } from '@classe/dto';
-import { CreateLessonDTO, ILessonRO } from '@lesson/dto';
-import { LessonParam } from '@lesson/lesson.param';
+import { CreateLessonDTO, ILessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonService } from '@lesson/lesson.service';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
@@ -33,13 +32,13 @@ export class LessonController {
     @Auth()
     @Get('lesson/:id')
     getLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-
+        return this.lessonService.getLessonById(id, jwtUser);
     }
 
     @Auth()
     @Patch('lesson/:id')
-    updateLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-
+    updateLessonById(@Param() { id }: FindOneParams, @Body() data: UpdateLessonDTO, @User() jwtUser: JwtUser) {
+        return this.lessonService.updateLessonById(id, data, jwtUser);
     }
 
     @Auth()

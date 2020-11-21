@@ -3,7 +3,7 @@ import { BaseService } from '@/commons';
 import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
 import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
-import { CreateLessonDTO, ILessonRO, LessonRO } from '@lesson/dto';
+import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
@@ -47,10 +47,55 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         });
     }
 
-    lessonsValidation(newLesson: LessonEntity, lessonsInScope: LessonEntity[]) {
+    lessonsValidation(newLesson: LessonEntity, lessonsInScope: LessonEntity[], isUpdate = false) {
         const isBeforeNow = _moment(newLesson.startTime).isBefore(new Date());
-        if (isBeforeNow) throw new HttpException(`OOPS! Start-time of the new lesson is not valid`, HttpStatus.CONFLICT);
+        if (isBeforeNow && isUpdate === false) throw new HttpException(`OOPS! Start-time of the new lesson is not valid`, HttpStatus.CONFLICT);
         this.checkOverlaps(lessonsInScope, newLesson);
+    }
+
+    async updateLessonById(id: string, data: UpdateLessonDTO, jwtUser: JwtUser): Promise<ILessonRO> {
+        const lesson = await this.lessonRepository.getLessonByIdWithClasse(id);
+        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'update', jwtUser, lesson.classe.trainer.user.id);
+        if (permission.granted) {
+            const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            data = permission.filter(data);
+
+            const [_startTime, _duration] = [data.startTime || lesson.startTime, data.duration || lesson.duration];
+            const isSameTime = _moment(lesson.startTime).isSame(_moment(_startTime));
+            const isSameDuration = lesson.duration === _duration;
+            if (!isSameTime || !isSameDuration) {
+                const timeRange: TimeRangeQuery = {
+                    startTime: _startTime,
+                    endTime: _moment(_startTime).add(_duration, 'minutes').toDate(),
+                };
+                let lessonsInScope = await this.getTrainerLessons(trainer.id, timeRange, jwtUser);
+                lessonsInScope = lessonsInScope.filter(_lesson => _lesson.id !== lesson.id);
+                const newLesson = this.lessonRepository.create({ ...lesson, ...data });
+                this.lessonsValidation(newLesson, lessonsInScope, true);
+            }
+
+            Object.assign(lesson, data);
+
+            try {
+                await this.lessonRepository.save(lesson);
+                const result = await this.lessonRepository.getLessonById(id);
+                return permission.filter(result);
+            } catch ({ detail }) {
+                throw new HttpException(detail || `OOPS! Can't update the lesson`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async getLessonById(id: string, jwtUser: JwtUser): Promise<ILessonRO> {
+        const lesson = await this.lessonRepository.getLessonById(id);
+        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
+        if (permission.granted) {
+            return permission.filter(lesson);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async createLessonByClasseId(classeId: string, data: CreateLessonDTO, jwtUser: JwtUser): Promise<IClasseRO> {
