@@ -1,12 +1,26 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { LessonEntity } from '@lesson/entities';
-import { IPagination, PaginateParams } from '@/shared';
 import { EntityResults } from '@/commons';
+import { PaginateParams } from '@/shared';
+import { LessonEntity } from '@lesson/entities';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import moment from 'moment';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {
+    private readonly SELECT_LESSON_SCOPE = [
+        'lesson',
+        'classe',
+        'trainer',
+        'user.id',
+        'user.username',
+        'user.avatarUrl',
+        'user.name',
+        'user.roles',
+        'user.type',
+        'user.createdAt',
+        'user.updatedAt',
+    ];
+
     async getAllLessonsByClasseId(classeId: string, { order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<LessonEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('lesson')
@@ -23,18 +37,57 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
-    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery) {
+    async getLessonByIdWithClasse(id: string): Promise<LessonEntity> {
         try {
-            const lessons = await this.createQueryBuilder('lesson')
+            return await this.createQueryBuilder('lesson')
+              .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'trainer')
+              .leftJoinAndSelect('trainer.user', 'user')
+              .where('lesson.id = :id', { id })
+              .select(this.SELECT_LESSON_SCOPE)
+              .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getLessonById(id: string): Promise<LessonEntity> {
+        try {
+            return await this.createQueryBuilder('lesson')
+              .where('lesson.id = :id', { id })
+              .select(['lesson'])
+              .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getOneLessonBeforeOfTrainer(trainerId: string, startTime: Date): Promise<LessonEntity> {
+        try {
+            return await this.createQueryBuilder('lesson')
               .leftJoinAndSelect('lesson.classe', 'classe')
               .leftJoinAndSelect('classe.trainer', 'trainer')
               .where('trainer.id = :trainerId', { trainerId })
-              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
-              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD hh:mm:ss') })
-              .orderBy('lesson.startTime', 'ASC')
+              .andWhere('lesson.startTime < :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
+              .orderBy('lesson.startTime', 'DESC')
+              .select(['lesson'])
+              .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery): Promise<LessonEntity[]> {
+        try {
+            return await this.createQueryBuilder('lesson')
+              .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'trainer')
+              .where('trainer.id = :trainerId', { trainerId })
+              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
+              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD HH:mm:ss+07') })
+              .orderBy('lesson.startTime', 'DESC')
               .select('lesson')
               .getMany();
-            return lessons;
         } catch (e) {
             console.error(e);
         }
