@@ -60,16 +60,15 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         if (permission.granted) {
             const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
             if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-
-
             data = permission.filter(data);
 
-            const isSameTime = !!data.startTime && _moment(data.startTime).isSame(_moment(lesson.startTime));
-            const isSameDuration = !!data.duration && data.duration !== lesson.duration;
-            if (isSameTime || isSameDuration) {
+            const [_startTime, _duration] = [data.startTime || lesson.startTime, data.duration || lesson.duration];
+            const isSameTime = _moment(lesson.startTime).isSame(_moment(_startTime));
+            const isSameDuration = lesson.duration === _duration;
+            if (!isSameTime || !isSameDuration) {
                 const timeRange: TimeRangeQuery = {
-                    startTime: data.startTime,
-                    endTime: _moment(data.startTime).add(data.duration, 'minutes').toDate(),
+                    startTime: _startTime,
+                    endTime: _moment(_startTime).add(_duration, 'minutes').toDate(),
                 };
                 let lessonsInScope = await this.getTrainerLessons(trainer.id, timeRange, jwtUser);
                 lessonsInScope = lessonsInScope.filter(_lesson => _lesson.id !== lesson.id);
