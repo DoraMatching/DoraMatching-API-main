@@ -1,3 +1,5 @@
+import { ClasseEntity } from '@classe/entities';
+import { ILessonModel } from '@lesson/dto';
 import {
     BaseEntity,
     Column,
@@ -5,10 +7,8 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
-import { ILessonModel } from '@lesson/dto';
-import { ClasseEntity } from '@classe/entities';
 
 @Entity('lesson')
 export class LessonEntity extends BaseEntity implements ILessonModel {
