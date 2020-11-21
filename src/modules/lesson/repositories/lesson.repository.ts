@@ -23,6 +23,17 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
+    async getLessonById(id: string): Promise<LessonEntity> {
+        try {
+            return await this.createQueryBuilder('lesson')
+              .where('lesson.id = :id', { id })
+              .select(['lesson'])
+              .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     async getOneLessonBeforeOfTrainer(trainerId: string, startTime: Date): Promise<LessonEntity> {
         try {
             return await this.createQueryBuilder('lesson')

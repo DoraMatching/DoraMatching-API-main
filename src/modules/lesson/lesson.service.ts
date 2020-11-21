@@ -53,6 +53,15 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         this.checkOverlaps(lessonsInScope, newLesson);
     }
 
+    async getLessonById(id: string, jwtUser: JwtUser): Promise<ILessonRO> {
+        const lesson = await this.lessonRepository.getLessonById(id);
+        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${id} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
+        if (permission.granted) {
+            return permission.filter(lesson);
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
     async createLessonByClasseId(classeId: string, data: CreateLessonDTO, jwtUser: JwtUser): Promise<IClasseRO> {
         const classe = await this.classeRepository.getClasseById(classeId);
         if (!classe) throw new HttpException(`Classe with id: ${classeId} not found`, HttpStatus.NOT_FOUND);
