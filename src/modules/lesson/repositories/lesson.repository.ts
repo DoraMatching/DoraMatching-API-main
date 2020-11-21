@@ -7,6 +7,20 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {
+    private readonly SELECT_LESSON_SCOPE = [
+        'lesson',
+        'classe',
+        'trainer',
+        'user.id',
+        'user.username',
+        'user.avatarUrl',
+        'user.name',
+        'user.roles',
+        'user.type',
+        'user.createdAt',
+        'user.updatedAt',
+    ];
+
     async getAllLessonsByClasseId(classeId: string, { order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<LessonEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('lesson')
@@ -18,6 +32,20 @@ export class LessonRepository extends Repository<LessonEntity> {
               .take(limit)
               .getManyAndCount();
             return { entities, count };
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getLessonByIdWithClasse(id: string): Promise<LessonEntity> {
+        try {
+            return await this.createQueryBuilder('lesson')
+              .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.trainer', 'trainer')
+              .leftJoinAndSelect('trainer.user', 'user')
+              .where('lesson.id = :id', { id })
+              .select(this.SELECT_LESSON_SCOPE)
+              .getOne();
         } catch (e) {
             console.error(e);
         }
