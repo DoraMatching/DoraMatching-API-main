@@ -7,6 +7,7 @@ import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from '@topic/dto';
 import { TopicService } from '@topic/topic.service';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
+import { ClasseRO } from '@classe/dto';
 
 @ApiTags('topic')
 @Controller()
@@ -24,11 +25,19 @@ export class TopicController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get topic by :id', description: 'Return 1 topic with :id' })
+    @ApiOperation({ summary: 'Get topic by :topicId', description: 'Return 1 topic with :id' })
     @ApiResponse({ type: TopicRO, status: 200 })
     @Get('topic/:id')
     async getTopicById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<ITopicRO> {
         return this.topicService.getTopicById(id, jwtUser);
+    }
+
+    @Auth()
+    @ApiOperation({ summary: 'Get classes by :topicId', description: 'Return 1 page of classes with :topicId' })
+    @ApiResponse({ type: [ClasseRO], status: 200 })
+    @Get('topic/:id/classes')
+    async getAllClasseByTopicId(@Query() pagOpts: PaginateParams, @Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
+        return this.topicService.getAllClassesByTopicId({ ...pagOpts, route: `${apiUrl}/topic/${id}/classes`}, id, jwtUser);
     }
 
     @Auth()
@@ -40,7 +49,7 @@ export class TopicController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Update topic', description: 'Return topic updated' })
+    @ApiOperation({ summary: 'Update topic by :topicId', description: 'Return topic updated' })
     @ApiResponse({ type: TopicRO, status: 201 })
     @Patch('topic/:id')
     updateTopicById(@Param() { id }: FindOneParams, @Body() data: UpdateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {

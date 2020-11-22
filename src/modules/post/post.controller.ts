@@ -24,7 +24,7 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get post by :id', description: 'Return 1 post with :id' })
+    @ApiOperation({ summary: 'Get post by :postId', description: 'Return 1 post with :id' })
     @ApiResponse({ type: PostRO, status: 200 })
     @Get('post/:id')
     getPostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IPostRO> {
@@ -32,7 +32,7 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Delete post by :id', description: 'Return a delete status message' })
+    @ApiOperation({ summary: 'Delete post by :postId', description: 'Return a delete status message' })
     @ApiResponse({ type: DeleteResultDTO, status: 204 })
     @HttpCode(HttpStatus.ACCEPTED)
     @Delete('post/:id')
@@ -49,7 +49,7 @@ export class PostController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Update post', description: 'Return post updated' })
+    @ApiOperation({ summary: 'Update post by :postId', description: 'Return post updated' })
     @ApiResponse({ type: PostRO, status: 201 })
     @Patch('post/:id')
     updatePostById(@Param() { id }: FindOneParams, @Body() data: UpdatePostDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {

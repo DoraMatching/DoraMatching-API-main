@@ -6,15 +6,31 @@ import { TrainerRepository } from '@trainer/repositories';
 import { IUserModel, JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { ClasseRO } from '@classe/dto';
+import { ClasseRepository } from '@classe/repositories';
 
 @Injectable()
 export class TrainerService {
     constructor(
       private readonly userRepository: UserRepository,
       private readonly trainerRepository: TrainerRepository,
+      private readonly classeRepository: ClasseRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
+    }
+
+    async getAllClassesByTrainerId(pagOpts: PaginateParams, trainerId: string, jwtUser: JwtUser) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, null);
+        if (permission.granted) {
+            try {
+                const data = await this.classeRepository.getAllClasseByTrainerId(trainerId, pagOpts);
+                const result = customPaginate<ClasseRO>(data, pagOpts);
+                return paginateFilter(result, permission);
+            } catch ({ detail }) {
+                throw new HttpException(detail || `OOPS! Can't get all classes by :topicId`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async getAllTrainers(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<ITrainerRO>> {

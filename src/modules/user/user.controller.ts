@@ -21,7 +21,7 @@ export class UserController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiOperation({ summary: 'Get user by :userId', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
     getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
@@ -29,7 +29,7 @@ export class UserController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiOperation({ summary: 'Update user by :userId', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Patch('user/:id')
     updateUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser, @Body() updateUser: UpdateUserDTO): Promise<IUserRO> {
