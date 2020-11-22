@@ -32,7 +32,7 @@ export class QuestionController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get a question', description: 'Return a question with :id' })
+    @ApiOperation({ summary: 'Get a question by :questionId', description: 'Return a question with :id' })
     @ApiResponse({ type: QuestionRO, status: 200 })
     @Get('question/:id')
     getQuestionById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IQuestionRO> {
@@ -40,7 +40,7 @@ export class QuestionController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Update question', description: 'Return a question updated' })
+    @ApiOperation({ summary: 'Update question by :questionId', description: 'Return a question updated' })
     @ApiResponse({ type: QuestionRO, status: 201 })
     @Patch('question/:id')
     updateQuestion(@Param() { id }: FindOneParams, @Body() data: UpdateQuestionDTO, @User() jwtUser: JwtUser): Promise<IQuestionRO> {
@@ -48,7 +48,7 @@ export class QuestionController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Delete question', description: 'Return a question delete message' })
+    @ApiOperation({ summary: 'Delete question by :questionId', description: 'Return a question delete message' })
     @ApiResponse({ type: QuestionRO, status: 202 })
     @Delete('question/:id')
     deleteQuestion(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {

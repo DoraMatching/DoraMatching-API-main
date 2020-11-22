@@ -6,7 +6,7 @@ import {
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams
+    PaginateParams,
 } from '@/shared';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateTopicDTO, ITopicRO, TopicRO, UpdateTopicDTO } from '@topic/dto';
@@ -16,6 +16,8 @@ import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { ClasseRepository } from '@classe/repositories';
+import { ClasseRO } from '@classe/dto';
 
 @Injectable()
 export class TopicService extends BaseService<TopicEntity, TopicRepository> {
@@ -25,10 +27,24 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
       private readonly topicRepository: TopicRepository,
       private readonly userRepository: UserRepository,
       private readonly trainerRepository: TrainerRepository,
+      private readonly classeRepository: ClasseRepository,
       @InjectRolesBuilder()
       private readonly rolesBuilder: RolesBuilder,
     ) {
         super(topicRepository);
+    }
+
+    async getAllClassesByTopicId(pagOpts: PaginateParams, topicId: string, jwtUser: JwtUser) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, null);
+        if (permission.granted) {
+            try {
+                const data = await this.classeRepository.getAllClasseByTopicId(topicId, pagOpts);
+                const result = customPaginate<ClasseRO>(data, pagOpts);
+                return paginateFilter(result, permission);
+            } catch ({ detail }) {
+                throw new HttpException(detail || `OOPS! Can't get all classes by :topicId`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
     async getAllTopics(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<ITopicRO>> {
@@ -39,7 +55,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
                 const result = customPaginate<TopicRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(detail || `OOPS! Can't get all topics`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
@@ -97,11 +113,11 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     async deleteTopicById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundTopic = await this.getTopicById(id, jwtUser);
         const permission = grantPermission(this.rolesBuilder, AppResources.TOPIC, 'delete', jwtUser, foundTopic.author.user.id);
-        if(permission.granted) {
+        if (permission.granted) {
             await this.topicRepository.delete(id);
             return {
                 message: `Deleted topic with id: ${foundTopic.id}.`,
-            }
+            };
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }
