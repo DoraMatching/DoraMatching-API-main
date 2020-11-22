@@ -3,7 +3,7 @@ import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from '@user/dto';
+import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUserDTO, UserRO } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { UserService } from '@user/user.service';
 
@@ -32,7 +32,7 @@ export class UserController {
     @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
     @ApiResponse({ type: UserRO, status: 200 })
     @Patch('user/:id')
-    updateUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
+    updateUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser, @Body() updateUser: UpdateUserDTO): Promise<IUserRO> {
         return this.userService.updateUser(id, updateUser, jwtUser);
     }
 

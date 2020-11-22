@@ -20,7 +20,7 @@ import {
     IViewer,
     JwtUser,
     LoginUserDTO,
-    UpdateUser,
+    UpdateUserDTO,
     UserModel,
     UserRO,
 } from '@user/dto';
@@ -35,11 +35,11 @@ import { TraineeRepository } from '@trainee/repositories';
 @Injectable()
 export class UserService {
     constructor(
-        private readonly userRepository: UserRepository,
-        private readonly mailerService: MailerService,
-        private readonly traineeRepository: TraineeRepository,
-        @InjectRolesBuilder()
-        private readonly rolesBuilder: RolesBuilder,
+      private readonly userRepository: UserRepository,
+      private readonly mailerService: MailerService,
+      private readonly traineeRepository: TraineeRepository,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
     ) {
     }
 
@@ -113,25 +113,25 @@ export class UserService {
 
     }
 
-    async updateUser(id: string, updateUser: Partial<UpdateUser>, jwtUser: JwtUser): Promise<UserRO> {
+    async updateUser(id: string, updateUser: UpdateUserDTO, jwtUser: JwtUser): Promise<UserRO> {
         const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', jwtUser, id);
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
-            if (updateUser.roles)
-                updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
+            // if (updateUser.roles)
+            //     updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
 
             const foundUser = await this.userRepository.findOne({ id });
 
             if (foundUser) {
-                Object.keys(updateUser).forEach(key => {
-                    if (key === 'password' && updateUser['password']) {
-                        foundUser.password = updateUser.password;
-                    } else
-                        foundUser[key] = updateUser[key];
-                });
+                // Object.keys(updateUser).forEach(key => {
+                //     if (key === 'password' && updateUser['password']) {
+                //         foundUser.password = updateUser.password;
+                //     } else
+                //         foundUser[key] = updateUser[key];
+                // });
 
                 try {
-                    await this.userRepository.save(foundUser);
+                    await this.userRepository.update(foundUser.id, updateUser);
                 } catch ({ detail }) {
                     throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -174,7 +174,7 @@ export class UserService {
             user = await this.userRepository.save(user);
 
             const trainee = this.traineeRepository.create({
-                user
+                user,
             });
             await this.traineeRepository.save(trainee);
 

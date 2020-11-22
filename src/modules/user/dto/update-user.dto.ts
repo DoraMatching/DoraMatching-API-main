@@ -4,9 +4,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IUserModel } from '@user/dto';
 import { ArrayUnique, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
 
-export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics' | 'classes'>;
+export type IUpdateUser = Omit<IUserModel, 'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics' | 'classes' | 'roles'>;
 
-export class UpdateUser implements IUpdateUser {
+export class UpdateUserDTO implements IUpdateUser {
     @ApiProperty()
     @IsOptional()
     @IsString()
@@ -29,11 +29,11 @@ export class UpdateUser implements IUpdateUser {
     @IsOptional()
     avatarUrl: string;
 
-    @ApiProperty()
-    @IsOptional()
-    @ArrayUnique()
-    @Validate(RolesValidator)
-    roles: AppRoles[];
+    // @ApiProperty()
+    // @IsOptional()
+    // @ArrayUnique()
+    // @Validate(RolesValidator)
+    // roles: AppRoles[];
 
     @ApiProperty()
     @IsOptional()
