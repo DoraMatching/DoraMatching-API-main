@@ -39,7 +39,8 @@ export class ClasseRepository extends Repository<ClasseEntity> {
           .leftJoinAndSelect('classe.topic', 'topic')
           .leftJoinAndSelect('trainer.user', 'uTrainer')
           .leftJoinAndSelect('trainee.user', 'uTrainee')
-          .leftJoinAndSelect('classe.lessons', 'lesson');
+          .leftJoinAndSelect('classe.lessons', 'lesson')
+          .select(this.SELECT_CLASSE_SCOPE);
     }
 
     getAllClassesQueryBuilder({ order, limit, page }: Partial<PaginateParams>) {
@@ -47,7 +48,6 @@ export class ClasseRepository extends Repository<ClasseEntity> {
           .orderBy('classe.createdAt', order)
           .skip(limit * (page - 1))
           .take(limit)
-          .select(this.SELECT_CLASSE_SCOPE);
     }
 
     async getAllClasseByTopicId(topicId: string, pagOpts: Partial<PaginateParams>): Promise<EntityResults<ClasseEntity>> {
