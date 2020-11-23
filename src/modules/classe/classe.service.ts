@@ -33,11 +33,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
     }
 
     async getClasseById(id: string, jwtUser: JwtUser): Promise<IClasseRO> {
-        const [trainer, classe] = await Promise.all([
-            this.trainerRepository.getTrainerByUserId(jwtUser.id),
-            this.classeRepository.getClasseById(id),
-        ]);
-        if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        const classe = await this.classeRepository.getClasseById(id);
         if (!classe) throw new HttpException(`OOPS! Classe with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.CLASSE, 'read', jwtUser, classe.trainer.user.id);
         if (permission.granted) {
