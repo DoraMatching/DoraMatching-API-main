@@ -1,17 +1,20 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons';
-import { customPaginate, grantPermission, IPagination, paginateFilter, PaginateParams } from '@/shared';
+import {
+    customPaginate,
+    grantPermission,
+    IDeleteResultDTO,
+    IPagination,
+    paginateFilter,
+    PaginateParams
+} from '@/shared';
 import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
 import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
-import {
-    HttpException,
-    HttpStatus,
-    Injectable
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import _ from 'lodash';
@@ -33,7 +36,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         super(lessonRepository);
     }
 
-    timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonEntity[]): LessonEntity[] {
+    timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonRO[]): LessonEntity[] {
         const range = moment.range(timeRange.startTime, timeRange.endTime);
         const result = [];
         lessons.forEach(lesson => {
@@ -42,7 +45,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         return result;
     };
 
-    checkOverlaps(lessonsInScope: LessonEntity[], newLesson: LessonEntity): void {
+    checkOverlaps(lessonsInScope: LessonRO[], newLesson: LessonRO): void {
         lessonsInScope.forEach(_lesson => {
             const range1 = moment.range(_lesson.startTime, _moment(_lesson.startTime).add(_lesson.duration, 'minutes'));
             const range2 = moment.range(newLesson.startTime, _moment(newLesson.startTime).add(newLesson.duration, 'minutes'));
@@ -51,15 +54,15 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         });
     }
 
-    lessonsValidation(newLesson: LessonEntity, lessonsInScope: LessonEntity[], isUpdate = false) {
+    lessonsValidation(newLesson: LessonEntity, lessonsInScope: LessonRO[], isUpdate = false): void {
         const isBeforeNow = _moment(newLesson.startTime).isBefore(new Date());
         if (isBeforeNow && isUpdate === false) throw new HttpException(`OOPS! Start-time of the new lesson is not valid`, HttpStatus.CONFLICT);
         this.checkOverlaps(lessonsInScope, newLesson);
     }
 
-    async updateLessonById(id: string, data: UpdateLessonDTO, jwtUser: JwtUser): Promise<ILessonRO> {
-        const lesson = await this.lessonRepository.getLessonByIdWithClasse(id);
-        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${id} not found`, HttpStatus.NOT_FOUND);
+    async updateLessonById(lessonId: string, data: UpdateLessonDTO, jwtUser: JwtUser): Promise<ILessonRO> {
+        const lesson = await this.lessonRepository.getLessonByIdWithClasse(lessonId);
+        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${lessonId} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'update', jwtUser, lesson.classe.trainer.user.id);
         if (permission.granted) {
             const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
@@ -84,7 +87,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
 
             try {
                 await this.lessonRepository.save(lesson);
-                const result = await this.lessonRepository.getLessonById(id);
+                const result = await this.lessonRepository.getLessonById(lessonId);
                 return permission.filter(result);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't update the lesson`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,9 +96,9 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getLessonById(id: string, jwtUser: JwtUser): Promise<ILessonRO> {
-        const lesson = await this.lessonRepository.getLessonById(id);
-        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${id} not found`, HttpStatus.NOT_FOUND);
+    async getLessonById(lessonId: string, jwtUser: JwtUser): Promise<ILessonRO> {
+        const lesson = await this.lessonRepository.getLessonById(lessonId);
+        if (!lesson) throw new HttpException(`OOPS! Lesson with id: ${lessonId} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
         if (permission.granted) {
             return permission.filter(lesson);
@@ -139,7 +142,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getTrainerLessons(trainerId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser): Promise<LessonEntity[]> {
+    async getTrainerLessons(trainerId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser): Promise<LessonRO[]> {
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
         if (permission.granted) {
             try {
@@ -155,7 +158,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getTraineeLessons(traineeId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser) {
+    async getTraineeLessons(traineeId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser): Promise<LessonRO[]> {
         const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
         if (permission.granted) {
             try {
@@ -169,5 +172,17 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                 throw new HttpException(detail || `OOPS! Can't get the lessons`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+    }
+
+    async deleteLessonById(lessonId: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        const foundLesson = await this.lessonRepository.getLessonByIdWithClasse(lessonId);
+        if (!foundLesson) throw new HttpException(`OOPS! Lesson with id: ${lessonId} not found`, HttpStatus.NOT_FOUND);
+        const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'delete', jwtUser, foundLesson.classe.trainer.user.id);
+        if (permission.granted) {
+            await this.lessonRepository.delete(lessonId);
+            return {
+                message: `Deleted post with id: ${lessonId}`,
+            };
+        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 }

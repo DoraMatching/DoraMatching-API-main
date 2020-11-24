@@ -6,9 +6,9 @@ import {
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams,
+    PaginateParams
 } from '@/shared';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDTO, IPostRO, PostRO, UpdatePostDTO } from '@post/dto';
 import { PostEntity } from '@post/entities';
 import { PostRepository } from '@post/repositories';
@@ -19,8 +19,6 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class PostService extends BaseService<PostEntity, PostRepository> {
-    private readonly logger: Logger = new Logger(PostService.name);
-
     constructor(
       private readonly postRepository: PostRepository,
       private readonly tagPostRepository: TagPostRepository,
@@ -31,11 +29,12 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         super(postRepository);
     }
 
-    async deletePostById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
-        const foundPost = await this.getPostById(id, jwtUser);
+    async deletePostById(postId: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        const foundPost = await this.getPostById(postId, jwtUser);
+        if (!foundPost) throw new HttpException(`Post with id: ${postId} not found!`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'delete', jwtUser, foundPost.author.id);
         if (permission.granted) {
-            await this.postRepository.delete(id);
+            await this.postRepository.delete(postId);
             return {
                 message: `Deleted post with id: ${foundPost.id}.`,
             };
@@ -82,9 +81,9 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
     }
 
-    async getPostById(id: string, jwtUser: JwtUser): Promise<IPostRO> {
-        const foundPost = await this.postRepository.getPostById(id);
-        if (!foundPost) throw new HttpException(`Post with id: ${id} not found!`, HttpStatus.NOT_FOUND);
+    async getPostById(postId: string, jwtUser: JwtUser): Promise<IPostRO> {
+        const foundPost = await this.postRepository.getPostById(postId);
+        if (!foundPost) throw new HttpException(`Post with id: ${postId} not found!`, HttpStatus.NOT_FOUND);
         else {
             const permission = grantPermission(this.rolesBuilder, AppResources.POST, 'read', jwtUser, foundPost.author.id);
             if (permission.granted) {

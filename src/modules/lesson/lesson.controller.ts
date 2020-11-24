@@ -1,7 +1,7 @@
-import { FindOneParams, IPagination, PaginateParams } from '@/shared';
+import { FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { IClasseRO } from '@classe/dto';
-import { CreateLessonDTO, ILessonRO, UpdateLessonDTO } from '@lesson/dto';
+import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonService } from '@lesson/lesson.service';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
@@ -31,31 +31,31 @@ export class LessonController {
 
     @Auth()
     @Get('lesson/:id')
-    getLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-        return this.lessonService.getLessonById(id, jwtUser);
+    getLessonById(@Param() { id: lessonId }: FindOneParams, @User() jwtUser: JwtUser): Promise<ILessonRO> {
+        return this.lessonService.getLessonById(lessonId, jwtUser);
     }
 
     @Auth()
     @Patch('lesson/:id')
-    updateLessonById(@Param() { id }: FindOneParams, @Body() data: UpdateLessonDTO, @User() jwtUser: JwtUser) {
-        return this.lessonService.updateLessonById(id, data, jwtUser);
+    updateLessonById(@Param() { id: lessonId }: FindOneParams, @Body() data: UpdateLessonDTO, @User() jwtUser: JwtUser): Promise<ILessonRO> {
+        return this.lessonService.updateLessonById(lessonId, data, jwtUser);
     }
 
     @Auth()
     @Delete('lesson/:id')
-    deleteLessonById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-
+    deleteLessonById(@Param() { id: lessonId }: FindOneParams, @User() jwtUser: JwtUser): Promise<IDeleteResultDTO> {
+        return this.lessonService.deleteLessonById(lessonId, jwtUser);
     }
 
     @Auth()
     @Get('trainer/:id/lessons')
-    getTrainerLessons(@Param() { id: trainerId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
+    getTrainerLessons(@Param() { id: trainerId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser): Promise<ILessonRO[]> {
         return this.lessonService.getTrainerLessons(trainerId, timeRange, jwtUser);
     }
 
     @Auth()
     @Get('trainee/:id/lessons')
-    getTraineeLessons(@Param() { id: traineeId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
+    getTraineeLessons(@Param() { id: traineeId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser): Promise<LessonRO[]> {
         return this.lessonService.getTraineeLessons(traineeId, timeRange, jwtUser);
     }
 }
