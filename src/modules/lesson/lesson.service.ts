@@ -7,7 +7,11 @@ import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/d
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+    HttpException,
+    HttpStatus,
+    Injectable
+} from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import _ from 'lodash';
@@ -149,5 +153,21 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                 throw new HttpException(detail || `OOPS! Can't get the lessons`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+    }
+
+    async getTraineeLessons(traineeId: string, timeRange: TimeRangeQuery, jwtUser: JwtUser) {
+        const permission = grantPermission(this.rolesBuilder, AppResources.LESSON, 'read', jwtUser, null);
+        if (permission.granted) {
+            try {
+                const [beforeLesson, lessons] = await Promise.all([
+                    this.lessonRepository.getOneLessonBeforeOfTrainee(traineeId, timeRange.startTime),
+                    this.lessonRepository.getAllLessonsByTraineeId(traineeId, timeRange),
+                ]);
+                const result = beforeLesson ? [beforeLesson, ...lessons] : lessons;
+                return this.timeContainLessons(timeRange, _.uniqBy(result, 'id'));
+            } catch ({ detail }) {
+                throw new HttpException(detail || `OOPS! Can't get the lessons`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 }

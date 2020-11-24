@@ -3,7 +3,7 @@ import { PaginateParams } from '@/shared';
 import { LessonEntity } from '@lesson/entities';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import moment from 'moment';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 
 @EntityRepository(LessonEntity)
 export class LessonRepository extends Repository<LessonEntity> {
@@ -77,19 +77,50 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
-    async getAllLessonByTrainerId(trainerId: string, { startTime, endTime }: TimeRangeQuery): Promise<LessonEntity[]> {
+    async getOneLessonBeforeOfTrainee(traineeId: string, startTime: Date) {
         try {
             return await this.createQueryBuilder('lesson')
               .leftJoinAndSelect('lesson.classe', 'classe')
+              .leftJoinAndSelect('classe.members', 'trainee')
+              .where('trainee.id = :traineeId', { traineeId })
+              .andWhere('lesson.startTime < :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
+              .orderBy('lesson.startTime', 'DESC')
+              .select(['lesson'])
+              .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    getAllLesson({ startTime, endTime }: TimeRangeQuery): SelectQueryBuilder<LessonEntity> {
+        return this.createQueryBuilder('lesson')
+          .leftJoinAndSelect('lesson.classe', 'classe')
+          .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss+07') })
+          .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD HH:mm:ss+07') })
+          .orderBy('lesson.startTime', 'DESC')
+          .select('lesson');
+    }
+
+    async getAllLessonByTrainerId(trainerId: string, timeRange: TimeRangeQuery): Promise<LessonEntity[]> {
+        try {
+            return await this.getAllLesson(timeRange)
               .leftJoinAndSelect('classe.trainer', 'trainer')
               .where('trainer.id = :trainerId', { trainerId })
-              .andWhere('lesson.startTime >= :startTime', { startTime: moment(startTime).utc(true).format('YYYY-MM-DD HH:mm:ss') })
-              .andWhere('lesson.startTime < :endTime', { endTime: moment(endTime).utc(true).format('YYYY-MM-DD HH:mm:ss+07') })
-              .orderBy('lesson.startTime', 'DESC')
-              .select('lesson')
               .getMany();
         } catch (e) {
             console.error(e);
         }
     }
+
+    async getAllLessonsByTraineeId(traineeId: string, timeRange: TimeRangeQuery) {
+        try {
+            return await this.getAllLesson(timeRange)
+              .leftJoinAndSelect('classe.members', 'trainee')
+              .where('trainee.id = :traineeId', { traineeId })
+              .getMany();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
 }

@@ -26,11 +26,11 @@ export class TraineeController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get trainee by id', description: 'Return a trainee with :id' })
+    @ApiOperation({ summary: 'Get trainee by :traineeId', description: 'Return a trainee with :traineeId' })
     @ApiResponse({ type: TraineeRO, status: 200 })
     @Get('trainee/:id')
-    getTraineeById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser) {
-        return this.traineeService.getTraineeById(id, jwtUser);
+    getTraineeById(@Param() { id: traineeId }: FindOneParams, @User() jwtUser: JwtUser) {
+        return this.traineeService.getTraineeById(traineeId, jwtUser);
     }
 
     @Auth()

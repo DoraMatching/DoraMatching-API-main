@@ -49,7 +49,13 @@ export class LessonController {
 
     @Auth()
     @Get('trainer/:id/lessons')
-    getTrainerLessons(@Param() { id }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
-        return this.lessonService.getTrainerLessons(id, timeRange, jwtUser);
+    getTrainerLessons(@Param() { id: trainerId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
+        return this.lessonService.getTrainerLessons(trainerId, timeRange, jwtUser);
+    }
+
+    @Auth()
+    @Get('trainee/:id/lessons')
+    getTraineeLessons(@Param() { id: traineeId }: FindOneParams, @Query() timeRange: TimeRangeQuery, @User() jwtUser: JwtUser) {
+        return this.lessonService.getTraineeLessons(traineeId, timeRange, jwtUser);
     }
 }
