@@ -18,6 +18,6 @@ export class SearchController {
     @ApiOperation({ summary: 'Search USER | POST | QUESTION' })
     @Get()
     search(@Query() scopes: SearchQuery, @User() jwtUser: JwtUser) {
-        return { scopes, jwtUser };
+        return this.searchService.search(scopes, jwtUser);
     }
 }

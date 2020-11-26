@@ -15,16 +15,28 @@ export class UserRepository extends Repository<UserEntity> {
         'user.createdAt',
         'user.updatedAt',
         'user.type',
+    ];
+
+    private readonly SELECT_POST_SCOPE = [
         'post.id',
         'post.title',
         'post.subTitle',
         'post.featuredImage',
         'post.createdAt',
         'post.updatedAt',
+    ];
+
+    private readonly SELECT_QUESTION_SCOPE = [
         'question.id',
         'question.title',
         'question.createdAt',
         'question.updatedAt',
+    ];
+
+    private readonly TOTALLY_SELECT_USER_SCOPE = [
+        ...this.SELECT_USER_SCOPE,
+        ...this.SELECT_POST_SCOPE,
+        ...this.SELECT_QUESTION_SCOPE,
         'pTag.id',
         'pTag.name',
         'qTag.id',
@@ -38,10 +50,10 @@ export class UserRepository extends Repository<UserEntity> {
               .leftJoinAndSelect('user.posts', 'post')
               .leftJoinAndSelect('post.tags', 'pTag')
               .leftJoinAndSelect('question.tags', 'qTag')
-              .select(this.SELECT_USER_SCOPE)
+              .select(this.TOTALLY_SELECT_USER_SCOPE)
               .where('user.id = :id', { id })
               .getOne();
-        }catch (e) {
+        } catch (e) {
             console.error(e);
         }
     }
@@ -53,7 +65,7 @@ export class UserRepository extends Repository<UserEntity> {
               .leftJoinAndSelect('user.posts', 'post')
               .leftJoinAndSelect('post.tags', 'pTag')
               .leftJoinAndSelect('question.tags', 'qTag')
-              .select(this.SELECT_USER_SCOPE)
+              .select(this.TOTALLY_SELECT_USER_SCOPE)
               .orderBy('user.createdAt', order)
               .skip(limit * (page - 1))
               .take(limit)
@@ -70,5 +82,18 @@ export class UserRepository extends Repository<UserEntity> {
           .set({ ...updateUser, password })
           .where('id = :id', { id })
           .execute();
+    }
+
+    search(key: string): Promise<UserEntity[]> {
+        try {
+            return this.createQueryBuilder('user')
+              .where('user.username ILIKE :key', { key: `%${key}%` })
+              .orWhere('user.name ILIKE :key', { key: `%${key}%` })
+              .orWhere('user.email ILIKE :key', { key: `%${key}%` })
+              .select(this.SELECT_USER_SCOPE)
+              .getMany();
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

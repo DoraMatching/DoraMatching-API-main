@@ -17,6 +17,7 @@ export class SearchQuery {
     @ApiProperty({ type: () => String, example: `["USER","POST","QUESTION"]` })
     @IsOptional()
     @IsArray()
+    @ArrayUnique()
     @ArrayMinSize(1)
     @Transform(values => JSON.parse(values).map(e => SearchScopes[e]).filter(Boolean))
     scope: SearchScopes[] = [SearchScopes.USER];

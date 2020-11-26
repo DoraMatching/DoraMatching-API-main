@@ -58,4 +58,20 @@ export class QuestionRepository extends Repository<QuestionEntity> {
             console.error(e);
         }
     }
+
+    search(key: string): Promise<QuestionEntity[]> {
+        try {
+            return this.createQueryBuilder('question')
+              .leftJoinAndSelect('question.author', 'author')
+              .leftJoinAndSelect('question.comments', 'comments')
+              .leftJoinAndSelect('question.tags', 'tag')
+              .leftJoinAndSelect('comments.author', 'commentAuthor')
+              .where('question.title ILIKE :key', { key: `%${key}%` })
+              .orWhere('question.content ILIKE :key', { key: `%${key}%` })
+              .select(this.SELECT_QUESTION_SCOPE)
+              .getMany();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }

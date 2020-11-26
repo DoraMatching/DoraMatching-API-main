@@ -1,4 +1,41 @@
 import { Injectable } from '@nestjs/common';
+import { UserRepository } from '@user/repositories';
+import { QuestionRepository } from '@question/repositories';
+import { PostRepository } from '@post/repositories';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { SearchQuery, SearchScopes } from '@search/search.query';
+import { JwtUser } from '@user/dto';
 
 @Injectable()
-export class SearchService {}
+export class SearchService {
+    constructor(
+      private readonly userRepository: UserRepository,
+      private readonly postRepository: PostRepository,
+      private readonly questionRepository: QuestionRepository,
+      @InjectRolesBuilder()
+      private readonly rolesBuilder: RolesBuilder,
+    ) {
+    }
+
+    async search({ key, scope }: SearchQuery, jwtUser: JwtUser) {
+        const result = {
+            users: [],
+            posts: [],
+            questions: [],
+        };
+
+        const [users, posts, questions] = await Promise.all([
+            this.userRepository.search(key),
+            this.postRepository.search(key),
+            this.questionRepository.search(key),
+        ]);
+
+        if (users && scope.includes(SearchScopes.USER))
+            result.users = users;
+        if (posts && scope.includes(SearchScopes.POST))
+            result.posts = posts;
+        if (questions && scope.includes(SearchScopes.QUESTION))
+            result.questions = questions;
+        return result;
+    }
+}
