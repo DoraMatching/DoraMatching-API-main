@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PostRO } from '@post/dto';
 import { QuestionRO } from '@question/dto';
 import { IUserModel } from '@user/dto';
-import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export type IUserRO = Omit<IUserModel, 'password'>;
 
@@ -19,6 +19,11 @@ export class UserRO implements IUserRO {
     @IsOptional()
     @IsEmail()
     email: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    phoneNumber: string;
 
     @ApiProperty()
     name: string;

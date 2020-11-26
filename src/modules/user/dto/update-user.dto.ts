@@ -21,6 +21,11 @@ export class UpdateUserDTO implements IUpdateUser {
     email: string;
 
     @ApiProperty()
+    @IsOptional()
+    @IsString()
+    phoneNumber: string;
+
+    @ApiProperty()
     @IsString()
     @IsOptional()
     name: string;

@@ -2,12 +2,13 @@ import { AppRoles } from '@/app.roles';
 import { ApiProperty } from '@nestjs/swagger';
 import { IPostModel, PostModel } from '@post/dto';
 import { IQuestionModel, QuestionModel } from '@question/dto';
-import { IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export interface IUserModel {
     id: string;
     username: string;
     email: string;
+    phoneNumber: string;
     name: string;
     avatarUrl: string;
     roles: AppRoles[];
@@ -25,6 +26,11 @@ export class UserModel implements IUserModel {
     @ApiProperty()
     @IsNotEmpty()
     username: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    phoneNumber: string;
 
     @ApiProperty()
     @IsOptional()

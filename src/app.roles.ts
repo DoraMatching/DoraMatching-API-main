@@ -28,7 +28,7 @@ export const roles: RolesBuilder = new RolesBuilder();
 roles
   // Resource USER
   .grant(AppRoles.GUEST)
-  .readAny(AppResources.USER, '*, !email, !roles, !password, !createdAt, !updatedAt')
+  .readAny(AppResources.USER, '*, !email, !phoneNumber, !roles, !password, !createdAt, !updatedAt')
   .createAny(AppResources.USER, '*, !roles')
   .grant(AppRoles.TRAINEE)
   .readAny(AppResources.USER, '*, !password')
