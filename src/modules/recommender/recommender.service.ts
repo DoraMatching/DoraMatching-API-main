@@ -1,10 +1,19 @@
+import Raccoon from '@maruware/raccoon';
 import { Injectable } from '@nestjs/common';
-import * as raccoon from 'raccoon';
 
 @Injectable()
 export class RecommenderService {
-    
-    liked(userId: string, itemId: string) {
-        raccoon.liked(userId, itemId)
+    private raccoon = new Raccoon({
+        className: 'item',
+        redisUrl: process.env.REDIS_URL,
+        redisPort: Number(process.env.REDIS_PORT)
+    });
+
+    async liked(userId: string, itemId: string) {
+        return await this.raccoon.liked(userId, itemId);
+    }
+
+    async recommendFor(userid: string) {
+        return await this.raccoon.recommendFor(userid, 10);
     }
 }
