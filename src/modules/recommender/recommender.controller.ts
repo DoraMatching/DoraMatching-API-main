@@ -1,6 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { RecommenderService } from './recommender.service';
 
+@ApiTags('machine-learning-features')
 @Controller('recommender')
 export class RecommenderController {
     constructor(
