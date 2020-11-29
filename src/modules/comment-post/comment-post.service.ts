@@ -10,17 +10,19 @@ import { PostRepository } from '@post/repositories';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { RecommenderService } from '../recommender/recommender.service';
 
 @Injectable()
 export class CommentPostService extends BaseService<CommentPostEntity, CommentPostRepository> {
     private readonly logger: Logger = new Logger(CommentPostService.name);
 
     constructor(
-      private readonly commentPostRepository: CommentPostRepository,
-      private readonly postRepository: PostRepository,
-      private readonly userRepository: UserRepository,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+        private readonly commentPostRepository: CommentPostRepository,
+        private readonly postRepository: PostRepository,
+        private readonly userRepository: UserRepository,
+        private readonly recommenderService: RecommenderService,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder,
     ) {
         super(commentPostRepository);
     }
@@ -35,7 +37,10 @@ export class CommentPostService extends BaseService<CommentPostEntity, CommentPo
             try {
                 await this.commentPostRepository.save(newComment);
                 post.comments.push(newComment);
-                await this.postRepository.save(post);
+                await Promise.all([
+                    this.postRepository.save(post),
+                    this.recommenderService.liked(jwtUser.id, JSON.stringify({ itemId: post.id, itemName: post.title, itemType: 'post' }))
+                ]);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create new Post Comment`, HttpStatus.INTERNAL_SERVER_ERROR);
             }

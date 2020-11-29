@@ -23,6 +23,7 @@ export class TraineeRepository extends Repository<TraineeEntity> {
         'tUser.avatarUrl',
         'tUser.roles',
         'tUser.type',
+        'topic',
     ];
 
     async getAllTrainees({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TraineeEntity>> {
@@ -50,6 +51,7 @@ export class TraineeRepository extends Repository<TraineeEntity> {
               .leftJoinAndSelect('trainee.classes', 'classe')
               .leftJoinAndSelect('classe.trainer', 'cTrainer')
               .leftJoinAndSelect('cTrainer.user', 'tUser')
+              .leftJoinAndSelect('classe.topic', 'topic')
               .where('trainee.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();
@@ -65,6 +67,7 @@ export class TraineeRepository extends Repository<TraineeEntity> {
               .leftJoinAndSelect('trainee.classes', 'classe')
               .leftJoinAndSelect('classe.trainer', 'cTrainer')
               .leftJoinAndSelect('cTrainer.user', 'tUser')
+              .leftJoinAndSelect('classe.topic', 'topic')
               .where('user.id = :id', { id })
               .select(this.SELECT_TRAINEE_SCOPE)
               .getOne();

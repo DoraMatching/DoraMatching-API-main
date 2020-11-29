@@ -13,7 +13,12 @@ export class RecommenderService {
         return await this.raccoon.liked(userId, itemId);
     }
 
+    async unliked(userId: string, itemId: string) {
+        return await this.raccoon.unliked(userId, itemId);
+    }
+
     async recommendFor(userid: string) {
-        return await this.raccoon.recommendFor(userid, 10);
+        const items = await this.raccoon.recommendFor(userid, 10);
+        return items.map(i => JSON.parse(i));
     }
 }

@@ -15,15 +15,17 @@ import { QuestionRepository } from '@question/repositories';
 import { JwtUser } from '@user/dto';
 import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { RecommenderService } from '../recommender/recommender.service';
 
 @Injectable()
 export class CommentQuestionService extends BaseService<CommentQuestionEntity, CommentQuestionRepository> {
     constructor(
-      private readonly commentQuestionRepository: CommentQuestionRepository,
-      private readonly questionRepository: QuestionRepository,
-      private readonly userRepository: UserRepository,
-      @InjectRolesBuilder()
-      private readonly rolesBuilder: RolesBuilder,
+        private readonly commentQuestionRepository: CommentQuestionRepository,
+        private readonly questionRepository: QuestionRepository,
+        private readonly userRepository: UserRepository,
+        private readonly recommenderService: RecommenderService,
+        @InjectRolesBuilder()
+        private readonly rolesBuilder: RolesBuilder,
     ) {
         super(commentQuestionRepository);
     }
@@ -38,7 +40,10 @@ export class CommentQuestionService extends BaseService<CommentQuestionEntity, C
             try {
                 await this.commentQuestionRepository.save(newComment);
                 question.comments.push(newComment);
-                await this.questionRepository.save(question);
+                await Promise.all([
+                    this.questionRepository.save(question),
+                    this.recommenderService.liked(jwtUser.id, JSON.stringify({ itemId: question.id, itemName: question.type, itemType: 'question' }))
+                ]);
             } catch ({ detail }) {
                 throw new HttpException(detail || `OOPS! Can't create new Question Comment`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
