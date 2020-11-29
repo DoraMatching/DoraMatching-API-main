@@ -6,7 +6,7 @@ export class RecommenderService {
     private raccoon = new Raccoon({
         className: 'item',
         redisUrl: process.env.REDIS_URL,
-        redisPort: Number(process.env.REDIS_PORT)
+        redisPort: Number(process.env.REDIS_PORT),
     });
 
     async liked(userId: string, itemId: string) {
