@@ -28,7 +28,8 @@
       "@user/*": ["src/modules/user/*"],
       "@lesson/*": ["src/modules/lesson/*"],
       "@tag-predict/*": ["src/modules/tag-predict/*"],
-      "@search/*": ["src/modules/search/*"]
+      "@search/*": ["src/modules/search/*"],
+      "@recommender/*": ["src/modules/recommender/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],
