@@ -1,16 +1,12 @@
-import { SearchScopeValidator } from '@/shared';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMinSize,
   ArrayUnique,
   IsArray,
-  IsIn,
   IsOptional,
-  IsString,
-  MinLength,
-  Validate,
+  IsString
 } from 'class-validator';
-import { Transform } from 'class-transformer';
 
 export enum SearchScopes {
   USER = 'USER',
