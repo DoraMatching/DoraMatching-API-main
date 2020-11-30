@@ -5,38 +5,38 @@ import { UserModel } from '@user/dto';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface ITopicRO extends ITopicModel {
-    id: string;
+  id: string;
 }
 
 export class TopicRO implements ITopicRO {
-    @ApiProperty()
-    @IsNotEmpty()
-    id: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  id: string;
 
-    @ApiProperty()
-    @IsOptional()
-    name: string;
+  @ApiProperty()
+  @IsOptional()
+  name: string;
 
-    @ApiProperty()
-    @IsOptional()
-    description: string;
+  @ApiProperty()
+  @IsOptional()
+  description: string;
 
-    @ApiProperty()
-    @IsOptional()
-    featuredImage: string;
+  @ApiProperty()
+  @IsOptional()
+  featuredImage: string;
 
-    @ApiProperty({ type: () => UserModel })
-    author: TrainerModel;
+  @ApiProperty({ type: () => UserModel })
+  author: TrainerModel;
 
-    @ApiProperty()
-    @IsOptional()
-    createdAt: Date;
+  @ApiProperty()
+  @IsOptional()
+  createdAt: Date;
 
-    @ApiProperty()
-    @IsOptional()
-    updatedAt: Date;
+  @ApiProperty()
+  @IsOptional()
+  updatedAt: Date;
 
-    @ApiProperty({ type: () => String, default: 'topic' })
-    @IsOptional()
-    type?: string;
+  @ApiProperty({ type: () => String, default: 'topic' })
+  @IsOptional()
+  type?: string;
 }

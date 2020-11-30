@@ -1,41 +1,44 @@
-import { CommentQuestionModel, ICommentQuestionModel } from '@comment-question/dto';
+import {
+  CommentQuestionModel,
+  ICommentQuestionModel,
+} from '@comment-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagQuestionModel, TagQuestionModel } from '@tag-question/dto';
 import { IUserModel, UserModel } from '@user/dto';
 import { IsArray, IsString } from 'class-validator';
 
 export interface IQuestionModel {
-    title: string;
-    content: string;
-    author: Partial<IUserModel>;
-    comments: ICommentQuestionModel[];
-    tags: ITagQuestionModel[]
-    createdAt?: Date;
-    updatedAt?: Date;
+  title: string;
+  content: string;
+  author: Partial<IUserModel>;
+  comments: ICommentQuestionModel[];
+  tags: ITagQuestionModel[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class QuestionModel implements IQuestionModel {
-    @ApiProperty()
-    @IsString()
-    title: string;
+  @ApiProperty()
+  @IsString()
+  title: string;
 
-    @ApiProperty({ type: () => UserModel })
-    author: Partial<IUserModel>;
+  @ApiProperty({ type: () => UserModel })
+  author: Partial<IUserModel>;
 
-    @ApiProperty()
-    @IsString()
-    content: string;
+  @ApiProperty()
+  @IsString()
+  content: string;
 
-    @ApiProperty({ type: () => CommentQuestionModel, isArray: true })
-    @IsArray()
-    comments: CommentQuestionModel[];
+  @ApiProperty({ type: () => CommentQuestionModel, isArray: true })
+  @IsArray()
+  comments: CommentQuestionModel[];
 
-    @ApiProperty({type: () => TagQuestionModel, isArray: true})
-    tags: TagQuestionModel[];
+  @ApiProperty({ type: () => TagQuestionModel, isArray: true })
+  tags: TagQuestionModel[];
 
-    @ApiProperty()
-    createdAt: Date;
+  @ApiProperty()
+  createdAt: Date;
 
-    @ApiProperty()
-    updatedAt: Date;
+  @ApiProperty()
+  updatedAt: Date;
 }
