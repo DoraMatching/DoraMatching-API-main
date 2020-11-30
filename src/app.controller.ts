@@ -3,9 +3,8 @@ import { Response } from 'express';
 
 @Controller()
 export class AppController {
-
-    @Get()
-    getHello(@Res() res?: Response) {
-        return res.redirect(`/docs`);
-    }
+  @Get()
+  getHello(@Res() res?: Response) {
+    return res.redirect(`/docs`);
+  }
 }

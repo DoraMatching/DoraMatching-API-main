@@ -1,26 +1,26 @@
 import { RolesBuilder } from 'nest-access-control';
 
 export enum AppRoles {
-    ADMIN = 'ADMIN',
-    TRAINER = 'TRAINER',
-    TRAINEE = 'TRAINEE',
-    GUEST = 'GUEST'
+  ADMIN = 'ADMIN',
+  TRAINER = 'TRAINER',
+  TRAINEE = 'TRAINEE',
+  GUEST = 'GUEST',
 }
 
 export enum AppResources {
-    CLASSE = 'CLASSE',
-    COMMENT_POST = 'COMMENT_POST',
-    COMMENT_QUESTION = 'COMMENT_QUESTION',
-    POST = 'POST',
-    QUESTION = 'QUESTION',
-    TAG_POST = 'TAG_POST',
-    TAG_QUESTION = 'TAG_QUESTION',
-    TOPIC = 'TOPIC',
-    TRAINER = 'TRAINER',
-    TRAINEE = 'TRAINEE',
-    USER = 'USER',
-    REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER',
-    LESSON = 'LESSON'
+  CLASSE = 'CLASSE',
+  COMMENT_POST = 'COMMENT_POST',
+  COMMENT_QUESTION = 'COMMENT_QUESTION',
+  POST = 'POST',
+  QUESTION = 'QUESTION',
+  TAG_POST = 'TAG_POST',
+  TAG_QUESTION = 'TAG_QUESTION',
+  TOPIC = 'TOPIC',
+  TRAINER = 'TRAINER',
+  TRAINEE = 'TRAINEE',
+  USER = 'USER',
+  REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER',
+  LESSON = 'LESSON',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -28,7 +28,10 @@ export const roles: RolesBuilder = new RolesBuilder();
 roles
   // Resource USER
   .grant(AppRoles.GUEST)
-  .readAny(AppResources.USER, '*, !email, !phoneNumber, !roles, !password, !createdAt, !updatedAt')
+  .readAny(
+    AppResources.USER,
+    '*, !email, !phoneNumber, !roles, !password, !createdAt, !updatedAt',
+  )
   .createAny(AppResources.USER, '*, !roles')
   .grant(AppRoles.TRAINEE)
   .readAny(AppResources.USER, '*, !password')
@@ -196,4 +199,3 @@ roles
   .extend(AppRoles.TRAINER)
   .updateAny(AppResources.LESSON)
   .deleteAny(AppResources.LESSON);
-

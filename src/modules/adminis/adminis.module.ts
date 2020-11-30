@@ -4,6 +4,6 @@ import { AdminisService } from './adminis.service';
 
 @Module({
   controllers: [AdminisController],
-  providers: [AdminisService]
+  providers: [AdminisService],
 })
 export class AdminisModule {}

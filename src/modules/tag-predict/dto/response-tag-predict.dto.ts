@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export interface ITagPredictionRO {
-    tags: string[];
+  tags: string[];
 }
 
 export class TagPredictionRO implements ITagPredictionRO {
-    @ApiProperty({example: ['php', 'vue-js']})
-    tags: string[];
+  @ApiProperty({ example: ['php', 'vue-js'] })
+  tags: string[];
 }

@@ -11,38 +11,53 @@ import { User } from '@user/user.decorator';
 @ApiTags('classe')
 @Controller()
 export class ClasseController {
-    constructor(
-      private readonly classeService: ClasseService,
-    ) {
-    }
+  constructor(private readonly classeService: ClasseService) {}
 
-    @Auth()
-    @Get('classes')
-    getAllClasses(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IClasseRO>> {
-        return this.classeService.getAllClasses({ ...pagOpts, route: `${apiUrl}/classes` }, jwtUser);
-    }
+  @Auth()
+  @Get('classes')
+  getAllClasses(
+    @Query() pagOpts: PaginateParams,
+    @User() jwtUser: JwtUser,
+  ): Promise<IPagination<IClasseRO>> {
+    return this.classeService.getAllClasses(
+      { ...pagOpts, route: `${apiUrl}/classes` },
+      jwtUser,
+    );
+  }
 
-    @Auth()
-    @Post('classe')
-    createClasse(@Body() data: CreateClasseDTO, @User() jwtUser: JwtUser): Promise<IClasseRO> {
-        return this.classeService.createClasse(data, jwtUser);
-    }
+  @Auth()
+  @Post('classe')
+  createClasse(
+    @Body() data: CreateClasseDTO,
+    @User() jwtUser: JwtUser,
+  ): Promise<IClasseRO> {
+    return this.classeService.createClasse(data, jwtUser);
+  }
 
-    @Auth()
-    @Get('classe/:id')
-    getClasseById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IClasseRO> {
-        return this.classeService.getClasseById(id, jwtUser);
-    }
+  @Auth()
+  @Get('classe/:id')
+  getClasseById(
+    @Param() { id }: FindOneParams,
+    @User() jwtUser: JwtUser,
+  ): Promise<IClasseRO> {
+    return this.classeService.getClasseById(id, jwtUser);
+  }
 
-    @Auth()
-    @Get('classe/:id/register')
-    registerClasse(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IClasseRO> {
-        return this.classeService.registerClasse(id, jwtUser);
-    }
+  @Auth()
+  @Get('classe/:id/register')
+  registerClasse(
+    @Param() { id }: FindOneParams,
+    @User() jwtUser: JwtUser,
+  ): Promise<IClasseRO> {
+    return this.classeService.registerClasse(id, jwtUser);
+  }
 
-    @Auth()
-    @Get('classe/:id/deregister')
-    deregisterClasse(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IClasseRO> {
-        return this.classeService.registerClasse(id, jwtUser, true);
-    }
+  @Auth()
+  @Get('classe/:id/deregister')
+  deregisterClasse(
+    @Param() { id }: FindOneParams,
+    @User() jwtUser: JwtUser,
+  ): Promise<IClasseRO> {
+    return this.classeService.registerClasse(id, jwtUser, true);
+  }
 }

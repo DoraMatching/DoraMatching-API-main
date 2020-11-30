@@ -5,6 +5,6 @@ import { TagPredictService } from './tag-predict.service';
 @Module({
   imports: [HttpModule],
   controllers: [TagPredictController],
-  providers: [TagPredictService]
+  providers: [TagPredictService],
 })
 export class TagPredictModule {}

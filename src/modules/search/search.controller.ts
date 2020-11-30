@@ -9,15 +9,12 @@ import { User } from '@user/user.decorator';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-    constructor(
-      private readonly searchService: SearchService,
-    ) {
-    }
+  constructor(private readonly searchService: SearchService) {}
 
-    @Auth()
-    @ApiOperation({ summary: 'Search USER | POST | QUESTION' })
-    @Get()
-    search(@Query() scopes: SearchQuery, @User() jwtUser: JwtUser) {
-        return this.searchService.search(scopes, jwtUser);
-    }
+  @Auth()
+  @ApiOperation({ summary: 'Search USER | POST | QUESTION' })
+  @Get()
+  search(@Query() scopes: SearchQuery, @User() jwtUser: JwtUser) {
+    return this.searchService.search(scopes, jwtUser);
+  }
 }
