@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '@user/repositories';
-import { QuestionRepository } from '@question/repositories';
 import { PostRepository } from '@post/repositories';
-import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
+import { QuestionRepository } from '@question/repositories';
 import { SearchQuery, SearchScopes } from '@search/search.query';
 import { JwtUser } from '@user/dto';
+import { UserRepository } from '@user/repositories';
+import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
 export class SearchService {
