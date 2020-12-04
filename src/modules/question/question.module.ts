@@ -7,14 +7,14 @@ import { TagQuestionRepository } from '@tag-question/repositories';
 import { UserRepository } from '@user/repositories';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UserRepository,
-      QuestionRepository,
-      TagQuestionRepository,
-    ]),
-  ],
-  controllers: [QuestionController],
-  providers: [QuestionService],
+    imports: [
+        TypeOrmModule.forFeature([
+            UserRepository,
+            QuestionRepository,
+            TagQuestionRepository,
+        ]),
+    ],
+    controllers: [QuestionController],
+    providers: [QuestionService],
 })
 export class QuestionModule {}

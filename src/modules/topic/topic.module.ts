@@ -9,15 +9,15 @@ import { UserRepository } from '@user/repositories';
 import { ClasseRepository } from '@classe/repositories';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UserRepository,
-      TopicRepository,
-      TrainerRepository,
-      ClasseRepository,
-    ]),
-  ],
-  controllers: [TopicController],
-  providers: [TopicService, TopicResolver],
+    imports: [
+        TypeOrmModule.forFeature([
+            UserRepository,
+            TopicRepository,
+            TrainerRepository,
+            ClasseRepository,
+        ]),
+    ],
+    controllers: [TopicController],
+    providers: [TopicService, TopicResolver],
 })
 export class TopicModule {}

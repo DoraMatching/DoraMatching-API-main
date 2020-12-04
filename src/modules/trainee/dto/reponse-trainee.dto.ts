@@ -5,19 +5,19 @@ import { IsNotEmpty } from 'class-validator';
 import { ITraineeModel } from './trainee.model';
 
 export interface ITraineeRO extends ITraineeModel {
-  id: string;
+    id: string;
 }
 
 export class TraineeRO implements ITraineeRO {
-  @IsNotEmpty()
-  id: string;
+    @IsNotEmpty()
+    id: string;
 
-  @ApiProperty()
-  traineeProfile: string;
+    @ApiProperty()
+    traineeProfile: string;
 
-  @ApiProperty({ type: () => UserModel })
-  user: UserModel;
+    @ApiProperty({ type: () => UserModel })
+    user: UserModel;
 
-  @ApiProperty({ type: () => ClasseRO, isArray: true })
-  classes: ClasseRO[];
+    @ApiProperty({ type: () => ClasseRO, isArray: true })
+    classes: ClasseRO[];
 }

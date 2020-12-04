@@ -8,15 +8,15 @@ import { RecommenderModule } from '@recommender/recommender.module';
 import { UserRepository } from '@user/repositories';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      CommentPostRepository,
-      PostRepository,
-      UserRepository,
-    ]),
-    RecommenderModule,
-  ],
-  controllers: [CommentPostController],
-  providers: [CommentPostService],
+    imports: [
+        TypeOrmModule.forFeature([
+            CommentPostRepository,
+            PostRepository,
+            UserRepository,
+        ]),
+        RecommenderModule,
+    ],
+    controllers: [CommentPostController],
+    providers: [CommentPostService],
 })
 export class CommentPostModule {}

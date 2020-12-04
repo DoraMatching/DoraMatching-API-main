@@ -8,15 +8,15 @@ import { LessonController } from './lesson.controller';
 import { LessonService } from './lesson.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      ClasseRepository,
-      TrainerRepository,
-      LessonRepository,
-      UserRepository,
-    ]),
-  ],
-  providers: [LessonService],
-  controllers: [LessonController],
+    imports: [
+        TypeOrmModule.forFeature([
+            ClasseRepository,
+            TrainerRepository,
+            LessonRepository,
+            UserRepository,
+        ]),
+    ],
+    providers: [LessonService],
+    controllers: [LessonController],
 })
 export class LessonModule {}

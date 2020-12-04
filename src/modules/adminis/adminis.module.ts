@@ -3,7 +3,7 @@ import { AdminisController } from './adminis.controller';
 import { AdminisService } from './adminis.service';
 
 @Module({
-  controllers: [AdminisController],
-  providers: [AdminisService],
+    controllers: [AdminisController],
+    providers: [AdminisService],
 })
 export class AdminisModule {}

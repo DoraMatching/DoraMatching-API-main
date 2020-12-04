@@ -1,36 +1,36 @@
 import { QuestionEntity } from '@question/entities';
 import { ITagQuestionModel } from '@tag-question/dto';
 import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('tag-question')
 export class TagQuestionEntity extends BaseEntity implements ITagQuestionModel {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-  @Column({ type: 'text', nullable: false })
-  name: string;
+    @Column({ type: 'text', nullable: false })
+    name: string;
 
-  @ManyToMany(
-    () => QuestionEntity,
-    question => question.tags,
-    { cascade: true, onDelete: 'CASCADE' },
-  )
-  questions: QuestionEntity[];
+    @ManyToMany(
+        () => QuestionEntity,
+        question => question.tags,
+        { cascade: true, onDelete: 'CASCADE' },
+    )
+    questions: QuestionEntity[];
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
 
-  @Column({ type: 'text', default: 'tag-question', nullable: false })
-  type: string;
+    @Column({ type: 'text', default: 'tag-question', nullable: false })
+    type: string;
 }

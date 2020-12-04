@@ -6,19 +6,19 @@ import { IUserRO, UserRO } from '@user/dto';
 export type IHomeRO = IPostRO | IQuestionRO | IUserListRO;
 
 export interface IUserListRO {
-  users: IUserRO[];
-  type: string;
+    users: IUserRO[];
+    type: string;
 }
 
 export class UserListRO implements IUserListRO {
-  constructor(props) {
-    this.type = 'user-list';
-    Object.assign(this, props);
-  }
+    constructor(props) {
+        this.type = 'user-list';
+        Object.assign(this, props);
+    }
 
-  @ApiProperty({ type: () => UserRO, isArray: true })
-  users: UserRO[];
+    @ApiProperty({ type: () => UserRO, isArray: true })
+    users: UserRO[];
 
-  @ApiProperty({ type: () => String, default: 'user-list' })
-  type: string;
+    @ApiProperty({ type: () => String, default: 'user-list' })
+    type: string;
 }

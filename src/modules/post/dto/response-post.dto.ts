@@ -5,47 +5,47 @@ import { TagPostModel } from '@tag-post/dto';
 import { UserModel } from '@user/dto';
 
 export interface IPostRO extends IPostModel {
-  id: string;
+    id: string;
 }
 
 export class PostRO implements IPostRO {
-  constructor(data) {
-    Object.assign(this, data);
-  }
+    constructor(data) {
+        Object.assign(this, data);
+    }
 
-  @ApiProperty()
-  id: string;
+    @ApiProperty()
+    id: string;
 
-  @ApiProperty()
-  title: string;
+    @ApiProperty()
+    title: string;
 
-  @ApiProperty()
-  subTitle: string;
+    @ApiProperty()
+    subTitle: string;
 
-  @ApiProperty()
-  featuredImage: string;
+    @ApiProperty()
+    featuredImage: string;
 
-  @ApiProperty()
-  isDraft: boolean;
+    @ApiProperty()
+    isDraft: boolean;
 
-  @ApiProperty()
-  content: string;
+    @ApiProperty()
+    content: string;
 
-  @ApiProperty({ type: () => CommentPostRO, isArray: true })
-  comments?: CommentPostRO[];
+    @ApiProperty({ type: () => CommentPostRO, isArray: true })
+    comments?: CommentPostRO[];
 
-  @ApiProperty({ type: () => TagPostModel, isArray: true })
-  tags: TagPostModel[];
+    @ApiProperty({ type: () => TagPostModel, isArray: true })
+    tags: TagPostModel[];
 
-  @ApiProperty({ type: () => UserModel })
-  author: Partial<UserModel>;
+    @ApiProperty({ type: () => UserModel })
+    author: Partial<UserModel>;
 
-  @ApiProperty()
-  createdAt?: Date;
+    @ApiProperty()
+    createdAt?: Date;
 
-  @ApiProperty()
-  updatedAt?: Date;
+    @ApiProperty()
+    updatedAt?: Date;
 
-  @ApiProperty()
-  type?: string = 'post';
+    @ApiProperty()
+    type?: string = 'post';
 }

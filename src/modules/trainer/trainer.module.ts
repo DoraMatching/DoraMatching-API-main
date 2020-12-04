@@ -7,14 +7,14 @@ import { UserRepository } from '@user/repositories';
 import { ClasseRepository } from '@classe/repositories';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UserRepository,
-      TrainerRepository,
-      ClasseRepository,
-    ]),
-  ],
-  providers: [TrainerService],
-  controllers: [TrainerController],
+    imports: [
+        TypeOrmModule.forFeature([
+            UserRepository,
+            TrainerRepository,
+            ClasseRepository,
+        ]),
+    ],
+    providers: [TrainerService],
+    controllers: [TrainerController],
 })
 export class TrainerModule {}

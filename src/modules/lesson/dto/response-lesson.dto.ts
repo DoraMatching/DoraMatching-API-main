@@ -6,28 +6,28 @@ import { IsNotEmpty } from 'class-validator';
 export type ILessonRO = ILessonModel;
 
 export class LessonRO implements ILessonRO {
-  @ApiProperty()
-  @IsNotEmpty()
-  id: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    id: string;
 
-  @ApiProperty({ type: () => ClasseModel })
-  classe: ClasseModel;
+    @ApiProperty({ type: () => ClasseModel })
+    classe: ClasseModel;
 
-  @ApiProperty()
-  duration: number;
+    @ApiProperty()
+    duration: number;
 
-  @ApiProperty()
-  name: string;
+    @ApiProperty()
+    name: string;
 
-  @ApiProperty()
-  startTime: Date;
+    @ApiProperty()
+    startTime: Date;
 
-  @ApiProperty({ default: 'lesson' })
-  type: string;
+    @ApiProperty({ default: 'lesson' })
+    type: string;
 
-  @ApiProperty()
-  createdAt: Date;
+    @ApiProperty()
+    createdAt: Date;
 
-  @ApiProperty()
-  updatedAt: Date;
+    @ApiProperty()
+    updatedAt: Date;
 }
