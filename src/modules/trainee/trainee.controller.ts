@@ -12,44 +12,47 @@ import { UserQuery } from '@user/user.query';
 @ApiTags('trainee')
 @Controller()
 export class TraineeController {
-  constructor(private readonly traineeService: TraineeService) {}
+    constructor(private readonly traineeService: TraineeService) {}
 
-  @Auth()
-  @ApiOperation({
-    summary: 'Get all trainees',
-    description: 'Return 1 page of trainees',
-  })
-  @ApiResponse({ type: TraineeRO, status: 200 })
-  @Get('trainees')
-  getAllTrainees(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
-    return this.traineeService.getAllTrainees(
-      { ...pagOpts, route: `${apiUrl}/trainees` },
-      jwtUser,
-    );
-  }
+    @Auth()
+    @ApiOperation({
+        summary: 'Get all trainees',
+        description: 'Return 1 page of trainees',
+    })
+    @ApiResponse({ type: TraineeRO, status: 200 })
+    @Get('trainees')
+    getAllTrainees(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
+        return this.traineeService.getAllTrainees(
+            { ...pagOpts, route: `${apiUrl}/trainees` },
+            jwtUser,
+        );
+    }
 
-  @Auth()
-  @ApiOperation({
-    summary: 'Get trainee by :traineeId',
-    description: 'Return a trainee with :traineeId',
-  })
-  @ApiResponse({ type: TraineeRO, status: 200 })
-  @Get('trainee/:id')
-  getTraineeById(
-    @Param() { id: traineeId }: FindOneParams,
-    @User() jwtUser: JwtUser,
-  ) {
-    return this.traineeService.getTraineeById(traineeId, jwtUser);
-  }
+    @Auth()
+    @ApiOperation({
+        summary: 'Get trainee by :traineeId',
+        description: 'Return a trainee with :traineeId',
+    })
+    @ApiResponse({ type: TraineeRO, status: 200 })
+    @Get('trainee/:id')
+    getTraineeById(
+        @Param() { id: traineeId }: FindOneParams,
+        @User() jwtUser: JwtUser,
+    ) {
+        return this.traineeService.getTraineeById(traineeId, jwtUser);
+    }
 
-  @Auth()
-  @ApiOperation({
-    summary: 'Get trainee by userId',
-    description: 'Return a trainee with :userId',
-  })
-  @ApiResponse({ type: TraineeRO, status: 200 })
-  @Get('trainee')
-  getTraineeByUserId(@Query() { userId }: UserQuery, @User() jwtUser: JwtUser) {
-    return this.traineeService.getTraineeByUserId(userId, jwtUser);
-  }
+    @Auth()
+    @ApiOperation({
+        summary: 'Get trainee by userId',
+        description: 'Return a trainee with :userId',
+    })
+    @ApiResponse({ type: TraineeRO, status: 200 })
+    @Get('trainee')
+    getTraineeByUserId(
+        @Query() { userId }: UserQuery,
+        @User() jwtUser: JwtUser,
+    ) {
+        return this.traineeService.getTraineeByUserId(userId, jwtUser);
+    }
 }

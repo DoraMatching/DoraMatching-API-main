@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export interface ITagPostModel {
-  name: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+    name: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class TagPostModel implements ITagPostModel {
-  @ApiProperty()
-  name: string;
+    @ApiProperty()
+    name: string;
 
-  @ApiProperty()
-  createdAt: Date;
+    @ApiProperty()
+    createdAt: Date;
 
-  @ApiProperty()
-  updatedAt: Date;
+    @ApiProperty()
+    updatedAt: Date;
 }

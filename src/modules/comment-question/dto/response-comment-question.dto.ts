@@ -5,18 +5,18 @@ import { UserModel } from '@user/dto';
 export type ICommentQuestionRO = ICommentQuestionModel;
 
 export class CommentQuestionRO implements ICommentQuestionRO {
-  @ApiProperty()
-  content: string;
+    @ApiProperty()
+    content: string;
 
-  @ApiProperty({ type: () => UserModel })
-  author: Partial<UserModel>;
+    @ApiProperty({ type: () => UserModel })
+    author: Partial<UserModel>;
 
-  @ApiProperty()
-  createdAt: Date;
+    @ApiProperty()
+    createdAt: Date;
 
-  @ApiProperty()
-  updatedAt: Date;
+    @ApiProperty()
+    updatedAt: Date;
 
-  @ApiProperty({ type: () => String, default: 'comment-question' })
-  type?: string = 'comment-question';
+    @ApiProperty({ type: () => String, default: 'comment-question' })
+    type?: string = 'comment-question';
 }

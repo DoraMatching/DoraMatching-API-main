@@ -9,16 +9,16 @@ import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UserRepository,
-      TrainerRepository,
-      TraineeRepository,
-      PostRepository,
-      QuestionRepository,
-    ]),
-  ],
-  controllers: [SearchController],
-  providers: [SearchService],
+    imports: [
+        TypeOrmModule.forFeature([
+            UserRepository,
+            TrainerRepository,
+            TraineeRepository,
+            PostRepository,
+            QuestionRepository,
+        ]),
+    ],
+    controllers: [SearchController],
+    providers: [SearchService],
 })
 export class SearchModule {}

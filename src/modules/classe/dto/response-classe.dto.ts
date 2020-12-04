@@ -5,23 +5,23 @@ import { IsNotEmpty } from 'class-validator';
 import { IClasseModel } from './classe.model';
 
 export interface IClasseRO extends IClasseModel {
-  id: string;
+    id: string;
 }
 
 export class ClasseRO implements IClasseRO {
-  @IsNotEmpty()
-  id: string;
+    @IsNotEmpty()
+    id: string;
 
-  name: string;
-  description: string;
-  featuredImage: string;
-  startTime: Date;
-  endTime?: Date;
-  duration: number;
-  topic: TopicModel;
-  trainer: TrainerModel;
-  members: TraineeRO[];
-  createdAt?: Date;
-  updatedAt?: Date;
-  type?: string;
+    name: string;
+    description: string;
+    featuredImage: string;
+    startTime: Date;
+    endTime?: Date;
+    duration: number;
+    topic: TopicModel;
+    trainer: TrainerModel;
+    members: TraineeRO[];
+    createdAt?: Date;
+    updatedAt?: Date;
+    type?: string;
 }
