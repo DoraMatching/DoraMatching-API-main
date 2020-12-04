@@ -1,8 +1,7 @@
 import { EntityResults } from '@/commons';
-import { IPagination, PaginateParams } from '@/shared';
+import { PaginateParams } from '@/shared';
 import { ClasseEntity } from '@classe/entities';
 import { EntityRepository, Repository } from 'typeorm';
-import { LessonEntity } from '@lesson/entities';
 
 @EntityRepository(ClasseEntity)
 export class ClasseRepository extends Repository<ClasseEntity> {
@@ -30,23 +29,66 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         'uTrainee.createdAt',
         'uTrainee.updatedAt',
 
-        'lesson'
+        'lesson',
     ];
 
-    async getAllClasses({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<ClasseEntity>> {
+    getOneClasseQueryBuilder() {
+        return this.createQueryBuilder('classe')
+            .leftJoinAndSelect('classe.trainer', 'trainer')
+            .leftJoinAndSelect('classe.members', 'trainee')
+            .leftJoinAndSelect('classe.topic', 'topic')
+            .leftJoinAndSelect('trainer.user', 'uTrainer')
+            .leftJoinAndSelect('trainee.user', 'uTrainee')
+            .leftJoinAndSelect('classe.lessons', 'lesson')
+            .select(this.SELECT_CLASSE_SCOPE);
+    }
+
+    getAllClassesQueryBuilder({ order, limit, page }: Partial<PaginateParams>) {
+        return this.getOneClasseQueryBuilder()
+            .orderBy('classe.createdAt', order)
+            .skip(limit * (page - 1))
+            .take(limit);
+    }
+
+    async getAllClasseByTopicId(
+        topicId: string,
+        pagOpts: Partial<PaginateParams>,
+    ): Promise<EntityResults<ClasseEntity>> {
         try {
-            const [entities, count] = await this.createQueryBuilder('classe')
-              .leftJoinAndSelect('classe.trainer', 'trainer')
-              .leftJoinAndSelect('classe.members', 'trainee')
-              .leftJoinAndSelect('classe.topic', 'topic')
-              .leftJoinAndSelect('trainer.user', 'uTrainer')
-              .leftJoinAndSelect('trainee.user', 'uTrainee')
-              .leftJoinAndSelect('classe.lessons', 'lesson')
-              .orderBy('classe.createdAt', order)
-              .skip(limit * (page - 1))
-              .take(limit)
-              .select(this.SELECT_CLASSE_SCOPE)
-              .getManyAndCount();
+            const [entities, count] = await this.getAllClassesQueryBuilder(
+                pagOpts,
+            )
+                .where('topic.id = :topicId', { topicId })
+                .getManyAndCount();
+            return { entities, count };
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getAllClasseByTrainerId(
+        trainerId: string,
+        pagOpts: Partial<PaginateParams>,
+    ): Promise<EntityResults<ClasseEntity>> {
+        try {
+            const [entities, count] = await this.getAllClassesQueryBuilder(
+                pagOpts,
+            )
+                .where('trainer.id = :trainerId', { trainerId })
+                .getManyAndCount();
+            return { entities, count };
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getAllClasses(
+        pagOpts: Partial<PaginateParams>,
+    ): Promise<EntityResults<ClasseEntity>> {
+        try {
+            const [entities, count] = await this.getAllClassesQueryBuilder(
+                pagOpts,
+            ).getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);
@@ -55,16 +97,9 @@ export class ClasseRepository extends Repository<ClasseEntity> {
 
     async getClasseById(id: string): Promise<ClasseEntity> {
         try {
-            return this.createQueryBuilder('classe')
-              .leftJoinAndSelect('classe.trainer', 'trainer')
-              .leftJoinAndSelect('classe.members', 'trainee')
-              .leftJoinAndSelect('classe.topic', 'topic')
-              .leftJoinAndSelect('trainer.user', 'uTrainer')
-              .leftJoinAndSelect('trainee.user', 'uTrainee')
-              .leftJoinAndSelect('classe.lessons', 'lesson')
-              .where('classe.id = :id', { id })
-              .select(this.SELECT_CLASSE_SCOPE)
-              .getOne();
+            return this.getOneClasseQueryBuilder()
+                .where('classe.id = :id', { id })
+                .getOne();
         } catch (e) {
             console.error(e);
         }

@@ -28,15 +28,15 @@ export class QuestionRepository extends Repository<QuestionEntity> {
     async getAllQuestions({ order, limit, page }: Partial<PaginateParams>) {
         try {
             const [entities, count] = await this.createQueryBuilder('question')
-              .leftJoinAndSelect('question.author', 'author')
-              .leftJoinAndSelect('question.comments', 'comments')
-              .leftJoinAndSelect('question.tags', 'tag')
-              .leftJoinAndSelect('comments.author', 'commentAuthor')
-              .select(this.SELECT_QUESTION_SCOPE)
-              .orderBy('question.createdAt', order)
-              .skip(limit * (page - 1))
-              .take(limit)
-              .getManyAndCount();
+                .leftJoinAndSelect('question.author', 'author')
+                .leftJoinAndSelect('question.comments', 'comments')
+                .leftJoinAndSelect('question.tags', 'tag')
+                .leftJoinAndSelect('comments.author', 'commentAuthor')
+                .select(this.SELECT_QUESTION_SCOPE)
+                .orderBy('question.createdAt', order)
+                .skip(limit * (page - 1))
+                .take(limit)
+                .getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);
@@ -46,14 +46,29 @@ export class QuestionRepository extends Repository<QuestionEntity> {
     async getQuestionById(id: string): Promise<QuestionEntity> {
         try {
             return await this.createQueryBuilder('question')
-              .leftJoinAndSelect('question.author', 'author')
-              .leftJoinAndSelect('question.comments', 'comments')
-              .leftJoinAndSelect('question.tags', 'tag')
-              .leftJoinAndSelect('comments.author', 'commentAuthor')
-              .where('question.id = :id', { id })
-              .select(this.SELECT_QUESTION_SCOPE)
-              .getOne();
+                .leftJoinAndSelect('question.author', 'author')
+                .leftJoinAndSelect('question.comments', 'comments')
+                .leftJoinAndSelect('question.tags', 'tag')
+                .leftJoinAndSelect('comments.author', 'commentAuthor')
+                .where('question.id = :id', { id })
+                .select(this.SELECT_QUESTION_SCOPE)
+                .getOne();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
+    search(key: string): Promise<QuestionEntity[]> {
+        try {
+            return this.createQueryBuilder('question')
+                .leftJoinAndSelect('question.author', 'author')
+                .leftJoinAndSelect('question.comments', 'comments')
+                .leftJoinAndSelect('question.tags', 'tag')
+                .leftJoinAndSelect('comments.author', 'commentAuthor')
+                .where('question.title ILIKE :key', { key: `%${key}%` })
+                .orWhere('question.content ILIKE :key', { key: `%${key}%` })
+                .select(this.SELECT_QUESTION_SCOPE)
+                .getMany();
         } catch (e) {
             console.error(e);
         }

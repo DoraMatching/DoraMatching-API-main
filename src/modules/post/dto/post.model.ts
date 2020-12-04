@@ -2,7 +2,13 @@ import { CommentPostModel, ICommentPostModel } from '@comment-post/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagPostModel, TagPostModel } from '@tag-post/dto';
 import { UserModel } from '@user/dto';
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+    IsArray,
+    IsBoolean,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+} from 'class-validator';
 
 export interface IPostModel {
     title: string;

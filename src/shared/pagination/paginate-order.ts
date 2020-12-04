@@ -9,9 +9,13 @@ function addOrderQuery(links: any, order: EnumOrder): any {
     return _links;
 }
 
-export function paginateOrder<T>({ items, links, meta }, order: EnumOrder): IPagination<T> {
+export function paginateOrder<T>(
+    { items, links, meta },
+    order: EnumOrder,
+): IPagination<T> {
     return {
-        items, meta,
+        items,
+        meta,
         links: addOrderQuery(links, order),
     };
 }

@@ -4,6 +4,7 @@ import { CommentPostRepository } from '@comment-post/repositories';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostRepository } from '@post/repositories';
+import { RecommenderModule } from '@recommender/recommender.module';
 import { UserRepository } from '@user/repositories';
 
 @Module({
@@ -13,9 +14,9 @@ import { UserRepository } from '@user/repositories';
             PostRepository,
             UserRepository,
         ]),
+        RecommenderModule,
     ],
     controllers: [CommentPostController],
     providers: [CommentPostService],
 })
-export class CommentPostModule {
-}
+export class CommentPostModule {}

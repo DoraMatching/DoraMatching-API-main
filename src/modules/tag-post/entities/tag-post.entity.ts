@@ -18,7 +18,11 @@ export class TagPostEntity extends BaseEntity implements ITagPostModel {
     @Column({ type: 'text', nullable: false })
     name: string;
 
-    @ManyToMany(() => PostEntity, post => post.tags, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToMany(
+        () => PostEntity,
+        post => post.tags,
+        { cascade: true, onDelete: 'CASCADE' },
+    )
     posts: PostEntity[];
 
     @CreateDateColumn()

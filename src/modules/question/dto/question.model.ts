@@ -1,4 +1,7 @@
-import { CommentQuestionModel, ICommentQuestionModel } from '@comment-question/dto';
+import {
+    CommentQuestionModel,
+    ICommentQuestionModel,
+} from '@comment-question/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagQuestionModel, TagQuestionModel } from '@tag-question/dto';
 import { IUserModel, UserModel } from '@user/dto';
@@ -9,7 +12,7 @@ export interface IQuestionModel {
     content: string;
     author: Partial<IUserModel>;
     comments: ICommentQuestionModel[];
-    tags: ITagQuestionModel[]
+    tags: ITagQuestionModel[];
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -30,7 +33,7 @@ export class QuestionModel implements IQuestionModel {
     @IsArray()
     comments: CommentQuestionModel[];
 
-    @ApiProperty({type: () => TagQuestionModel, isArray: true})
+    @ApiProperty({ type: () => TagQuestionModel, isArray: true })
     tags: TagQuestionModel[];
 
     @ApiProperty()

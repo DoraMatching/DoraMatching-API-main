@@ -5,6 +5,6 @@ export interface ITagPredictionRO {
 }
 
 export class TagPredictionRO implements ITagPredictionRO {
-    @ApiProperty({example: ['php', 'vue-js']})
+    @ApiProperty({ example: ['php', 'vue-js'] })
     tags: string[];
 }

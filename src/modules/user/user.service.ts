@@ -15,12 +15,13 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
     CreateUserDTO,
-    IGithubSchema, IGithubUserLangs,
+    IGithubSchema,
+    IGithubUserLangs,
     IUserRO,
     IViewer,
     JwtUser,
     LoginUserDTO,
-    UpdateUser,
+    UpdateUserDTO,
     UserModel,
     UserRO,
 } from '@user/dto';
@@ -40,41 +41,78 @@ export class UserService {
         private readonly traineeRepository: TraineeRepository,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) {
-    }
+    ) {}
 
-    async showAll({ limit, page, order, route }: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IUserRO>> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, null);
+    async showAll(
+        { limit, page, order, route }: PaginateParams,
+        jwtUser: JwtUser,
+    ): Promise<IPagination<IUserRO>> {
+        const permission = grantPermission(
+            this.rolesBuilder,
+            AppResources.USER,
+            'read',
+            jwtUser,
+            null,
+        );
 
         if (permission.granted) {
-            const { items, meta, links } = await paginate<UserEntity>(this.userRepository, {
-                limit,
-                page,
-                route,
-            }, { order: { createdAt: order }, cache: isEnableCache });
+            const { items, meta, links } = await paginate<UserEntity>(
+                this.userRepository,
+                {
+                    limit,
+                    page,
+                    route,
+                },
+                { order: { createdAt: order }, cache: isEnableCache },
+            );
 
-            const result = paginateOrder<UserRO>({
-                items: items.map(user => user.toResponseObject(false)),
-                links, meta,
-            }, order);
+            const result = paginateOrder<UserRO>(
+                {
+                    items: items.map(user => user.toResponseObject(false)),
+                    links,
+                    meta,
+                },
+                order,
+            );
 
             return paginateFilter<UserRO>(result, permission);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+        } else
+            throw new HttpException(
+                `You don't have permission for this!`,
+                HttpStatus.FORBIDDEN,
+            );
     }
 
-    async getUserById({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'read', jwtUser, id);
+    async getUserById(
+        { id }: Partial<UserModel>,
+        jwtUser: JwtUser,
+    ): Promise<UserRO> {
+        const permission = grantPermission(
+            this.rolesBuilder,
+            AppResources.USER,
+            'read',
+            jwtUser,
+            id,
+        );
         if (permission.granted) {
             // const user = await this.userRepository.findOne({ where: { id }, cache: isEnableCache });
             const user = await this.userRepository.getUserById(id);
             if (user) {
                 const result = user.toResponseObject(false);
                 return permission.filter(result);
-            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+            } else
+                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        } else
+            throw new HttpException(
+                `You don't have permission for this!`,
+                HttpStatus.FORBIDDEN,
+            );
     }
 
-    async findByUsernameOrEmail(username: string, email?: string): Promise<UserRO> {
+    async findByUsernameOrEmail(
+        username: string,
+        email?: string,
+    ): Promise<UserRO> {
         const user = await this.userRepository.findOne({
             where: [{ username }, { email }],
         });
@@ -83,22 +121,38 @@ export class UserService {
 
     async login(data: LoginUserDTO): Promise<UserRO> {
         const { username, password, email } = data;
-        const user = await this.userRepository.findOne({ where: [{ username }, { email }] });
+        const user = await this.userRepository.findOne({
+            where: [{ username }, { email }],
+        });
         if (!user || !(await user.comparePassword(password))) {
-            throw new HttpException('Invalid username/password', HttpStatus.FORBIDDEN);
+            throw new HttpException(
+                'Invalid username/password',
+                HttpStatus.FORBIDDEN,
+            );
         }
         return user.toResponseObject();
     }
 
     async register(data: CreateUserDTO, jwtUser: JwtUser): Promise<UserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'create', jwtUser, null);
+        const permission = grantPermission(
+            this.rolesBuilder,
+            AppResources.USER,
+            'create',
+            jwtUser,
+            null,
+        );
         if (permission.granted) {
             data = permission.filter(data);
 
             const { username, email } = data;
-            let user = await this.userRepository.findOne({ where: [{ username }, { email }] });
+            let user = await this.userRepository.findOne({
+                where: [{ username }, { email }],
+            });
             if (user) {
-                throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+                throw new HttpException(
+                    'User already exists',
+                    HttpStatus.BAD_REQUEST,
+                );
             }
             user = this.userRepository.create(data);
             user = await this.userRepository.save(user);
@@ -107,51 +161,71 @@ export class UserService {
             });
             await this.traineeRepository.save(trainee);
             return user.toResponseObject();
-
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
-
-
+        } else
+            throw new HttpException(
+                `You don't have permission for this!`,
+                HttpStatus.FORBIDDEN,
+            );
     }
 
-    async updateUser(id: string, updateUser: Partial<UpdateUser>, jwtUser: JwtUser): Promise<UserRO> {
-        const permission = grantPermission(this.rolesBuilder, AppResources.USER, 'update', jwtUser, id);
+    async updateUser(
+        id: string,
+        updateUser: UpdateUserDTO,
+        jwtUser: JwtUser,
+    ): Promise<UserRO> {
+        const permission = grantPermission(
+            this.rolesBuilder,
+            AppResources.USER,
+            'update',
+            jwtUser,
+            id,
+        );
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
-            if (updateUser.roles)
-                updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
+            // if (updateUser.roles)
+            //     updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
 
             const foundUser = await this.userRepository.findOne({ id });
 
             if (foundUser) {
-                Object.keys(updateUser).forEach(key => {
-                    if (key === 'password' && updateUser['password']) {
-                        foundUser.password = updateUser.password;
-                    } else
-                        foundUser[key] = updateUser[key];
-                });
+                // Object.keys(updateUser).forEach(key => {
+                //     if (key === 'password' && updateUser['password']) {
+                //         foundUser.password = updateUser.password;
+                //     } else
+                //         foundUser[key] = updateUser[key];
+                // });
 
                 try {
-                    await this.userRepository.save(foundUser);
+                    await this.userRepository.update(foundUser.id, updateUser);
                 } catch ({ detail }) {
-                    throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
+                    throw new HttpException(
+                        detail || 'OOPS!',
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                    );
                 }
-                return (await this.userRepository.findOne({ id })).toResponseObject(false);
-            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-
-        } else throw new HttpException(`You don't have permission for this!`, HttpStatus.FORBIDDEN);
+                return (
+                    await this.userRepository.findOne({ id })
+                ).toResponseObject(false);
+            } else
+                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        } else
+            throw new HttpException(
+                `You don't have permission for this!`,
+                HttpStatus.FORBIDDEN,
+            );
     }
 
     async getGithubProfile(accessToken: string): Promise<IViewer> {
         const query = gql`
-          query {
-              viewer {
-                  login
-                  email
-                  avatarUrl
-                  name
-              }
-          }
-      `;
+            query {
+                viewer {
+                    login
+                    email
+                    avatarUrl
+                    name
+                }
+            }
+        `;
 
         const { viewer } = await ghQuery<IGithubSchema>(accessToken, query);
         return viewer;
@@ -169,19 +243,26 @@ export class UserService {
         });
         if (!user) {
             const password = pwGenerator.generate({ length: 10, strict: true });
-            user = this.userRepository.create({ avatarUrl, email, username: login, name, password });
+            user = this.userRepository.create({
+                avatarUrl,
+                email,
+                username: login,
+                name,
+                password,
+            });
 
             user = await this.userRepository.save(user);
 
             const trainee = this.traineeRepository.create({
-                user
+                user,
             });
             await this.traineeRepository.save(trainee);
 
             await this.mailerService.sendMail({
                 to: email,
                 from: mailAddress,
-                subject: 'You have successfully registered an account on DoraMatching',
+                subject:
+                    'You have successfully registered an account on DoraMatching',
                 template: 'welcome',
                 context: {
                     name,
@@ -199,24 +280,32 @@ export class UserService {
 
     async githubLangs(accessToken: string) {
         const query = gql`
-          {
-              viewer {
-                  repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
-                      nodes {
-                          name
-                          languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
-                              edges {
-                                  size
-                                  node {
-                                      name
-                                  }
-                              }
-                          }
-                      }
-                  }
-                  name
-              }
-          }`;
+            {
+                viewer {
+                    repositories(
+                        ownerAffiliations: OWNER
+                        isFork: false
+                        first: 100
+                    ) {
+                        nodes {
+                            name
+                            languages(
+                                first: 100
+                                orderBy: { field: SIZE, direction: DESC }
+                            ) {
+                                edges {
+                                    size
+                                    node {
+                                        name
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    name
+                }
+            }
+        `;
 
         const result: IGithubUserLangs = { langs: {}, name: '' };
         const { viewer } = await ghQuery<any>(accessToken, query);

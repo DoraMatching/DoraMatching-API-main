@@ -8,8 +8,14 @@ import { TagPostService } from '@tag-post/tag-post.service';
 import { UserRepository } from '@user/repositories';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([TagPostRepository, PostRepository, UserRepository])],
+    imports: [
+        TypeOrmModule.forFeature([
+            TagPostRepository,
+            PostRepository,
+            UserRepository,
+        ]),
+    ],
     controllers: [TagPostController],
     providers: [TagPostService, PostService],
 })
-export class TagPostModule { }
+export class TagPostModule {}

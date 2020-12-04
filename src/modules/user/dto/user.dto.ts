@@ -20,14 +20,16 @@ export class GithubToken {
     accessToken: string;
 }
 
-export interface IViewer { // for Graphql
+export interface IViewer {
+    // for Graphql
     login: string;
     email: string;
     avatarUrl: string;
     name: string;
 }
 
-export interface IGithubSchema { // for Graphql
+export interface IGithubSchema {
+    // for Graphql
     viewer?: IViewer;
 }
 

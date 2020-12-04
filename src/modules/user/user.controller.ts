@@ -1,38 +1,76 @@
 import { apiUrl } from '@/config';
 import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDTO, GithubUserLogin, IUserRO, JwtUser, LoginUserDTO, UpdateUser, UserRO } from '@user/dto';
+import {
+    CreateUserDTO,
+    GithubUserLogin,
+    IUserRO,
+    JwtUser,
+    LoginUserDTO,
+    UpdateUserDTO,
+    UserRO,
+} from '@user/dto';
 import { User } from '@user/user.decorator';
 import { UserService } from '@user/user.service';
 
 @ApiTags('user')
 @Controller()
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(private readonly userService: UserService) {}
 
     @Auth()
-    @ApiOperation({ summary: 'Get all users', description: 'Return 1 page of users' })
+    @ApiOperation({
+        summary: 'Get all users',
+        description: 'Return 1 page of users',
+    })
     @ApiResponse({ type: [UserRO], status: 200 })
     @Get('users')
-    index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IUserRO>> {
-        return this.userService.showAll({ ...pagOpts, route: `${apiUrl}/users` }, jwtUser);
+    index(
+        @Query() pagOpts: PaginateParams,
+        @User() jwtUser: JwtUser,
+    ): Promise<IPagination<IUserRO>> {
+        return this.userService.showAll(
+            { ...pagOpts, route: `${apiUrl}/users` },
+            jwtUser,
+        );
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiOperation({
+        summary: 'Get user by :userId',
+        description: 'Return user with :id',
+    })
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
-    getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
+    getUser(
+        @Param() { id }: FindOneParams,
+        @User() jwtUser: JwtUser,
+    ): Promise<IUserRO> {
         return this.userService.getUserById({ id }, jwtUser);
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Get user', description: 'Return user with :id' })
+    @ApiOperation({
+        summary: 'Update user by :userId',
+        description: 'Return user with :id',
+    })
     @ApiResponse({ type: UserRO, status: 200 })
     @Patch('user/:id')
-    updateUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser, @Body() updateUser: UpdateUser): Promise<IUserRO> {
+    updateUser(
+        @Param() { id }: FindOneParams,
+        @User() jwtUser: JwtUser,
+        @Body() updateUser: UpdateUserDTO,
+    ): Promise<IUserRO> {
         return this.userService.updateUser(id, updateUser, jwtUser);
     }
 
@@ -44,10 +82,16 @@ export class UserController {
     }
 
     @Auth()
-    @ApiOperation({ summary: 'Create user', description: 'Return user created' })
+    @ApiOperation({
+        summary: 'Create user',
+        description: 'Return user created',
+    })
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
-    register(@Body() data: CreateUserDTO, @User() jwtUser: JwtUser): Promise<IUserRO> {
+    register(
+        @Body() data: CreateUserDTO,
+        @User() jwtUser: JwtUser,
+    ): Promise<IUserRO> {
         return this.userService.register(data, jwtUser);
     }
 
@@ -58,18 +102,22 @@ export class UserController {
         return this.userService.githubLogin(accessToken);
     }
 
-    @ApiOperation({ summary: `Utils`, description: 'Get repos of current user' })
+    @ApiOperation({
+        summary: `Utils`,
+        description: 'Get repos of current user',
+    })
     @Post('github/langs')
     githubLangs(@Body() { accessToken }: GithubUserLogin) {
         return this.userService.githubLangs(accessToken);
     }
 
     @Auth()
-    @ApiOperation({ summary: `Utils`, description: 'Get JWT payload user token' })
+    @ApiOperation({
+        summary: `Utils`,
+        description: 'Get JWT payload user token',
+    })
     @Get('viewer')
-    viewer(
-        @User() user: JwtUser,
-    ) {
+    viewer(@User() user: JwtUser) {
         return user;
     }
 }

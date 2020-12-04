@@ -43,8 +43,9 @@ export class TagQuestionRepository extends Repository<TagQuestionEntity> {
         }
     }
 
-
-    async findManyAndCreateIfNotExisted(tagNames: string[]): Promise<TagQuestionEntity[]> {
+    async findManyAndCreateIfNotExisted(
+        tagNames: string[],
+    ): Promise<TagQuestionEntity[]> {
         const tagPromises = tagNames.map(name => this.createIfNotExists(name));
         try {
             return await Promise.all(tagPromises);
@@ -53,16 +54,20 @@ export class TagQuestionRepository extends Repository<TagQuestionEntity> {
         }
     }
 
-    async getAllTags({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TagQuestionEntity>> {
+    async getAllTags({
+        order,
+        limit,
+        page,
+    }: Partial<PaginateParams>): Promise<EntityResults<TagQuestionEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('tag')
-              .leftJoinAndSelect('tag.questions', 'question')
-              .leftJoinAndSelect('question.author', 'author')
-              .select(this.SELECT_TAG_QUESTION_SCOPE)
-              .orderBy('tag.createdAt', order)
-              .skip(limit * (page - 1))
-              .take(limit)
-              .getManyAndCount();
+                .leftJoinAndSelect('tag.questions', 'question')
+                .leftJoinAndSelect('question.author', 'author')
+                .select(this.SELECT_TAG_QUESTION_SCOPE)
+                .orderBy('tag.createdAt', order)
+                .skip(limit * (page - 1))
+                .take(limit)
+                .getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);

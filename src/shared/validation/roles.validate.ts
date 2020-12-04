@@ -1,5 +1,8 @@
 import { AppRoles } from '@/app.roles';
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
+} from 'class-validator';
 import _ from 'lodash';
 
 export const rolesArray = Object.values(AppRoles);
@@ -11,6 +14,8 @@ export class RolesValidator implements ValidatorConstraintInterface {
     }
 
     defaultMessage() {
-        return `roles must be one of the following values: ${rolesArray.join(', ')}`;
+        return `roles must be one of the following values: ${rolesArray.join(
+            ', ',
+        )}`;
     }
 }

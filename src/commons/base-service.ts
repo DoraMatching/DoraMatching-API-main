@@ -15,7 +15,8 @@ export interface IBaseService<T> {
     delete(id: EntityId): Promise<DeleteResult>;
 }
 
-export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
+export class BaseService<T extends BaseEntity, R extends Repository<T>>
+    implements IBaseService<T> {
     protected readonly repository: R;
 
     constructor(repository: R) {
@@ -46,5 +47,4 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     delete(id: EntityId): Promise<DeleteResult> {
         return this.repository.delete(id);
     }
-
 }

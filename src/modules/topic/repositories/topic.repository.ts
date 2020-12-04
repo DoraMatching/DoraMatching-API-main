@@ -15,16 +15,20 @@ export class TopicRepository extends Repository<TopicEntity> {
         'user.type',
     ];
 
-    async getAllTopics({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TopicEntity>> {
+    async getAllTopics({
+        order,
+        limit,
+        page,
+    }: Partial<PaginateParams>): Promise<EntityResults<TopicEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('topic')
-              .leftJoinAndSelect('topic.author', 'trainer')
-              .leftJoinAndSelect('trainer.user', 'user')
-              .select(this.SELECT_TOPIC_SCOPE)
-              .orderBy('topic.createdAt', order)
-              .skip(limit * (page - 1))
-              .take(limit)
-              .getManyAndCount();
+                .leftJoinAndSelect('topic.author', 'trainer')
+                .leftJoinAndSelect('trainer.user', 'user')
+                .select(this.SELECT_TOPIC_SCOPE)
+                .orderBy('topic.createdAt', order)
+                .skip(limit * (page - 1))
+                .take(limit)
+                .getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);
@@ -34,11 +38,11 @@ export class TopicRepository extends Repository<TopicEntity> {
     async getTopicById(id: string): Promise<TopicEntity> {
         try {
             return await this.createQueryBuilder('topic')
-              .leftJoinAndSelect('topic.author', 'trainer')
-              .leftJoinAndSelect('trainer.user', 'user')
-              .select(this.SELECT_TOPIC_SCOPE)
-              .where('topic.id = :id', { id })
-              .getOne();
+                .leftJoinAndSelect('topic.author', 'trainer')
+                .leftJoinAndSelect('trainer.user', 'user')
+                .select(this.SELECT_TOPIC_SCOPE)
+                .where('topic.id = :id', { id })
+                .getOne();
         } catch (e) {
             console.error(e);
         }

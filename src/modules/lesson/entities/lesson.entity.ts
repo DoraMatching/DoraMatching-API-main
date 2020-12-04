@@ -1,3 +1,5 @@
+import { ClasseEntity } from '@classe/entities';
+import { ILessonModel } from '@lesson/dto';
 import {
     BaseEntity,
     Column,
@@ -7,15 +9,16 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { ILessonModel } from '@lesson/dto';
-import { ClasseEntity } from '@classe/entities';
 
 @Entity('lesson')
 export class LessonEntity extends BaseEntity implements ILessonModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => ClasseEntity, classe => classe.lessons)
+    @ManyToOne(
+        () => ClasseEntity,
+        classe => classe.lessons,
+    )
     classe: ClasseEntity;
 
     @Column({ type: 'timestamptz', nullable: false, default: new Date() })
@@ -27,7 +30,7 @@ export class LessonEntity extends BaseEntity implements ILessonModel {
     @Column({ type: 'text', nullable: false })
     name: string;
 
-    @Column({ type: 'text', nullable: false, default: 'lesson'})
+    @Column({ type: 'text', nullable: false, default: 'lesson' })
     type: string;
 
     @CreateDateColumn()

@@ -4,7 +4,7 @@ import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 
 export enum EnumOrder {
     ASC = 'ASC',
-    DESC = 'DESC'
+    DESC = 'DESC',
 }
 
 export class PaginateParams {
@@ -24,7 +24,11 @@ export class PaginateParams {
     readonly limit?: number = 20;
 
     @ApiProperty({ enum: EnumOrder, default: EnumOrder.DESC })
-    @IsEnum(EnumOrder, { message: `order must be one of the following values: ${Object.keys(EnumOrder).join(', ')}` })
+    @IsEnum(EnumOrder, {
+        message: `order must be one of the following values: ${Object.keys(
+            EnumOrder,
+        ).join(', ')}`,
+    })
     @IsOptional()
     readonly order?: EnumOrder = EnumOrder.DESC;
 

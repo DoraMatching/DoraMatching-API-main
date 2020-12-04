@@ -5,8 +5,8 @@ import { AuthGuard } from './auth.guard';
 
 export function Auth(...roles: Role[]) {
     return applyDecorators(
-      UseGuards(AuthGuard, ACGuard),
-      UseRoles(...roles),
-      ApiBearerAuth(),
+        UseGuards(AuthGuard, ACGuard),
+        UseRoles(...roles),
+        ApiBearerAuth(),
     );
 }

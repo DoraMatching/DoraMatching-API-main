@@ -9,7 +9,7 @@ export interface ILessonModel {
     updatedAt?: Date;
 }
 
-export class LessonModel implements ILessonModel{
+export class LessonModel implements ILessonModel {
     classe: IClasseModel;
     duration: number;
     name: string;

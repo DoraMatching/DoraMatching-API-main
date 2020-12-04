@@ -1,8 +1,9 @@
 import { ILessonModel } from '@lesson/dto/lesson.model';
-import { IsDateString, IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsDate, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export type ICreateLessonDTO = Omit<ILessonModel, 'classe'>
+export type ICreateLessonDTO = Omit<ILessonModel, 'classe'>;
 
 export class CreateLessonDTO implements ICreateLessonDTO {
     @ApiProperty()
@@ -17,6 +18,7 @@ export class CreateLessonDTO implements ICreateLessonDTO {
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsDateString()
+    @IsDate()
+    @Transform(value => new Date(value))
     startTime: Date;
 }

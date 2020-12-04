@@ -4,9 +4,10 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, ManyToOne,
+    Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('topic')
@@ -23,7 +24,10 @@ export class TopicEntity extends BaseEntity implements ITopicModel {
     @Column({ type: 'text', nullable: false })
     featuredImage: string;
 
-    @ManyToOne(() => TrainerEntity, trainer => trainer.topics)
+    @ManyToOne(
+        () => TrainerEntity,
+        trainer => trainer.topics,
+    )
     author: TrainerEntity;
 
     @CreateDateColumn()

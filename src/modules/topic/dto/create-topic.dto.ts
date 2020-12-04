@@ -2,7 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel } from '@topic/dto';
 import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
-export type ICreateTopicDTO = Pick<ITopicModel, 'name' | 'description' | 'featuredImage'>;
+export type ICreateTopicDTO = Pick<
+    ITopicModel,
+    'name' | 'description' | 'featuredImage'
+>;
 
 export class CreateTopicDTO implements ICreateTopicDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })

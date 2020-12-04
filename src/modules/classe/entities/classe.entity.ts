@@ -11,13 +11,14 @@ import {
     JoinColumn,
     JoinTable,
     ManyToMany,
-    ManyToOne, OneToMany,
-    PrimaryGeneratedColumn, UpdateDateColumn
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('classe')
 export class ClasseEntity extends BaseEntity implements IClasseModel {
-
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -39,17 +40,26 @@ export class ClasseEntity extends BaseEntity implements IClasseModel {
     @Column({ type: 'integer', nullable: true })
     duration: number;
 
-    @OneToMany(() => LessonEntity, lesson => lesson.classe)
+    @OneToMany(
+        () => LessonEntity,
+        lesson => lesson.classe,
+    )
     lessons: LessonEntity[];
 
     @ManyToOne(() => TopicEntity)
     @JoinColumn({ name: 'topic' })
     topic: TopicEntity;
 
-    @ManyToOne(() => TrainerEntity, trainer => trainer.classes)
+    @ManyToOne(
+        () => TrainerEntity,
+        trainer => trainer.classes,
+    )
     trainer: TrainerEntity;
 
-    @ManyToMany(() => TraineeEntity, trainee => trainee.classes)
+    @ManyToMany(
+        () => TraineeEntity,
+        trainee => trainee.classes,
+    )
     @JoinTable()
     members: TraineeEntity[];
 

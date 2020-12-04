@@ -15,10 +15,10 @@ export class CommentPostRepository extends Repository<CommentPostEntity> {
     async getCommentById(id: string): Promise<CommentPostEntity> {
         try {
             return await this.createQueryBuilder('comment')
-              .leftJoinAndSelect('comment.author', 'author')
-              .where('comment.id = :id', { id })
-              .select(this.SELECT_COMMENT_SCOPE)
-              .getOne();
+                .leftJoinAndSelect('comment.author', 'author')
+                .where('comment.id = :id', { id })
+                .select(this.SELECT_COMMENT_SCOPE)
+                .getOne();
         } catch (e) {
             console.error(e);
         }
