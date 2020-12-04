@@ -12,19 +12,23 @@ import { User } from '@user/user.decorator';
 @ApiTags('home')
 @Controller('home')
 export class HomeController {
-    constructor(
-      private readonly homeService: HomeService,
-    ) {
-    }
+    constructor(private readonly homeService: HomeService) {}
 
     @Auth()
     @ApiOperation({
         summary: 'Get all posts | questions | users',
-        description: 'Return 1 page of posts | questions | users. <p><b>Note: reponse_limit = request_limit * 3</b></p>',
+        description:
+            'Return 1 page of posts | questions | users. <p><b>Note: reponse_limit = request_limit * 3</b></p>',
     })
     @ApiResponse({ type: [PostRO], status: 200 })
     @Get()
-    index(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser): Promise<IPagination<IHomeRO>> {
-        return this.homeService.getAll({ ...pagOpts, route: `${apiUrl}/home` }, jwtUser);
+    index(
+        @Query() pagOpts: PaginateParams,
+        @User() jwtUser: JwtUser,
+    ): Promise<IPagination<IHomeRO>> {
+        return this.homeService.getAll(
+            { ...pagOpts, route: `${apiUrl}/home` },
+            jwtUser,
+        );
     }
 }

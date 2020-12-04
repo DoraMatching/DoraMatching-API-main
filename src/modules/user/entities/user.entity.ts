@@ -13,7 +13,7 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('user')
@@ -23,6 +23,9 @@ export class UserEntity implements IUserModel {
 
     @Column({ type: 'text', nullable: true, unique: true })
     email: string;
+
+    @Column({ type: 'text', nullable: true, unique: true })
+    phoneNumber: string;
 
     @Column({ type: 'text', nullable: true })
     avatarUrl: string;
@@ -39,10 +42,16 @@ export class UserEntity implements IUserModel {
     @Column({ type: 'simple-array', default: AppRoles.TRAINEE })
     roles: AppRoles[];
 
-    @OneToMany(() => PostEntity, post => post.author)
+    @OneToMany(
+        () => PostEntity,
+        post => post.author,
+    )
     posts: PostEntity[];
 
-    @OneToMany(() => QuestionEntity, question => question.author)
+    @OneToMany(
+        () => QuestionEntity,
+        question => question.author,
+    )
     questions: QuestionEntity[];
 
     @CreateDateColumn()
@@ -71,19 +80,34 @@ export class UserEntity implements IUserModel {
     }
 
     toResponseObject(showToken = true): UserRO {
-        const { id, name, createdAt, updatedAt, username, token, roles, email, avatarUrl, posts, questions, type } = this;
+        const {
+            id,
+            name,
+            createdAt,
+            updatedAt,
+            username,
+            token,
+            roles,
+            email,
+            phoneNumber,
+            avatarUrl,
+            posts,
+            questions,
+            type,
+        } = this;
         const responseObject: UserRO = {
             id,
             createdAt,
             updatedAt,
             username,
             email,
+            phoneNumber,
             name,
             roles,
             avatarUrl,
             posts,
             questions,
-            type
+            type,
         };
         if (showToken) {
             responseObject.token = token;
@@ -101,6 +125,7 @@ export class UserEntity implements IUserModel {
         return jwt.sign(
             { id, username, roles, email: email ? email : undefined },
             jwtSecretKey,
-            { expiresIn: jwtExpiresIn });
+            { expiresIn: jwtExpiresIn },
+        );
     }
 }

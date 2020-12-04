@@ -10,10 +10,15 @@ import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserRepository, ClasseRepository, TrainerRepository, TopicRepository, TraineeRepository]),
+        TypeOrmModule.forFeature([
+            UserRepository,
+            ClasseRepository,
+            TrainerRepository,
+            TopicRepository,
+            TraineeRepository,
+        ]),
     ],
     controllers: [ClasseController],
     providers: [ClasseService],
 })
-export class ClasseModule {
-}
+export class ClasseModule {}

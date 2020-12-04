@@ -9,12 +9,16 @@ export class TimeRangeQuery {
     @IsDate()
     @Type(() => Date)
     @Transform(value => new Date(value))
-    startTime?: Date = moment().startOf('day').toDate();
+    startTime?: Date = moment()
+        .startOf('day')
+        .toDate();
 
     @ApiProperty()
     @IsOptional()
     @IsDate()
     @Type(() => Date)
     @Transform(value => new Date(value))
-    endTime?: Date = moment().endOf('day').toDate();
+    endTime?: Date = moment()
+        .endOf('day')
+        .toDate();
 }

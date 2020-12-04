@@ -4,7 +4,7 @@ export interface ICreateTrainerDTO {
     trainerProfile: string;
 }
 
-export class CreateTrainerDTO implements ICreateTrainerDTO{
+export class CreateTrainerDTO implements ICreateTrainerDTO {
     @IsString()
     @IsOptional()
     trainerProfile: string;

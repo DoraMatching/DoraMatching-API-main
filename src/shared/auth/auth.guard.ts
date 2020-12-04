@@ -1,15 +1,19 @@
 import { AppRoles } from '@/app.roles';
 import { jwtSecretKey } from '@/config';
-import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+    CanActivate,
+    ExecutionContext,
+    HttpException,
+    HttpStatus,
+    Injectable,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { UserRepository } from '@user/repositories';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(
-        private readonly userRepository: UserRepository
-    ) { }
+    constructor(private readonly userRepository: UserRepository) {}
 
     async attachUser(authorization: string): Promise<any> {
         if (!authorization) {
@@ -22,13 +26,15 @@ export class AuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
 
-        if (request) { // for JWT authen
+        if (request) {
+            // for JWT authen
             const { authorization } = request.headers;
 
             request.user = await this.attachUser(authorization);
 
             return true;
-        } else { // for GraphQL authen
+        } else {
+            // for GraphQL authen
             const ctx: any = GqlExecutionContext.create(context).getContext();
             const { authorization } = ctx.headers;
 

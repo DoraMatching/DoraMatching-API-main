@@ -6,11 +6,8 @@ import { TraineeController } from './trainee.controller';
 import { TraineeService } from './trainee.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UserRepository, TraineeRepository]),
-    ],
+    imports: [TypeOrmModule.forFeature([UserRepository, TraineeRepository])],
     providers: [TraineeService],
     controllers: [TraineeController],
 })
-export class TraineeModule {
-}
+export class TraineeModule {}

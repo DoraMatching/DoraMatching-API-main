@@ -11,11 +11,11 @@ export const mailerConfig: MailerOptions = {
         secure: true,
         port: 465,
         auth: {
-            'user': mailAddress,
-            'pass': mailPassword,
+            user: mailAddress,
+            pass: mailPassword,
         },
         tls: {
-            'rejectUnauthorized': false,
+            rejectUnauthorized: false,
         },
     },
     defaults: {

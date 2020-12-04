@@ -3,7 +3,7 @@ import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export enum TagPredictAlgorithms {
     BOW = 'bow',
-    TFIDF = 'tfidf'
+    TFIDF = 'tfidf',
 }
 
 export interface IRequestTagPredictDTO {
@@ -18,8 +18,15 @@ export class RequestTagPredictDTO implements IRequestTagPredictDTO {
 }
 
 export class RequestTagQueryDTO {
-    @ApiProperty({ enum: TagPredictAlgorithms, default: TagPredictAlgorithms.TFIDF })
+    @ApiProperty({
+        enum: TagPredictAlgorithms,
+        default: TagPredictAlgorithms.TFIDF,
+    })
     @IsOptional()
-    @IsEnum(TagPredictAlgorithms, { message: `order must be one of the following values: ${Object.keys(TagPredictAlgorithms).join(', ')}` })
+    @IsEnum(TagPredictAlgorithms, {
+        message: `order must be one of the following values: ${Object.keys(
+            TagPredictAlgorithms,
+        ).join(', ')}`,
+    })
     algorithm: TagPredictAlgorithms;
 }

@@ -14,27 +14,27 @@ async function bootstrap() {
 
     app.use(helmet());
     app.useGlobalPipes(
-      new ValidationPipe({
-          whitelist: true,
-          transform: true,
-          // dismissDefaultMessages: true,
-          validationError: { target: false },
-      }),
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+            // dismissDefaultMessages: true,
+            validationError: { target: false },
+        }),
     );
 
     if (environment === 'development') {
         app.enableCors();
 
         const options = new DocumentBuilder()
-          .setTitle(`Senior project`)
-          .setDescription('Dora-matching API')
-          .setVersion('1.0')
-          .addBearerAuth()
-          .addServer('https://dora.doramatching.tk')
-          .addServer('http://localhost:4000')
-          .addServer('https://api.dev.doramatching.tk')
-          .addServer('http://192.168.21.207:4000')
-          .build();
+            .setTitle(`Senior project`)
+            .setDescription('Dora-matching API')
+            .setVersion('1.0')
+            .addBearerAuth()
+            .addServer('https://dora.doramatching.tk')
+            .addServer('http://localhost:4000')
+            .addServer('https://api.dev.doramatching.tk')
+            .addServer('http://192.168.21.207:4000')
+            .build();
 
         const document = SwaggerModule.createDocument(app, options);
 

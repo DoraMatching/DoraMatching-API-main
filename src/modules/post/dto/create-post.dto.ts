@@ -9,11 +9,14 @@ import {
     IsString,
     IsUrl,
     MinLength,
-    ValidateNested
+    ValidateNested,
 } from 'class-validator';
 import { IPostModel } from './post.model';
 
-export type ICreatePostDTO = Omit<IPostModel, 'author' | 'comments' | 'createdAt' | 'updatedAt'>;
+export type ICreatePostDTO = Omit<
+    IPostModel,
+    'author' | 'comments' | 'createdAt' | 'updatedAt'
+>;
 
 export class CreatePostDTO implements ICreatePostDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
@@ -40,7 +43,10 @@ export class CreatePostDTO implements ICreatePostDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })
     @IsNotEmpty()
     @IsString()
-    @MinLength(43, { message: 'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...' })
+    @MinLength(43, {
+        message:
+            'The text you wrote is shorter than "The quick brown fox jumps over the lazy dog"! Please write more...',
+    })
     content: string;
 
     @ApiProperty({ type: () => CreateTagPostDTO, isArray: true })

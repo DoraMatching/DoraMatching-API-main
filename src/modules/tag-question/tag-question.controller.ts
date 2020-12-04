@@ -11,14 +11,19 @@ import { User } from '@user/user.decorator';
 @ApiTags('tag-question')
 @Controller()
 export class TagQuestionController {
-    constructor(private readonly tagQuestionService: TagQuestionService) {
-    }
+    constructor(private readonly tagQuestionService: TagQuestionService) {}
 
     @Auth()
-    @ApiOperation({ summary: 'Get all tag-questions', description: 'Return 1 page of tag-question' })
+    @ApiOperation({
+        summary: 'Get all tag-questions',
+        description: 'Return 1 page of tag-question',
+    })
     @ApiResponse({ type: [TagQuestionRO], status: 200 })
     @Get('tag-question')
     getAllTags(@Query() pagOpts: PaginateParams, @User() jwtUser: JwtUser) {
-        return this.tagQuestionService.getAllTags({ ...pagOpts, route: `${apiUrl}/tag-question` }, jwtUser);
+        return this.tagQuestionService.getAllTags(
+            { ...pagOpts, route: `${apiUrl}/tag-question` },
+            jwtUser,
+        );
     }
 }

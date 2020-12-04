@@ -7,8 +7,10 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinTable, ManyToMany,
-    ManyToOne, OneToMany,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -24,15 +26,25 @@ export class QuestionEntity extends BaseEntity implements IQuestionModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, nullable: false })
+    @ManyToOne(
+        () => UserEntity,
+        author => author.posts,
+        { cascade: true, nullable: false },
+    )
     @JoinTable()
     author: UserEntity;
 
-    @OneToMany(() => CommentQuestionEntity, comment => comment.question)
+    @OneToMany(
+        () => CommentQuestionEntity,
+        comment => comment.question,
+    )
     @JoinTable()
     comments: CommentQuestionEntity[];
 
-    @ManyToMany(() => TagQuestionEntity, tag => tag.questions)
+    @ManyToMany(
+        () => TagQuestionEntity,
+        tag => tag.questions,
+    )
     @JoinTable()
     tags: TagQuestionEntity[];
 

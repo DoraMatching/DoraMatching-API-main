@@ -3,9 +3,28 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TopicRO } from '@topic/dto';
 import { TraineeRO } from '@trainee/dto';
 import { Type } from 'class-transformer';
-import { IsArray, IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
+import {
+    IsArray,
+    IsDateString,
+    IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    IsUrl,
+    ValidateNested,
+} from 'class-validator';
 
-export type ICreateClasseDTO = Pick<IClasseModel, 'name' | 'description' | 'featuredImage' | 'startTime' | 'endTime' | 'topic' | 'duration' | 'members'>;
+export type ICreateClasseDTO = Pick<
+    IClasseModel,
+    | 'name'
+    | 'description'
+    | 'featuredImage'
+    | 'startTime'
+    | 'endTime'
+    | 'topic'
+    | 'duration'
+    | 'members'
+>;
 
 export class CreateClasseDTO implements ICreateClasseDTO {
     @ApiProperty()

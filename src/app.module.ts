@@ -10,6 +10,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from '@post/post.module';
 import { QuestionModule } from '@question/question.module';
+import { RecommenderModule } from '@recommender/recommender.module';
+import { SearchModule } from '@search/search.module';
 import { TagPostModule } from '@tag-post/tag-post.module';
 import { TagPredictModule } from '@tag-predict/tag-predict.module';
 import { TagQuestionModule } from '@tag-question/tag-question.module';
@@ -22,7 +24,6 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { SearchModule } from './modules/search/search.module';
 
 @Module({
     imports: [
@@ -50,9 +51,9 @@ import { SearchModule } from './modules/search/search.module';
         LessonModule,
         TagPredictModule,
         SearchModule,
+        RecommenderModule,
     ],
     controllers: [AppController],
     providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

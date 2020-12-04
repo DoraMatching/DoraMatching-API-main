@@ -19,12 +19,11 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         'author.type',
     ];
 
-
     async getTagByName(tagName: string) {
         try {
             return await this.findOne({ where: { name: tagName } });
         } catch (e) {
-           console.error(e);
+            console.error(e);
         }
     }
 
@@ -34,7 +33,7 @@ export class TagPostRepository extends Repository<TagPostEntity> {
             tag.name = tagName;
             return await this.save(tag);
         } catch (e) {
-           console.error(e);
+            console.error(e);
         }
     }
 
@@ -48,7 +47,9 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         }
     }
 
-    async findManyAndCreateIfNotExisted(tagNames: string[]): Promise<TagPostEntity[]> {
+    async findManyAndCreateIfNotExisted(
+        tagNames: string[],
+    ): Promise<TagPostEntity[]> {
         const tagPromises = tagNames.map(name => this.createIfNotExists(name));
         try {
             return await Promise.all(tagPromises);
@@ -57,16 +58,20 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         }
     }
 
-    async getAllTags({ order, limit, page }: Partial<PaginateParams>): Promise<EntityResults<TagPostEntity>> {
+    async getAllTags({
+        order,
+        limit,
+        page,
+    }: Partial<PaginateParams>): Promise<EntityResults<TagPostEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('tag')
-              .leftJoinAndSelect('tag.posts', 'post')
-              .leftJoinAndSelect('post.author', 'author')
-              .select(this.SELECT_TAG_POST_SCOPE)
-              .orderBy('tag.createdAt', order)
-              .skip(limit * (page - 1))
-              .take(limit)
-              .getManyAndCount();
+                .leftJoinAndSelect('tag.posts', 'post')
+                .leftJoinAndSelect('post.author', 'author')
+                .select(this.SELECT_TAG_POST_SCOPE)
+                .orderBy('tag.createdAt', order)
+                .skip(limit * (page - 1))
+                .take(limit)
+                .getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);

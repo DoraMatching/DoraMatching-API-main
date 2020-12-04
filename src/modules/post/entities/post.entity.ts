@@ -4,13 +4,15 @@ import { TagPostEntity } from '@tag-post/entities';
 import { UserEntity } from '@user/entities';
 import {
     BaseEntity,
-    Column, CreateDateColumn,
+    Column,
+    CreateDateColumn,
     Entity,
     JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn, UpdateDateColumn,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('post')
@@ -33,15 +35,25 @@ export class PostEntity extends BaseEntity implements IPostModel {
     @Column({ type: 'text', nullable: false })
     content: string;
 
-    @ManyToMany(() => TagPostEntity, tag => tag.posts)
+    @ManyToMany(
+        () => TagPostEntity,
+        tag => tag.posts,
+    )
     @JoinTable()
     tags: TagPostEntity[];
 
-    @ManyToOne(() => UserEntity, author => author.posts, { cascade: true, onDelete: 'CASCADE', nullable: false })
+    @ManyToOne(
+        () => UserEntity,
+        author => author.posts,
+        { cascade: true, onDelete: 'CASCADE', nullable: false },
+    )
     @JoinTable()
     author: UserEntity;
 
-    @OneToMany(() => CommentPostEntity, comment => comment.post)
+    @OneToMany(
+        () => CommentPostEntity,
+        comment => comment.post,
+    )
     @JoinTable()
     comments: CommentPostEntity[];
 

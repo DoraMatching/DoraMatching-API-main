@@ -9,10 +9,13 @@ import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [
-      TypeOrmModule.forFeature([UserRepository, PostRepository, TagPostRepository]),
+        TypeOrmModule.forFeature([
+            UserRepository,
+            PostRepository,
+            TagPostRepository,
+        ]),
     ],
     controllers: [PostController],
     providers: [PostService, PostResolver],
 })
-export class PostModule {
-}
+export class PostModule {}

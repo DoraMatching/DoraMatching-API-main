@@ -10,5 +10,5 @@ export class CommentPostParam {
     @ApiProperty()
     @IsString()
     @IsUUID()
-    commentId: string
+    commentId: string;
 }

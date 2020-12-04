@@ -6,13 +6,18 @@ import { TopicResolver } from '@topic/topic.resolver';
 import { TopicService } from '@topic/topic.service';
 import { TrainerRepository } from '@trainer/repositories';
 import { UserRepository } from '@user/repositories';
+import { ClasseRepository } from '@classe/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserRepository, TopicRepository, TrainerRepository]),
+        TypeOrmModule.forFeature([
+            UserRepository,
+            TopicRepository,
+            TrainerRepository,
+            ClasseRepository,
+        ]),
     ],
     controllers: [TopicController],
     providers: [TopicService, TopicResolver],
 })
-export class TopicModule {
-}
+export class TopicModule {}

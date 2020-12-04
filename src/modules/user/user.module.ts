@@ -11,4 +11,4 @@ import { TraineeRepository } from '@trainee/repositories';
     controllers: [UserController],
     providers: [UserService, UserResolver],
 })
-export class UserModule { }
+export class UserModule {}

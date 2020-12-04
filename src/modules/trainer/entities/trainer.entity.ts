@@ -6,11 +6,12 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, JoinColumn,
+    Entity,
+    JoinColumn,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('trainer')
@@ -25,10 +26,16 @@ export class TrainerEntity extends BaseEntity implements ITrainerModel {
     @JoinColumn({ name: 'user' })
     user: UserEntity;
 
-    @OneToMany(() => TopicEntity, topic => topic.author)
+    @OneToMany(
+        () => TopicEntity,
+        topic => topic.author,
+    )
     topics: TopicEntity[];
 
-    @OneToMany(() => ClasseEntity, classe => classe.trainer)
+    @OneToMany(
+        () => ClasseEntity,
+        classe => classe.trainer,
+    )
     classes: ClasseEntity[];
 
     @CreateDateColumn()

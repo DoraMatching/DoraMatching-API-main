@@ -10,7 +10,7 @@ import {
     ManyToMany,
     OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('trainee')
@@ -18,7 +18,10 @@ export class TraineeEntity extends BaseEntity implements ITraineeModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToMany(() => ClasseEntity, classe => classe.members)
+    @ManyToMany(
+        () => ClasseEntity,
+        classe => classe.members,
+    )
     classes: ClasseEntity[];
 
     @Column({ type: 'text', nullable: true })
