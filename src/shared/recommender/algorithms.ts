@@ -73,6 +73,26 @@ export const updateSimilarityFor = async function(
     });
 };
 
+export const similaritySum = async function(
+    client: Redis,
+    simSet: string,
+    compSet: string,
+) {
+    let similarSum = 0.0;
+    const userIds = await client.smembers(compSet);
+    await pMap(
+        userIds,
+        async userId => {
+            const zScore = await client.zscore(simSet, userId);
+            const newScore = parseFloat(zScore) || 0.0;
+            similarSum += newScore;
+        },
+        { concurrency: 1 },
+    );
+
+    return similarSum;
+};
+
 export const predictFor = async function(
     client: Redis,
     className: string,
@@ -96,26 +116,6 @@ export const predictFor = async function(
     } else {
         return 0.0;
     }
-};
-
-export const similaritySum = async function(
-    client: Redis,
-    simSet: string,
-    compSet: string,
-) {
-    let similarSum = 0.0;
-    const userIds = await client.smembers(compSet);
-    await pMap(
-        userIds,
-        async userId => {
-            const zScore = await client.zscore(simSet, userId);
-            const newScore = parseFloat(zScore) || 0.0;
-            similarSum += newScore;
-        },
-        { concurrency: 1 },
-    );
-
-    return similarSum;
 };
 
 export const updateRecommendationsFor = async function(

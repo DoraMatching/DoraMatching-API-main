@@ -1,37 +1,15 @@
-import Config, { ConfigArgs } from './config';
-import { createClient } from './client';
 import { Redis } from 'ioredis';
+import { updateSimilarityFor, updateWilsonScore } from './algorithms';
+import { createClient } from './client';
+import Config, { ConfigArgs } from './config';
+import { disliked, liked, unliked, UpdateRecsOptions } from './input';
 import {
-    liked,
-    disliked,
-    unliked,
-    undisliked,
-    UpdateRecsOptions,
-} from './input';
-
-import {
-    updateSimilarityFor,
-    updateWilsonScore,
-    updateRecommendationsFor,
-    predictFor,
-    similaritySum,
-} from './algorithms';
-import {
-    recommendFor,
     bestRated,
-    worstRated,
     bestRatedWithScores,
-    mostLiked,
-    mostDisliked,
-    mostSimilarUsers,
     leastSimilarUsers,
-    likedBy,
-    likedCount,
-    dislikedBy,
-    dislikedCount,
-    allLikedFor,
-    allDislikedFor,
-    allWatchedFor,
+    mostDisliked,
+    mostLiked,
+    recommendFor,
     recommendForWithScores,
 } from './stat';
 
