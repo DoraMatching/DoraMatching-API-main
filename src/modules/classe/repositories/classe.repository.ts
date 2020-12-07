@@ -15,6 +15,8 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         'uTrainer.username',
         'uTrainer.avatarUrl',
         'uTrainer.name',
+        'uTrainer.phoneNumber',
+        'uTrainer.email',
         'uTrainer.roles',
         'uTrainer.type',
         'uTrainer.createdAt',
