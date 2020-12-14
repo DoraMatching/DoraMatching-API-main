@@ -70,6 +70,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
     async getAllClasses(
         pagOpts: PaginateParams,
         jwtUser: JwtUser,
+        key = '',
     ): Promise<IPagination<IClasseRO>> {
         const permission = grantPermission(
             this.rolesBuilder,
@@ -79,7 +80,10 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
             null,
         );
         if (permission.granted) {
-            const data = await this.classeRepository.getAllClasses(pagOpts);
+            const data = await this.classeRepository.getAllClasses(
+                pagOpts,
+                key,
+            );
             const result = customPaginate<ClasseRO>(data, pagOpts);
             return paginateFilter(result, permission);
         } else

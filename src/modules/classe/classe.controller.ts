@@ -18,10 +18,12 @@ export class ClasseController {
     getAllClasses(
         @Query() pagOpts: PaginateParams,
         @User() jwtUser: JwtUser,
+        @Query('key') key?: string,
     ): Promise<IPagination<IClasseRO>> {
         return this.classeService.getAllClasses(
             { ...pagOpts, route: `${apiUrl}/classes` },
             jwtUser,
+            key,
         );
     }
 

@@ -88,11 +88,17 @@ export class ClasseRepository extends Repository<ClasseEntity> {
 
     async getAllClasses(
         pagOpts: Partial<PaginateParams>,
+        key: string,
     ): Promise<EntityResults<ClasseEntity>> {
         try {
-            const [entities, count] = await this.getAllClassesQueryBuilder(
-                pagOpts,
-            ).getManyAndCount();
+            let queryBuilder = this.getAllClassesQueryBuilder(pagOpts);
+            if (key)
+                queryBuilder = queryBuilder
+                    .where('classe.name ILIKE :key', { key: `%${key}%` })
+                    .orWhere('classe.description ILIKE :key', {
+                        key: `%${key}%`,
+                    });
+            const [entities, count] = await queryBuilder.getManyAndCount();
             return { entities, count };
         } catch (e) {
             console.error(e);
@@ -103,6 +109,7 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         try {
             return this.getOneClasseQueryBuilder()
                 .where('classe.id = :id', { id })
+                .orWhere('classe.description = :id', { id })
                 .getOne();
         } catch (e) {
             console.error(e);
