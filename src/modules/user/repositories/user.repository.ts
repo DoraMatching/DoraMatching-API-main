@@ -10,6 +10,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.username',
         'user.name',
         'user.email',
+        'user.phoneNumber',
         'user.avatarUrl',
         'user.roles',
         'user.createdAt',
