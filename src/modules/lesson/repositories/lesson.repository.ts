@@ -57,8 +57,9 @@ export class LessonRepository extends Repository<LessonEntity> {
     async getLessonById(id: string): Promise<LessonEntity> {
         try {
             return await this.createQueryBuilder('lesson')
+                .leftJoinAndSelect('lesson.classe', 'classe')
                 .where('lesson.id = :id', { id })
-                .select(['lesson'])
+                .select(['lesson','classe'])
                 .getOne();
         } catch (e) {
             console.error(e);
@@ -80,7 +81,7 @@ export class LessonRepository extends Repository<LessonEntity> {
                         .format('YYYY-MM-DD HH:mm:ss'),
                 })
                 .orderBy('lesson.startTime', 'DESC')
-                .select(['lesson'])
+                .select(['lesson','classe'])
                 .getOne();
         } catch (e) {
             console.error(e);
@@ -123,7 +124,7 @@ export class LessonRepository extends Repository<LessonEntity> {
                     .format('YYYY-MM-DD HH:mm:ss+07'),
             })
             .orderBy('lesson.startTime', 'DESC')
-            .select('lesson');
+            .select(['lesson','classe']);
     }
 
     async getAllLessonByTrainerId(
