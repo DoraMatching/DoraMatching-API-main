@@ -14,6 +14,7 @@ export class TrainerRepository extends Repository<TrainerEntity> {
         'user.avatarUrl',
         'user.roles',
         'user.type',
+        'classe',
     ];
 
     async getAllTrainers({
@@ -24,6 +25,7 @@ export class TrainerRepository extends Repository<TrainerEntity> {
         try {
             const [entities, count] = await this.createQueryBuilder('trainer')
                 .leftJoinAndSelect('trainer.user', 'user')
+                .leftJoinAndSelect('trainer.classes', 'classe')
                 .orderBy('trainer.createdAt', order)
                 .skip(limit * (page - 1))
                 .take(limit)

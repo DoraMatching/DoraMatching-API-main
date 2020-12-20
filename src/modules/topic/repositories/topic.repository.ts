@@ -13,6 +13,7 @@ export class TopicRepository extends Repository<TopicEntity> {
         'user.name',
         'user.roles',
         'user.type',
+        'classe'
     ];
 
     async getAllTopics({
@@ -22,6 +23,7 @@ export class TopicRepository extends Repository<TopicEntity> {
     }: Partial<PaginateParams>): Promise<EntityResults<TopicEntity>> {
         try {
             const [entities, count] = await this.createQueryBuilder('topic')
+                .leftJoinAndSelect('topic.classes', 'classe')
                 .leftJoinAndSelect('topic.author', 'trainer')
                 .leftJoinAndSelect('trainer.user', 'user')
                 .select(this.SELECT_TOPIC_SCOPE)

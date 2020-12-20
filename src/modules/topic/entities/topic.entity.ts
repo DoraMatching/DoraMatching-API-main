@@ -1,11 +1,13 @@
 import { ITopicModel } from '@topic/dto';
 import { TrainerEntity } from '@trainer/entities';
+import { ClasseEntity } from '@classe/entities';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -29,6 +31,12 @@ export class TopicEntity extends BaseEntity implements ITopicModel {
         trainer => trainer.topics,
     )
     author: TrainerEntity;
+
+    @OneToMany(
+        () => ClasseEntity,
+        classe => classe.topic,
+    )
+    classes: ClasseEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
