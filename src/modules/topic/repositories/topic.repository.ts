@@ -40,6 +40,7 @@ export class TopicRepository extends Repository<TopicEntity> {
     async getTopicById(id: string): Promise<TopicEntity> {
         try {
             return await this.createQueryBuilder('topic')
+                .leftJoinAndSelect('topic.classes', 'classe')
                 .leftJoinAndSelect('topic.author', 'trainer')
                 .leftJoinAndSelect('trainer.user', 'user')
                 .select(this.SELECT_TOPIC_SCOPE)
