@@ -41,6 +41,7 @@ export class TrainerRepository extends Repository<TrainerEntity> {
         try {
             return await this.createQueryBuilder('trainer')
                 .leftJoinAndSelect('trainer.user', 'user')
+                .leftJoinAndSelect('trainer.classes', 'classe')
                 .where('trainer.id = :id', { id })
                 .select(this.SELECT_TRAINER_SCOPE)
                 .getOne();
@@ -53,6 +54,7 @@ export class TrainerRepository extends Repository<TrainerEntity> {
         try {
             return await this.createQueryBuilder('trainer')
                 .leftJoinAndSelect('trainer.user', 'user')
+                .leftJoinAndSelect('trainer.classes', 'classe')
                 .where('user.id = :id', { id })
                 .select(this.SELECT_TRAINER_SCOPE)
                 .getOne();
