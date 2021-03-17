@@ -165,7 +165,9 @@ export class TrainerService {
             this.userRepository.getUserById(userId),
             this.trainerRepository.getTrainerByUserId(userId),
         ]);
-        if (!user)
+
+        if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        if (!trainer)
             throw new HttpException(
                 `Trainer with userId: ${userId} not found!`,
                 HttpStatus.NOT_FOUND,

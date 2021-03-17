@@ -26,7 +26,9 @@ export class ZoomApiService {
             topic: req.topic,
             type: 1,
             settings: {
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 host_video: 'true',
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 participant_video: 'true',
             },
         };
