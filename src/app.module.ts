@@ -24,7 +24,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { ZoomApiModule } from './modules/zoom-api/zoom-api.module';
+import { ZoomApiModule } from '@zoom-api/zoom-api.module';
 
 @Module({
     imports: [
