@@ -1,12 +1,16 @@
+import { AppRoles } from '@/app.roles';
+import { RolesValidator } from '@/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IUserModel } from '@user/dto';
 import {
+    ArrayUnique,
     IsEmail,
     IsOptional,
     IsString,
     Matches,
     MaxLength,
     MinLength,
+    Validate,
 } from 'class-validator';
 
 export type IUpdateUser = Omit<
@@ -49,11 +53,11 @@ export class UpdateUserDTO implements IUpdateUser {
     @IsOptional()
     avatarUrl: string;
 
-    // @ApiProperty()
-    // @IsOptional()
-    // @ArrayUnique()
-    // @Validate(RolesValidator)
-    // roles: AppRoles[];
+    @ApiProperty()
+    @IsOptional()
+    @ArrayUnique()
+    @Validate(RolesValidator)
+    roles: AppRoles[];
 
     @ApiProperty()
     @IsOptional()

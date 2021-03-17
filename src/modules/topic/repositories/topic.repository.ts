@@ -13,7 +13,7 @@ export class TopicRepository extends Repository<TopicEntity> {
         'user.name',
         'user.roles',
         'user.type',
-        'classe'
+        'classe',
     ];
 
     async getAllTopics({

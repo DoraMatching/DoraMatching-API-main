@@ -1,5 +1,8 @@
+import { AppRoles } from '@/app.roles';
+import { RolesValidator } from '@/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import {
+    ArrayUnique,
     IsEmail,
     IsNotEmpty,
     IsOptional,
@@ -8,6 +11,7 @@ import {
     Matches,
     MaxLength,
     MinLength,
+    Validate,
 } from 'class-validator';
 import { IUserModel } from './user.model';
 
@@ -49,6 +53,12 @@ export class CreateUserDTO implements ICreateUserDTO {
     @IsOptional()
     @IsUrl()
     avatarUrl: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @ArrayUnique()
+    @Validate(RolesValidator)
+    roles: AppRoles[];
 
     @ApiProperty()
     @IsNotEmpty()

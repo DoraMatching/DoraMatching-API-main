@@ -1,5 +1,4 @@
 import 'cross-fetch/polyfill'; // fix Headers is not defined of ghQuery
-
 import { AppResources } from '@/app.roles';
 import { feUrl, isEnableCache, mailAddress } from '@/config';
 import {
@@ -9,10 +8,11 @@ import {
     paginateFilter,
     paginateOrder,
     PaginateParams,
-    // rolesFilter,
+    rolesFilter,
 } from '@/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { TraineeRepository } from '@trainee/repositories';
 import {
     CreateUserDTO,
     IGithubSchema,
@@ -27,11 +27,11 @@ import {
 } from '@user/dto';
 import { UserEntity } from '@user/entities';
 import { UserRepository } from '@user/repositories';
+import * as bcrypt from 'bcryptjs';
 import * as pwGenerator from 'generate-password';
 import { gql } from 'graphql-request';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { TraineeRepository } from '@trainee/repositories';
 
 @Injectable()
 export class UserService {
@@ -182,8 +182,8 @@ export class UserService {
         );
         if (permission.granted) {
             updateUser = permission.filter(updateUser);
-            // if (updateUser.roles)
-            //     updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
+            if (updateUser.roles)
+                updateUser.roles = rolesFilter(jwtUser.roles, updateUser.roles);
 
             const foundUser = await this.userRepository.findOne({ id });
 
@@ -194,6 +194,11 @@ export class UserService {
                 //     } else
                 //         foundUser[key] = updateUser[key];
                 // });
+                if (updateUser['password'])
+                    updateUser['password'] = await bcrypt.hash(
+                        updateUser.password,
+                        10,
+                    );
 
                 try {
                     await this.userRepository.update(foundUser.id, updateUser);
