@@ -31,5 +31,9 @@ export class CreateZoomMeetingDTO implements ICreateZoomMeetingDTO {
             'Too weak password. Require minimum 8 characters, at least 1 letter, 1 number and 1 special character',
     })
     password: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
     topic: string;
 }
