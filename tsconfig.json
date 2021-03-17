@@ -29,7 +29,8 @@
       "@lesson/*": ["src/modules/lesson/*"],
       "@tag-predict/*": ["src/modules/tag-predict/*"],
       "@search/*": ["src/modules/search/*"],
-      "@recommender/*": ["src/modules/recommender/*"]
+      "@recommender/*": ["src/modules/recommender/*"],
+      "@zoom-api/*": ["src/modules/zoom-api/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],
