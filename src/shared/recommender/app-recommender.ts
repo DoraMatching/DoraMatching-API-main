@@ -69,12 +69,7 @@ export default class AppRecommender {
     }
 
     recommendFor(userId: string, numberOfRecs: number) {
-        return recommendFor(
-            this.client,
-            this.config.className,
-            userId,
-            numberOfRecs,
-        );
+        return recommendFor(this.client, this.config.className, userId, numberOfRecs);
     }
 
     recommendForWithScores(userId: string, numberOfRecs: number) {
@@ -95,11 +90,7 @@ export default class AppRecommender {
     // }
 
     bestRatedWithScores(numOfRatings: number) {
-        return bestRatedWithScores(
-            this.client,
-            this.config.className,
-            numOfRatings,
-        );
+        return bestRatedWithScores(this.client, this.config.className, numOfRatings);
     }
 
     mostLiked() {

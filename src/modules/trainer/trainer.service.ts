@@ -71,9 +71,7 @@ export class TrainerService {
         );
         if (permission.granted) {
             try {
-                const data = await this.trainerRepository.getAllTrainers(
-                    pagOpts,
-                );
+                const data = await this.trainerRepository.getAllTrainers(pagOpts);
                 const result = customPaginate<TrainerRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
@@ -89,14 +87,10 @@ export class TrainerService {
             );
     }
 
-    async registerTrainer(
-        data: CreateTrainerDTO,
-        jwtUser: JwtUser,
-    ): Promise<TrainerRO> {
+    async registerTrainer(data: CreateTrainerDTO, jwtUser: JwtUser): Promise<TrainerRO> {
         const userId = jwtUser.id;
         const foundUser = await this.userRepository.findOne(userId);
-        if (!foundUser)
-            throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        if (!foundUser) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.TRAINER,
@@ -118,9 +112,7 @@ export class TrainerService {
                     this.userRepository.update(userId, updateUser),
                     this.trainerRepository.save(trainer),
                 ]);
-                return await this.trainerRepository.getTrainerById(
-                    newTrainer.id,
-                );
+                return await this.trainerRepository.getTrainerById(newTrainer.id);
             } catch ({ detail, ...e }) {
                 throw new HttpException(
                     detail || `OOPS! Can't register trainer`,
@@ -157,10 +149,7 @@ export class TrainerService {
             );
     }
 
-    async getTrainerByUserId(
-        userId: string,
-        jwtUser: JwtUser,
-    ): Promise<TrainerRO> {
+    async getTrainerByUserId(userId: string, jwtUser: JwtUser): Promise<TrainerRO> {
         const [user, trainer] = await Promise.all([
             this.userRepository.getUserById(userId),
             this.trainerRepository.getTrainerByUserId(userId),

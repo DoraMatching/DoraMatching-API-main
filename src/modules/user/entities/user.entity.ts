@@ -125,7 +125,9 @@ export class UserEntity implements IUserModel {
         return jwt.sign(
             { id, username, roles, email: email ? email : undefined },
             jwtSecretKey,
-            { expiresIn: jwtExpiresIn },
+            {
+                expiresIn: jwtExpiresIn,
+            },
         );
     }
 }

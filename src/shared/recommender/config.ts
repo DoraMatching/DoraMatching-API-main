@@ -29,8 +29,7 @@ export default class Config {
         this.nearestNeighbors = nearestNeighbors || 5;
         this.className = className || 'item';
         this.numOfRecsStore = numOfRecsStore || 30;
-        this.factorLeastSimilarLeastLiked =
-            factorLeastSimilarLeastLiked || false;
+        this.factorLeastSimilarLeastLiked = factorLeastSimilarLeastLiked || false;
         this.redisUrl = redisUrl || process.env.REDIS_URL || '127.0.0.1';
         this.redisPort =
             redisPort ||

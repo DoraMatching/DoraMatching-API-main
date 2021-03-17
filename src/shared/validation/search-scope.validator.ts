@@ -1,8 +1,5 @@
 import { SearchScopes } from '@search/search.query';
-import {
-    ValidatorConstraint,
-    ValidatorConstraintInterface,
-} from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import _ from 'lodash';
 
 export const scopeArray = Object.values(SearchScopes);

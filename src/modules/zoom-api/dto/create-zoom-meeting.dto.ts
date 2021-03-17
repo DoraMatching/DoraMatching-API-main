@@ -10,10 +10,7 @@ import {
 } from 'class-validator';
 import { IZoomApiRO } from './response-zoom-api.dto';
 
-export type ICreateZoomMeetingDTO = Pick<
-    IZoomApiRO,
-    'hostEmail' | 'password' | 'topic'
->;
+export type ICreateZoomMeetingDTO = Pick<IZoomApiRO, 'hostEmail' | 'password' | 'topic'>;
 
 export class CreateZoomMeetingDTO implements ICreateZoomMeetingDTO {
     @ApiProperty()

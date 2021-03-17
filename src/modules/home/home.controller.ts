@@ -26,9 +26,6 @@ export class HomeController {
         @Query() pagOpts: PaginateParams,
         @User() jwtUser: JwtUser,
     ): Promise<IPagination<IHomeRO>> {
-        return this.homeService.getAll(
-            { ...pagOpts, route: `${apiUrl}/home` },
-            jwtUser,
-        );
+        return this.homeService.getAll({ ...pagOpts, route: `${apiUrl}/home` }, jwtUser);
     }
 }

@@ -22,14 +22,11 @@ export function grantPermission(
 ): Permission {
     let behavior;
 
-    if (id && creatorId)
-        behavior = `${action}${id === creatorId ? 'Own' : 'Any'}`;
+    if (id && creatorId) behavior = `${action}${id === creatorId ? 'Own' : 'Any'}`;
     else behavior = `${action}Any`;
 
     // let permisson: Permission = rolesBuilder.can(roles).readOwn(resource);
 
-    const permission: Permission = rolesBuilder
-        .can(roles)
-        [behavior + ''](resource);
+    const permission: Permission = rolesBuilder.can(roles)[behavior + ''](resource);
     return permission;
 }

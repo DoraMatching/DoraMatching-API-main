@@ -15,10 +15,7 @@ import { JwtUser } from '@user/dto';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
-export class TagPostService extends BaseService<
-    TagPostEntity,
-    TagPostRepository
-> {
+export class TagPostService extends BaseService<TagPostEntity, TagPostRepository> {
     constructor(
         private readonly tagPostRepository: TagPostRepository,
         @InjectRolesBuilder()

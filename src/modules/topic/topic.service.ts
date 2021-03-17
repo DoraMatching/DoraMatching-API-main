@@ -121,10 +121,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
         }
     }
 
-    async createTopic(
-        data: CreateTopicDTO,
-        jwtUser: JwtUser,
-    ): Promise<ITopicRO> {
+    async createTopic(data: CreateTopicDTO, jwtUser: JwtUser): Promise<ITopicRO> {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.TOPIC,
@@ -133,11 +130,8 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
             null,
         );
         if (permission.granted) {
-            const trainer = await this.trainerRepository.getTrainerByUserId(
-                jwtUser.id,
-            );
-            if (!trainer)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             data = permission.filter(data);
             const newTopic = this.topicRepository.create({
                 ...data,
@@ -199,10 +193,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
             );
     }
 
-    async deleteTopicById(
-        id: string,
-        jwtUser: JwtUser,
-    ): Promise<IDeleteResultDTO> {
+    async deleteTopicById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundTopic = await this.getTopicById(id, jwtUser);
         const permission = grantPermission(
             this.rolesBuilder,

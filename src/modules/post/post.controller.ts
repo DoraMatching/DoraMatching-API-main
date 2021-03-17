@@ -83,10 +83,7 @@ export class PostController {
     })
     @ApiResponse({ type: PostRO, status: 201 })
     @Post('post')
-    createPost(
-        @Body() data: CreatePostDTO,
-        @User() jwtUser: JwtUser,
-    ): Promise<IPostRO> {
+    createPost(@Body() data: CreatePostDTO, @User() jwtUser: JwtUser): Promise<IPostRO> {
         return this.postService.createPost(data, jwtUser);
     }
 

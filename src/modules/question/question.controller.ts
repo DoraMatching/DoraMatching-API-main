@@ -1,21 +1,7 @@
 import { apiUrl } from '@/config';
-import {
-    FindOneParams,
-    IDeleteResultDTO,
-    IPagination,
-    PaginateParams,
-} from '@/shared';
+import { FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
     CreateQuestionDTO,

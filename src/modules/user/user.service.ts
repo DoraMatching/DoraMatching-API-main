@@ -83,10 +83,7 @@ export class UserService {
             );
     }
 
-    async getUserById(
-        { id }: Partial<UserModel>,
-        jwtUser: JwtUser,
-    ): Promise<UserRO> {
+    async getUserById({ id }: Partial<UserModel>, jwtUser: JwtUser): Promise<UserRO> {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.USER,
@@ -100,8 +97,7 @@ export class UserService {
             if (user) {
                 const result = user.toResponseObject(false);
                 return permission.filter(result);
-            } else
-                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         } else
             throw new HttpException(
                 `You don't have permission for this!`,
@@ -109,10 +105,7 @@ export class UserService {
             );
     }
 
-    async findByUsernameOrEmail(
-        username: string,
-        email?: string,
-    ): Promise<UserRO> {
+    async findByUsernameOrEmail(username: string, email?: string): Promise<UserRO> {
         const user = await this.userRepository.findOne({
             where: [{ username }, { email }],
         });
@@ -125,10 +118,7 @@ export class UserService {
             where: [{ username }, { email }],
         });
         if (!user || !(await user.comparePassword(password))) {
-            throw new HttpException(
-                'Invalid username/password',
-                HttpStatus.FORBIDDEN,
-            );
+            throw new HttpException('Invalid username/password', HttpStatus.FORBIDDEN);
         }
         return user.toResponseObject();
     }
@@ -149,10 +139,7 @@ export class UserService {
                 where: [{ username }, { email }],
             });
             if (user) {
-                throw new HttpException(
-                    'User already exists',
-                    HttpStatus.BAD_REQUEST,
-                );
+                throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
             }
             user = this.userRepository.create(data);
             user = await this.userRepository.save(user);
@@ -195,10 +182,7 @@ export class UserService {
                 //         foundUser[key] = updateUser[key];
                 // });
                 if (updateUser['password'])
-                    updateUser['password'] = await bcrypt.hash(
-                        updateUser.password,
-                        10,
-                    );
+                    updateUser['password'] = await bcrypt.hash(updateUser.password, 10);
 
                 try {
                     await this.userRepository.update(foundUser.id, updateUser);
@@ -208,11 +192,10 @@ export class UserService {
                         HttpStatus.INTERNAL_SERVER_ERROR,
                     );
                 }
-                return (
-                    await this.userRepository.findOne({ id })
-                ).toResponseObject(false);
-            } else
-                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+                return (await this.userRepository.findOne({ id })).toResponseObject(
+                    false,
+                );
+            } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         } else
             throw new HttpException(
                 `You don't have permission for this!`,
@@ -266,8 +249,7 @@ export class UserService {
             await this.mailerService.sendMail({
                 to: email,
                 from: mailAddress,
-                subject:
-                    'You have successfully registered an account on DoraMatching',
+                subject: 'You have successfully registered an account on DoraMatching',
                 template: 'welcome',
                 context: {
                     name,
@@ -287,11 +269,7 @@ export class UserService {
         const query = gql`
             {
                 viewer {
-                    repositories(
-                        ownerAffiliations: OWNER
-                        isFork: false
-                        first: 100
-                    ) {
+                    repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
                         nodes {
                             name
                             languages(

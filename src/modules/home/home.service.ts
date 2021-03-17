@@ -1,10 +1,5 @@
 import { AppResources } from '@/app.roles';
-import {
-    customPaginate,
-    grantPermission,
-    IPagination,
-    PaginateParams,
-} from '@/shared';
+import { customPaginate, grantPermission, IPagination, PaginateParams } from '@/shared';
 import { IHomeRO, UserListRO } from '@home-modules/dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '@post/repositories';
@@ -67,10 +62,9 @@ export class HomeService {
 
         if (postPermission.granted) {
             try {
-                const {
-                    entities,
-                    count,
-                } = await this.postRepository.getAllPosts(pagOpts);
+                const { entities, count } = await this.postRepository.getAllPosts(
+                    pagOpts,
+                );
                 if (entities.length > 0) {
                     const posts = postPermission.filter(entities);
                     nestedItemsCount += posts.length;
@@ -87,10 +81,9 @@ export class HomeService {
 
         if (questionPermission.granted) {
             try {
-                const {
-                    entities,
-                    count,
-                } = await this.questionRepository.getAllQuestions(pagOpts);
+                const { entities, count } = await this.questionRepository.getAllQuestions(
+                    pagOpts,
+                );
                 if (entities.length > 0) {
                     const questions = questionPermission.filter(entities);
                     nestedItemsCount += questions.length;
@@ -107,10 +100,9 @@ export class HomeService {
 
         if (userPermission.granted) {
             try {
-                const {
-                    entities,
-                    count,
-                } = await this.userRepository.getAllUsers(pagOpts);
+                const { entities, count } = await this.userRepository.getAllUsers(
+                    pagOpts,
+                );
                 if (entities.length > 0) {
                     const users = userPermission.filter(entities);
                     nestedItemsCount += users.length;

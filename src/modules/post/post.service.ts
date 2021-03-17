@@ -29,10 +29,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         super(postRepository);
     }
 
-    async deletePostById(
-        postId: string,
-        jwtUser: JwtUser,
-    ): Promise<IDeleteResultDTO> {
+    async deletePostById(postId: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundPost = await this.getPostById(postId, jwtUser);
         if (!foundPost)
             throw new HttpException(
@@ -79,8 +76,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                     tags.map(tag => tag.name),
                 ),
             ]);
-            if (!user)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             data = permission.filter(data);
             const newPost = this.postRepository.create({
                 ...data,

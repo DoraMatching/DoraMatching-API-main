@@ -141,10 +141,7 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
-    async getAllLessonsByTraineeId(
-        traineeId: string,
-        timeRange: TimeRangeQuery,
-    ) {
+    async getAllLessonsByTraineeId(traineeId: string, timeRange: TimeRangeQuery) {
         try {
             return await this.getAllLesson(timeRange)
                 .leftJoinAndSelect('classe.members', 'trainee')

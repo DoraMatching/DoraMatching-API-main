@@ -18,10 +18,7 @@ export class ZoomApiService {
         return jwt.sign(payload, zoomApiSecret);
     }
 
-    async createMeeting(
-        req: CreateZoomMeetingDTO,
-        jwtUser: JwtUser,
-    ): Promise<ZoomApiRO> {
+    async createMeeting(req: CreateZoomMeetingDTO, jwtUser: JwtUser): Promise<ZoomApiRO> {
         const payload = {
             topic: req.topic,
             type: 1,
@@ -39,8 +36,7 @@ export class ZoomApiService {
 
         try {
             const { data } = await Axios.post<ZoomApiRO>(
-                `https://api.zoom.us/v2/users/${req.hostEmail ||
-                    jwtUser.email}/meetings`,
+                `https://api.zoom.us/v2/users/${req.hostEmail || jwtUser.email}/meetings`,
                 payload,
                 {
                     headers,

@@ -33,10 +33,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
     }
 
     classeValidate(classe: Partial<ClasseModel>): void {
-        const [startTime, endTime] = [
-            moment(classe.startTime),
-            moment(classe.endTime),
-        ];
+        const [startTime, endTime] = [moment(classe.startTime), moment(classe.endTime)];
         if (endTime.isBefore(startTime))
             throw new HttpException(
                 `OOPS! Invalid startTime or endTime`,
@@ -80,10 +77,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
             null,
         );
         if (permission.granted) {
-            const data = await this.classeRepository.getAllClasses(
-                pagOpts,
-                key,
-            );
+            const data = await this.classeRepository.getAllClasses(pagOpts, key);
             const result = customPaginate<ClasseRO>(data, pagOpts);
             return paginateFilter(result, permission);
         } else
@@ -93,10 +87,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
             );
     }
 
-    async createClasse(
-        data: CreateClasseDTO,
-        jwtUser: JwtUser,
-    ): Promise<IClasseRO> {
+    async createClasse(data: CreateClasseDTO, jwtUser: JwtUser): Promise<IClasseRO> {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.CLASSE,
@@ -110,8 +101,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
                 this.topicRepository.getTopicById(data.topic.id),
             ]);
 
-            if (!trainer)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             if (!topic)
                 throw new HttpException(
                     `OOPS! Topic with id: ${data.topic.id} not found!`,
@@ -161,8 +151,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
                 this.traineeRepository.getTraineeByUserId(jwtUser.id),
                 this.classeRepository.getClasseById(id),
             ]);
-            if (!trainee)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!trainee) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             if (!classe)
                 throw new HttpException(
                     `OOPS! Classe with id: ${id} not found!`,
@@ -175,9 +164,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
                 );
             let members = classe.members;
             if (opposite) {
-                members = members.filter(
-                    _trainee => _trainee.id !== trainee.id,
-                );
+                members = members.filter(_trainee => _trainee.id !== trainee.id);
             } else members.push(trainee);
             members = _.uniqBy(members, 'id');
             classe.members = members;

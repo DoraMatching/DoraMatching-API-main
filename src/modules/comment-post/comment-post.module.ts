@@ -9,11 +9,7 @@ import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([
-            CommentPostRepository,
-            PostRepository,
-            UserRepository,
-        ]),
+        TypeOrmModule.forFeature([CommentPostRepository, PostRepository, UserRepository]),
         RecommenderModule,
     ],
     controllers: [CommentPostController],

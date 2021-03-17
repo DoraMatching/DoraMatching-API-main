@@ -1,29 +1,10 @@
-import {
-    FindOneParams,
-    IDeleteResultDTO,
-    IPagination,
-    PaginateParams,
-} from '@/shared';
+import { FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import { IClasseRO } from '@classe/dto';
-import {
-    CreateLessonDTO,
-    ILessonRO,
-    LessonRO,
-    UpdateLessonDTO,
-} from '@lesson/dto';
+import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonService } from '@lesson/lesson.service';
 import { TimeRangeQuery } from '@lesson/time-range.params';
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
@@ -88,11 +69,7 @@ export class LessonController {
         @Query() timeRange: TimeRangeQuery,
         @User() jwtUser: JwtUser,
     ): Promise<ILessonRO[]> {
-        return this.lessonService.getTrainerLessons(
-            trainerId,
-            timeRange,
-            jwtUser,
-        );
+        return this.lessonService.getTrainerLessons(trainerId, timeRange, jwtUser);
     }
 
     @Auth()
@@ -102,10 +79,6 @@ export class LessonController {
         @Query() timeRange: TimeRangeQuery,
         @User() jwtUser: JwtUser,
     ): Promise<LessonRO[]> {
-        return this.lessonService.getTraineeLessons(
-            traineeId,
-            timeRange,
-            jwtUser,
-        );
+        return this.lessonService.getTraineeLessons(traineeId, timeRange, jwtUser);
     }
 }

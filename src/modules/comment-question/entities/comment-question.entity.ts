@@ -12,8 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity('comment-question')
-export class CommentQuestionEntity extends BaseEntity
-    implements ICommentQuestionModel {
+export class CommentQuestionEntity extends BaseEntity implements ICommentQuestionModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

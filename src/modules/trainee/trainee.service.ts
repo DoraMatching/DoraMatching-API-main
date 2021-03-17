@@ -15,10 +15,7 @@ import { JwtUser } from '@user/dto';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
-export class TraineeService extends BaseService<
-    TraineeEntity,
-    TraineeRepository
-> {
+export class TraineeService extends BaseService<TraineeEntity, TraineeRepository> {
     private readonly logger: Logger = new Logger(TraineeService.name);
 
     constructor(
@@ -88,9 +85,7 @@ export class TraineeService extends BaseService<
         );
         if (permission.granted) {
             try {
-                const data = await this.traineeRepository.getAllTrainees(
-                    pagOpts,
-                );
+                const data = await this.traineeRepository.getAllTrainees(pagOpts);
                 const result = customPaginate<TraineeRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {

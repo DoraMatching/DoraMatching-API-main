@@ -16,9 +16,7 @@ import { User } from '@user/user.decorator';
 @ApiTags('question-comment')
 @Controller()
 export class CommentQuestionController {
-    constructor(
-        private readonly commentQuestionService: CommentQuestionService,
-    ) {}
+    constructor(private readonly commentQuestionService: CommentQuestionService) {}
 
     @Auth()
     @ApiOperation({
@@ -45,11 +43,7 @@ export class CommentQuestionController {
         @Body() data: UpdateCommentQuestionDTO,
         @User() jwtUser: JwtUser,
     ): Promise<ICommentQuestionRO> {
-        return this.commentQuestionService.updateCommentById(
-            params,
-            data,
-            jwtUser,
-        );
+        return this.commentQuestionService.updateCommentById(params, data, jwtUser);
     }
 
     @Auth()

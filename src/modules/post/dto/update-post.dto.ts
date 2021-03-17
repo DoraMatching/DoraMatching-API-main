@@ -11,10 +11,7 @@ import {
     MinLength,
 } from 'class-validator';
 
-export type IUpdatePostDTO = Omit<
-    IPostModel,
-    'author' | 'createdAt' | 'updatedAt'
->;
+export type IUpdatePostDTO = Omit<IPostModel, 'author' | 'createdAt' | 'updatedAt'>;
 
 export class UpdatePostDTO implements IUpdatePostDTO {
     @ApiProperty({ example: 'The quick brown fox jumps over the lazy dog' })

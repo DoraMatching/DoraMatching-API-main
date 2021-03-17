@@ -50,10 +50,7 @@ export class CommentPostController {
         description: 'Return delete status',
     })
     @Delete('/post/:id/comment/:commentId')
-    deleteCommentById(
-        @Param() params: CommentPostParam,
-        @User() jwtUser: JwtUser,
-    ) {
+    deleteCommentById(@Param() params: CommentPostParam, @User() jwtUser: JwtUser) {
         return this.commentPostService.deleteCommentById(params, jwtUser);
     }
 }

@@ -158,12 +158,7 @@ export const updateRecommendationsFor = async function(
         await pMap(
             notYetRatedItems,
             async function(itemId: string) {
-                const score = await predictFor(
-                    client,
-                    className,
-                    userId,
-                    itemId,
-                );
+                const score = await predictFor(client, className, userId, itemId);
                 scoreMap.push([score, itemId]);
             },
             { concurrency: 1 },
@@ -174,22 +169,14 @@ export const updateRecommendationsFor = async function(
         await pMap(
             scoreMap,
             async function(scorePair) {
-                await client.zadd(
-                    recommendedZSet,
-                    scorePair[0].toString(),
-                    scorePair[1],
-                );
+                await client.zadd(recommendedZSet, scorePair[0].toString(), scorePair[1]);
             },
             { concurrency: 1 },
         );
 
         await client.del(tempAllLikedSet);
         const length = await client.zcard(recommendedZSet);
-        await client.zremrangebyrank(
-            recommendedZSet,
-            0,
-            length - numOfRecsStore - 1,
-        );
+        await client.zremrangebyrank(recommendedZSet, 0, length - numOfRecsStore - 1);
     }
 };
 

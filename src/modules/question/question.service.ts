@@ -23,10 +23,7 @@ import { UserRepository } from '@user/repositories';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 
 @Injectable()
-export class QuestionService extends BaseService<
-    QuestionEntity,
-    QuestionRepository
-> {
+export class QuestionService extends BaseService<QuestionEntity, QuestionRepository> {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly questionRepository: QuestionRepository,
@@ -50,9 +47,7 @@ export class QuestionService extends BaseService<
         );
         if (permission.granted) {
             try {
-                const data = await this.questionRepository.getAllQuestions(
-                    pagOpts,
-                );
+                const data = await this.questionRepository.getAllQuestions(pagOpts);
                 const result = customPaginate<QuestionRO>(data, pagOpts);
                 return paginateFilter<QuestionRO>(result, permission);
             } catch ({ detail }) {
@@ -90,20 +85,15 @@ export class QuestionService extends BaseService<
                     tags.map(tag => tag.name),
                 ),
             ]);
-            if (!user)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            if (!user) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             const newQuestion = this.questionRepository.create({
                 ...data,
                 author: user,
                 tags: _tags,
             });
             try {
-                const _newQuestion = await this.questionRepository.save(
-                    newQuestion,
-                );
-                return await this.questionRepository.getQuestionById(
-                    _newQuestion.id,
-                );
+                const _newQuestion = await this.questionRepository.save(newQuestion);
+                return await this.questionRepository.getQuestionById(_newQuestion.id);
             } catch ({ detail }) {
                 throw new HttpException(
                     detail || `OOPS! Can't create question`,
@@ -163,9 +153,7 @@ export class QuestionService extends BaseService<
                 );
             try {
                 await this.questionRepository.save(question);
-                const result = await this.questionRepository.getQuestionById(
-                    id,
-                );
+                const result = await this.questionRepository.getQuestionById(id);
                 return permission.filter(result);
             } catch ({ detail }) {
                 throw new HttpException(
@@ -180,10 +168,7 @@ export class QuestionService extends BaseService<
             );
     }
 
-    async deleteQuestionById(
-        id: string,
-        jwtUser: JwtUser,
-    ): Promise<IDeleteResultDTO> {
+    async deleteQuestionById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const question = await this.questionRepository.getQuestionById(id);
         if (!question)
             throw new HttpException(

@@ -1,10 +1,5 @@
 import { mlApiUrl } from '@/config';
-import {
-    HttpException,
-    HttpService,
-    HttpStatus,
-    Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
 import { TagPredictAlgorithms, TagPredictionRO } from '@tag-predict/dto';
 
 @Injectable()
@@ -14,12 +9,9 @@ export class TagPredictService {
     async predict(content: string, algorithm = TagPredictAlgorithms.TFIDF) {
         try {
             const { data } = await this.httpService
-                .post<TagPredictionRO>(
-                    `${mlApiUrl}/tags?algorithm=${algorithm}`,
-                    {
-                        predict: content,
-                    },
-                )
+                .post<TagPredictionRO>(`${mlApiUrl}/tags?algorithm=${algorithm}`, {
+                    predict: content,
+                })
                 .toPromise();
             return data;
         } catch ({ message }) {

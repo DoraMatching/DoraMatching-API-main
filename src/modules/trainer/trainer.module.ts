@@ -8,11 +8,7 @@ import { ClasseRepository } from '@classe/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([
-            UserRepository,
-            TrainerRepository,
-            ClasseRepository,
-        ]),
+        TypeOrmModule.forFeature([UserRepository, TrainerRepository, ClasseRepository]),
     ],
     providers: [TrainerService],
     controllers: [TrainerController],

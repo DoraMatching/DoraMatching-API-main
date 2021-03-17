@@ -2,9 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CommentQuestionEntity } from '@comment-question/entities';
 
 @EntityRepository(CommentQuestionEntity)
-export class CommentQuestionRepository extends Repository<
-    CommentQuestionEntity
-> {
+export class CommentQuestionRepository extends Repository<CommentQuestionEntity> {
     private readonly SELECT_COMMENT_SCOPE = [
         'comment',
         'author.id',

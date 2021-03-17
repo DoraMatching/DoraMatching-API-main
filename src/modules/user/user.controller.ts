@@ -1,15 +1,7 @@
 import { apiUrl } from '@/config';
 import { FindOneParams, IPagination, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
-import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Patch,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
     CreateUserDTO,
@@ -52,10 +44,7 @@ export class UserController {
     })
     @ApiResponse({ type: UserRO, status: 200 })
     @Get('user/:id')
-    getUser(
-        @Param() { id }: FindOneParams,
-        @User() jwtUser: JwtUser,
-    ): Promise<IUserRO> {
+    getUser(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IUserRO> {
         return this.userService.getUserById({ id }, jwtUser);
     }
 
@@ -88,10 +77,7 @@ export class UserController {
     })
     @ApiResponse({ type: UserRO, status: 201 })
     @Post('register')
-    register(
-        @Body() data: CreateUserDTO,
-        @User() jwtUser: JwtUser,
-    ): Promise<IUserRO> {
+    register(@Body() data: CreateUserDTO, @User() jwtUser: JwtUser): Promise<IUserRO> {
         return this.userService.register(data, jwtUser);
     }
 

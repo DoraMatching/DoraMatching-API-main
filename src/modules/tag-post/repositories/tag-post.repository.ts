@@ -47,9 +47,7 @@ export class TagPostRepository extends Repository<TagPostEntity> {
         }
     }
 
-    async findManyAndCreateIfNotExisted(
-        tagNames: string[],
-    ): Promise<TagPostEntity[]> {
+    async findManyAndCreateIfNotExisted(tagNames: string[]): Promise<TagPostEntity[]> {
         const tagPromises = tagNames.map(name => this.createIfNotExists(name));
         try {
             return await Promise.all(tagPromises);

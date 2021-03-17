@@ -59,9 +59,7 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         pagOpts: Partial<PaginateParams>,
     ): Promise<EntityResults<ClasseEntity>> {
         try {
-            const [entities, count] = await this.getAllClassesQueryBuilder(
-                pagOpts,
-            )
+            const [entities, count] = await this.getAllClassesQueryBuilder(pagOpts)
                 .where('topic.id = :topicId', { topicId })
                 .getManyAndCount();
             return { entities, count };
@@ -75,9 +73,7 @@ export class ClasseRepository extends Repository<ClasseEntity> {
         pagOpts: Partial<PaginateParams>,
     ): Promise<EntityResults<ClasseEntity>> {
         try {
-            const [entities, count] = await this.getAllClassesQueryBuilder(
-                pagOpts,
-            )
+            const [entities, count] = await this.getAllClassesQueryBuilder(pagOpts)
                 .where('trainer.id = :trainerId', { trainerId })
                 .getManyAndCount();
             return { entities, count };

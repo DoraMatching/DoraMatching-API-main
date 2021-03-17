@@ -39,9 +39,7 @@ export class TagQuestionService extends BaseService<
         );
         if (permission.granted) {
             try {
-                const data = await this.tagQuestionRepository.getAllTags(
-                    pagOpts,
-                );
+                const data = await this.tagQuestionRepository.getAllTags(pagOpts);
                 const result = customPaginate<TagQuestionRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {

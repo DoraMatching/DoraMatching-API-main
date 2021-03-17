@@ -35,10 +35,7 @@ export class TraineeController {
     })
     @ApiResponse({ type: TraineeRO, status: 200 })
     @Get('trainee/:id')
-    getTraineeById(
-        @Param() { id: traineeId }: FindOneParams,
-        @User() jwtUser: JwtUser,
-    ) {
+    getTraineeById(@Param() { id: traineeId }: FindOneParams, @User() jwtUser: JwtUser) {
         return this.traineeService.getTraineeById(traineeId, jwtUser);
     }
 
@@ -49,10 +46,7 @@ export class TraineeController {
     })
     @ApiResponse({ type: TraineeRO, status: 200 })
     @Get('trainee')
-    getTraineeByUserId(
-        @Query() { userId }: UserQuery,
-        @User() jwtUser: JwtUser,
-    ) {
+    getTraineeByUserId(@Query() { userId }: UserQuery, @User() jwtUser: JwtUser) {
         return this.traineeService.getTraineeByUserId(userId, jwtUser);
     }
 }

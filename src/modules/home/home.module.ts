@@ -8,11 +8,7 @@ import { UserRepository } from '@user/repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([
-            PostRepository,
-            QuestionRepository,
-            UserRepository,
-        ]),
+        TypeOrmModule.forFeature([PostRepository, QuestionRepository, UserRepository]),
     ],
     providers: [HomeService],
     controllers: [HomeController],

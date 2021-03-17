@@ -25,11 +25,7 @@ export const recommendFor = function(
     userId: string,
     numberOfRecs: number,
 ) {
-    return client.zrevrange(
-        recommendedZSetKey(className, userId),
-        0,
-        numberOfRecs,
-    );
+    return client.zrevrange(recommendedZSetKey(className, userId), 0, numberOfRecs);
 };
 
 export const recommendForWithScores = async function(
@@ -95,53 +91,25 @@ export const leastSimilarUsers = function(
 ) {
     return client.zrange(similarityZSetKey(className, userId), 0, -1);
 };
-export const likedBy = function(
-    client: Redis,
-    className: string,
-    itemId: string,
-) {
+export const likedBy = function(client: Redis, className: string, itemId: string) {
     return client.smembers(itemLikedBySetKey(className, itemId));
 };
-export const likedCount = function(
-    client: Redis,
-    className: string,
-    itemId: string,
-) {
+export const likedCount = function(client: Redis, className: string, itemId: string) {
     return client.scard(itemLikedBySetKey(className, itemId));
 };
-export const dislikedBy = function(
-    client: Redis,
-    className: string,
-    itemId: string,
-) {
+export const dislikedBy = function(client: Redis, className: string, itemId: string) {
     return client.smembers(itemDislikedBySetKey(className, itemId));
 };
-export const dislikedCount = function(
-    client: Redis,
-    className: string,
-    itemId: string,
-) {
+export const dislikedCount = function(client: Redis, className: string, itemId: string) {
     return client.scard(itemDislikedBySetKey(className, itemId));
 };
-export const allLikedFor = function(
-    client: Redis,
-    className: string,
-    userId: string,
-) {
+export const allLikedFor = function(client: Redis, className: string, userId: string) {
     return client.smembers(userLikedSetKey(className, userId));
 };
-export const allDislikedFor = function(
-    client: Redis,
-    className: string,
-    userId: string,
-) {
+export const allDislikedFor = function(client: Redis, className: string, userId: string) {
     return client.smembers(userDislikedSetKey(className, userId));
 };
-export const allWatchedFor = function(
-    client: Redis,
-    className: string,
-    userId: string,
-) {
+export const allWatchedFor = function(client: Redis, className: string, userId: string) {
     return client.sunion(
         userLikedSetKey(className, userId),
         userDislikedSetKey(className, userId),

@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagQuestionModel } from '@tag-question/dto';
-import {
-    IsNotEmpty,
-    IsString,
-    Matches,
-    MaxLength,
-    MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export type ICreateTagQuestionDTO = Pick<ITagQuestionModel, 'name'>;
 

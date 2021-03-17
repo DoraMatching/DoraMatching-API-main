@@ -10,12 +10,7 @@ import {
 } from '@/shared';
 import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
-import {
-    CreateLessonDTO,
-    ILessonRO,
-    LessonRO,
-    UpdateLessonDTO,
-} from '@lesson/dto';
+import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/dto';
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
@@ -41,18 +36,13 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         super(lessonRepository);
     }
 
-    timeContainLessons(
-        timeRange: TimeRangeQuery,
-        lessons: LessonRO[],
-    ): LessonEntity[] {
+    timeContainLessons(timeRange: TimeRangeQuery, lessons: LessonRO[]): LessonEntity[] {
         const range = moment.range(timeRange.startTime, timeRange.endTime);
         const result = [];
         lessons.forEach(lesson => {
             if (
                 range.contains(lesson.startTime) ||
-                range.contains(
-                    _moment(lesson.startTime).add(lesson.duration, 'minutes'),
-                )
+                range.contains(_moment(lesson.startTime).add(lesson.duration, 'minutes'))
             )
                 result.push(lesson);
         });
@@ -97,9 +87,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         data: UpdateLessonDTO,
         jwtUser: JwtUser,
     ): Promise<ILessonRO> {
-        const lesson = await this.lessonRepository.getLessonByIdWithClasse(
-            lessonId,
-        );
+        const lesson = await this.lessonRepository.getLessonByIdWithClasse(lessonId);
         if (!lesson)
             throw new HttpException(
                 `OOPS! Lesson with id: ${lessonId} not found`,
@@ -113,20 +101,15 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             lesson.classe.trainer.user.id,
         );
         if (permission.granted) {
-            const trainer = await this.trainerRepository.getTrainerByUserId(
-                jwtUser.id,
-            );
-            if (!trainer)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             data = permission.filter(data);
 
             const [_startTime, _duration] = [
                 data.startTime || lesson.startTime,
                 data.duration || lesson.duration,
             ];
-            const isSameTime = _moment(lesson.startTime).isSame(
-                _moment(_startTime),
-            );
+            const isSameTime = _moment(lesson.startTime).isSame(_moment(_startTime));
             const isSameDuration = lesson.duration === _duration;
             if (!isSameTime || !isSameDuration) {
                 const timeRange: TimeRangeQuery = {
@@ -154,9 +137,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
 
             try {
                 await this.lessonRepository.save(lesson);
-                const result = await this.lessonRepository.getLessonById(
-                    lessonId,
-                );
+                const result = await this.lessonRepository.getLessonById(lessonId);
                 return permission.filter(result);
             } catch ({ detail }) {
                 throw new HttpException(
@@ -171,10 +152,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             );
     }
 
-    async getLessonById(
-        lessonId: string,
-        jwtUser: JwtUser,
-    ): Promise<ILessonRO> {
+    async getLessonById(lessonId: string, jwtUser: JwtUser): Promise<ILessonRO> {
         const lesson = await this.lessonRepository.getLessonById(lessonId);
         if (!lesson)
             throw new HttpException(
@@ -216,11 +194,8 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             null,
         );
         if (permission.granted) {
-            const trainer = await this.trainerRepository.getTrainerByUserId(
-                jwtUser.id,
-            );
-            if (!trainer)
-                throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+            const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+            if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
             const timeRange: TimeRangeQuery = {
                 startTime: data.startTime,
                 endTime: _moment(data.startTime)
@@ -304,18 +279,10 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                         trainerId,
                         timeRange.startTime,
                     ),
-                    this.lessonRepository.getAllLessonByTrainerId(
-                        trainerId,
-                        timeRange,
-                    ),
+                    this.lessonRepository.getAllLessonByTrainerId(trainerId, timeRange),
                 ]);
-                const result = beforeLesson
-                    ? [beforeLesson, ...lessons]
-                    : lessons;
-                return this.timeContainLessons(
-                    timeRange,
-                    _.uniqBy(result, 'id'),
-                );
+                const result = beforeLesson ? [beforeLesson, ...lessons] : lessons;
+                return this.timeContainLessons(timeRange, _.uniqBy(result, 'id'));
             } catch ({ detail }) {
                 throw new HttpException(
                     detail || `OOPS! Can't get the lessons`,
@@ -348,18 +315,10 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                         traineeId,
                         timeRange.startTime,
                     ),
-                    this.lessonRepository.getAllLessonsByTraineeId(
-                        traineeId,
-                        timeRange,
-                    ),
+                    this.lessonRepository.getAllLessonsByTraineeId(traineeId, timeRange),
                 ]);
-                const result = beforeLesson
-                    ? [beforeLesson, ...lessons]
-                    : lessons;
-                return this.timeContainLessons(
-                    timeRange,
-                    _.uniqBy(result, 'id'),
-                );
+                const result = beforeLesson ? [beforeLesson, ...lessons] : lessons;
+                return this.timeContainLessons(timeRange, _.uniqBy(result, 'id'));
             } catch ({ detail }) {
                 throw new HttpException(
                     detail || `OOPS! Can't get the lessons`,
@@ -373,9 +332,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         lessonId: string,
         jwtUser: JwtUser,
     ): Promise<IDeleteResultDTO> {
-        const foundLesson = await this.lessonRepository.getLessonByIdWithClasse(
-            lessonId,
-        );
+        const foundLesson = await this.lessonRepository.getLessonByIdWithClasse(lessonId);
         if (!foundLesson)
             throw new HttpException(
                 `OOPS! Lesson with id: ${lessonId} not found`,

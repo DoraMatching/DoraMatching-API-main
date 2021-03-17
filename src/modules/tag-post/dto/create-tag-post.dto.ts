@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ITagPostModel } from '@tag-post/dto';
-import {
-    IsNotEmpty,
-    IsString,
-    Matches,
-    MaxLength,
-    MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export type ICreateTagPostDTO = Pick<ITagPostModel, 'name'>;
 
