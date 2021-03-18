@@ -7,7 +7,7 @@ import { ZoomApiService } from './zoom-api.service';
 
 @Controller('zoom-api')
 export class ZoomApiController {
-    constructor(private readonly zoomApiService: ZoomApiService) { }
+    constructor(private readonly zoomApiService: ZoomApiService) {}
 
     @Auth()
     @Post('create-meeting')

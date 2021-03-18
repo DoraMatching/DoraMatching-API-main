@@ -4,6 +4,7 @@ import { CommentPostModule } from '@comment-post/comment-post.module';
 import { CommentQuestionModule } from '@comment-question/comment-question.module';
 import { HomeModule } from '@home-modules/home.module';
 import { LessonModule } from '@lesson/lesson.module';
+import { MeetingModule } from '@meeting/meeting.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -19,12 +20,12 @@ import { TopicModule } from '@topic/topic.module';
 import { TraineeModule } from '@trainee/trainee.module';
 import { TrainerModule } from '@trainer/trainer.module';
 import { UserModule } from '@user/user.module';
+import { ZoomApiModule } from '@zoom-api/zoom-api.module';
 import { AccessControlModule } from 'nest-access-control';
 import { AutomapperModule } from 'nestjsx-automapper';
 import { AppController } from './app.controller';
 import { roles } from './app.roles';
 import { mailerConfig } from './config';
-import { ZoomApiModule } from '@zoom-api/zoom-api.module';
 
 @Module({
     imports: [
@@ -54,6 +55,7 @@ import { ZoomApiModule } from '@zoom-api/zoom-api.module';
         SearchModule,
         RecommenderModule,
         ZoomApiModule,
+        MeetingModule,
     ],
     controllers: [AppController],
     providers: [],

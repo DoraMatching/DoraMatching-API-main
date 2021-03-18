@@ -30,7 +30,8 @@
       "@tag-predict/*": ["src/modules/tag-predict/*"],
       "@search/*": ["src/modules/search/*"],
       "@recommender/*": ["src/modules/recommender/*"],
-      "@zoom-api/*": ["src/modules/zoom-api/*"]
+      "@zoom-api/*": ["src/modules/zoom-api/*"],
+      "@meeting/*": ["src/modules/meeting/*"]
     }
   },
   "exclude": ["src/node_modules", "dist", "*.js"],
