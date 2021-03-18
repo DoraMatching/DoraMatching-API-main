@@ -1,10 +1,10 @@
 import { zoomApiKey, zoomApiSecret } from '@/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtUser } from '@user/dto';
 import Axios from 'axios';
 import camelcaseKey from 'camelcase-keys';
 import { plainToClass } from 'class-transformer';
 import jwt from 'jsonwebtoken';
-import { JwtUser } from '../user/dto';
 import { CreateZoomMeetingDTO, ZoomApiRO } from './dto';
 
 @Injectable()

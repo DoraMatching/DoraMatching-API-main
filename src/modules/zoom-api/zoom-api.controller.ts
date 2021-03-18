@@ -1,13 +1,13 @@
 import { Auth } from '@/shared/auth';
 import { Body, Controller, Post } from '@nestjs/common';
-import { JwtUser } from '../user/dto';
-import { User } from '../user/user.decorator';
+import { JwtUser } from '@user/dto';
+import { User } from '@user/user.decorator';
 import { CreateZoomMeetingDTO, ZoomApiRO } from './dto';
 import { ZoomApiService } from './zoom-api.service';
 
 @Controller('zoom-api')
 export class ZoomApiController {
-    constructor(private readonly zoomApiService: ZoomApiService) {}
+    constructor(private readonly zoomApiService: ZoomApiService) { }
 
     @Auth()
     @Post('create-meeting')
