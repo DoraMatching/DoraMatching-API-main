@@ -30,8 +30,8 @@ async function bootstrap() {
             .setDescription('Dora-matching API')
             .setVersion('1.0')
             .addBearerAuth()
-            .addServer('https://dora.doramatching.tk')
             .addServer('http://localhost:4000')
+            .addServer('https://dora.doramatching.tk')
             .addServer('https://api.dev.doramatching.tk')
             .addServer('http://192.168.21.207:4000')
             .build();
