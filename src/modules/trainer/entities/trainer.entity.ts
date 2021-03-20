@@ -1,3 +1,4 @@
+import { MeetingEntity } from '@/modules/meeting/entities';
 import { ClasseEntity } from '@classe/entities';
 import { TopicEntity } from '@topic/entities';
 import { ITrainerModel } from '@trainer/dto';
@@ -37,6 +38,9 @@ export class TrainerEntity extends BaseEntity implements ITrainerModel {
         classe => classe.trainer,
     )
     classes: ClasseEntity[];
+
+    @OneToMany(() => MeetingEntity, meeting => meeting.trainer)
+    meetings: MeetingEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

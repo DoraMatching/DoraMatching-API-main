@@ -1,8 +1,10 @@
+import { TrainerEntity } from '@/modules/trainer/entities';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -15,9 +17,6 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
 
     @Column({ type: 'text' })
     hostEmail: string;
-
-    @Column({ type: 'text' })
-    username: string;
 
     @Column({ type: 'timestamptz' })
     startTime: Date;
@@ -36,6 +35,9 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
 
     @Column({ type: 'text' })
     source: string;
+
+    @ManyToOne(() => TrainerEntity, trainer => trainer.meetings)
+    trainer: string;
 
     @CreateDateColumn()
     createdAt: string;
