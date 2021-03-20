@@ -4,3 +4,4 @@ export * from './graphql';
 export * from './pagination';
 export * from './pipes';
 export * from './validation';
+export * from './auth';

@@ -21,6 +21,7 @@ export enum AppResources {
     USER = 'USER',
     REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER',
     LESSON = 'LESSON',
+    MEETING = 'MEETING'
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -198,4 +199,15 @@ roles
     .grant(AppRoles.ADMIN)
     .extend(AppRoles.TRAINER)
     .updateAny(AppResources.LESSON)
-    .deleteAny(AppResources.LESSON);
+    .deleteAny(AppResources.LESSON)
+
+    // Resource MEETING
+    .grant(AppRoles.TRAINER)
+    .readOwn(AppResources.MEETING)
+    .createOwn(AppResources.MEETING)
+    .updateOwn(AppResources.MEETING)
+    .deleteOwn(AppResources.MEETING)
+    .grant(AppRoles.ADMIN)
+    .extend(AppRoles.TRAINER)
+    .updateAny(AppResources.MEETING)
+    .deleteAny(AppResources.MEETING);

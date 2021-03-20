@@ -2,6 +2,7 @@
     "git.ignoreLimitWarning": true,
     "cSpell.words": [
         "Classe",
+        "accesscontrol",
         "camelcase",
         "doramatching",
         "nestjs",
