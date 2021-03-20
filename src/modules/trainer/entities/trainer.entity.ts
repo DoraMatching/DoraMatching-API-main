@@ -39,7 +39,10 @@ export class TrainerEntity extends BaseEntity implements ITrainerModel {
     )
     classes: ClasseEntity[];
 
-    @OneToMany(() => MeetingEntity, meeting => meeting.trainer)
+    @OneToMany(
+        () => MeetingEntity,
+        meeting => meeting.trainer,
+    )
     meetings: MeetingEntity[];
 
     @CreateDateColumn()

@@ -15,6 +15,15 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column({ type: 'text', nullable: true })
+    topic: string;
+
+    @Column({ type: 'text', nullable: true })
+    meetingId: string;
+
+    @Column({ type: 'text' })
+    password: string;
+
     @Column({ type: 'text' })
     hostEmail: string;
 
@@ -36,7 +45,10 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
     @Column({ type: 'text' })
     source: string;
 
-    @ManyToOne(() => TrainerEntity, trainer => trainer.meetings)
+    @ManyToOne(
+        () => TrainerEntity,
+        trainer => trainer.meetings,
+    )
     trainer: string;
 
     @CreateDateColumn()

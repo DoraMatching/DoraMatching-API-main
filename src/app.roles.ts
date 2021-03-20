@@ -21,7 +21,7 @@ export enum AppResources {
     USER = 'USER',
     REGISTER_CLASSE_MEMBER = 'REGISTER_CLASSE_MEMBER',
     LESSON = 'LESSON',
-    MEETING = 'MEETING'
+    MEETING = 'MEETING',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
