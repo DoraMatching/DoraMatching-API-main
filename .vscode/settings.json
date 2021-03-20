@@ -2,9 +2,12 @@
     "git.ignoreLimitWarning": true,
     "cSpell.words": [
         "Classe",
+        "camelcase",
         "doramatching",
         "nestjs",
         "postgres",
+        "prebuild",
+        "timestamptz",
         "toor",
         "typeorm"
     ]

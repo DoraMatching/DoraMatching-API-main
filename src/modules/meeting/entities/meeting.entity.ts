@@ -1,5 +1,11 @@
-import { extend } from 'lodash';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { IMeetingModel } from '../dto';
 
 @Entity('meeting')
@@ -30,4 +36,13 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
 
     @Column({ type: 'text' })
     source: string;
+
+    @CreateDateColumn()
+    createdAt: string;
+
+    @UpdateDateColumn()
+    updatedAt: string;
+
+    @Column({ type: 'text', default: 'meeting', nullable: false })
+    type: string;
 }

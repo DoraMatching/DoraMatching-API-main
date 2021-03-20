@@ -34,8 +34,6 @@ export class ZoomApiService {
             Authorization: `Bearer ${this.generateZoomToken()}`,
         };
 
-        console.log(headers);
-
         try {
             const { data } = await Axios.post<ZoomApiRO>(
                 `https://api.zoom.us/v2/users/${req.hostEmail || jwtUser.email}/meetings`,
