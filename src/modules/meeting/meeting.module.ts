@@ -7,7 +7,9 @@ import { MeetingService } from './meeting.service';
 import { MeetingRepository } from './repositories';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRepository, MeetingRepository, TrainerRepository])],
+    imports: [
+        TypeOrmModule.forFeature([UserRepository, MeetingRepository, TrainerRepository]),
+    ],
     controllers: [MeetingController],
     providers: [MeetingService],
 })
