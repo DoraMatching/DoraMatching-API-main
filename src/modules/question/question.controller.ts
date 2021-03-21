@@ -3,12 +3,7 @@ import { FindOneParams, IDeleteResultDTO, IPagination, PaginateParams } from '@/
 import { Auth } from '@/shared/auth';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-    CreateQuestionDTO,
-    IQuestionRO,
-    QuestionRO,
-    UpdateQuestionDTO,
-} from '@question/dto';
+import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
 import { QuestionService } from '@question/question.service';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';

@@ -9,12 +9,7 @@ import {
     PaginateParams,
 } from '@/shared';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {
-    CreateQuestionDTO,
-    IQuestionRO,
-    QuestionRO,
-    UpdateQuestionDTO,
-} from '@question/dto';
+import { CreateQuestionDTO, IQuestionRO, QuestionRO, UpdateQuestionDTO } from '@question/dto';
 import { QuestionEntity } from '@question/entities';
 import { QuestionRepository } from '@question/repositories';
 import { TagQuestionRepository } from '@tag-question/repositories';
@@ -51,10 +46,7 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
                 const result = customPaginate<QuestionRO>(data, pagOpts);
                 return paginateFilter<QuestionRO>(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else
             throw new HttpException(
@@ -133,10 +125,7 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
     ): Promise<IQuestionRO> {
         const question = await this.questionRepository.getQuestionById(id);
         if (!question)
-            throw new HttpException(
-                `Question with id ${id} not found!`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Question with id ${id} not found!`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.QUESTION,
@@ -171,10 +160,7 @@ export class QuestionService extends BaseService<QuestionEntity, QuestionReposit
     async deleteQuestionById(id: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const question = await this.questionRepository.getQuestionById(id);
         if (!question)
-            throw new HttpException(
-                `Question with id ${id} not found!`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Question with id ${id} not found!`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.QUESTION,

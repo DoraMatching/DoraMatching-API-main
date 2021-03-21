@@ -123,9 +123,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                     timeRange,
                     jwtUser,
                 );
-                lessonsInScope = lessonsInScope.filter(
-                    _lesson => _lesson.id !== lesson.id,
-                );
+                lessonsInScope = lessonsInScope.filter(_lesson => _lesson.id !== lesson.id);
                 const newLesson = this.lessonRepository.create({
                     ...lesson,
                     ...data,
@@ -328,10 +326,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         }
     }
 
-    async deleteLessonById(
-        lessonId: string,
-        jwtUser: JwtUser,
-    ): Promise<IDeleteResultDTO> {
+    async deleteLessonById(lessonId: string, jwtUser: JwtUser): Promise<IDeleteResultDTO> {
         const foundLesson = await this.lessonRepository.getLessonByIdWithClasse(lessonId);
         if (!foundLesson)
             throw new HttpException(

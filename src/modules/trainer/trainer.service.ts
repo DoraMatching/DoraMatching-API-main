@@ -75,10 +75,7 @@ export class TrainerService {
                 const result = customPaginate<TrainerRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else
             throw new HttpException(
@@ -129,10 +126,7 @@ export class TrainerService {
     async getTrainerById(id: string, jwtUser: JwtUser): Promise<TrainerRO> {
         const trainer = await this.trainerRepository.getTrainerById(id);
         if (!trainer)
-            throw new HttpException(
-                `Trainer with id: ${id} not found!`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Trainer with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.TRAINER,

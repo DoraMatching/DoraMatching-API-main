@@ -17,14 +17,7 @@ import { IUserModel } from './user.model';
 
 export type ICreateUserDTO = Omit<
     IUserModel,
-    | 'id'
-    | 'roles'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'posts'
-    | 'questions'
-    | 'topics'
-    | 'classes'
+    'id' | 'roles' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics' | 'classes'
 >;
 
 export class CreateUserDTO implements ICreateUserDTO {

@@ -34,10 +34,7 @@ export class MeetingService {
 
         if (permission.granted) {
             try {
-                const zoomMeeting = await this.zoomApiService.createMeeting(
-                    data,
-                    jwtUser,
-                );
+                const zoomMeeting = await this.zoomApiService.createMeeting(data);
 
                 const {
                     hostEmail,

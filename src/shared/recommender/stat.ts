@@ -77,18 +77,10 @@ export const usersWhoLikedAlsoLiked = function(
     console.log(itemId);
     throw new Error('not yet implement');
 };
-export const mostSimilarUsers = function(
-    client: Redis,
-    className: string,
-    userId: string,
-) {
+export const mostSimilarUsers = function(client: Redis, className: string, userId: string) {
     return client.zrevrange(similarityZSetKey(className, userId), 0, -1);
 };
-export const leastSimilarUsers = function(
-    client: Redis,
-    className: string,
-    userId: string,
-) {
+export const leastSimilarUsers = function(client: Redis, className: string, userId: string) {
     return client.zrange(similarityZSetKey(className, userId), 0, -1);
 };
 export const likedBy = function(client: Redis, className: string, itemId: string) {

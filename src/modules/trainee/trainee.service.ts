@@ -89,10 +89,7 @@ export class TraineeService extends BaseService<TraineeEntity, TraineeRepository
                 const result = customPaginate<TraineeRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else
             throw new HttpException(

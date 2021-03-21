@@ -133,11 +133,7 @@ export class ClasseService extends BaseService<ClasseEntity, ClasseRepository> {
             );
     }
 
-    async registerClasse(
-        id: string,
-        jwtUser: JwtUser,
-        opposite = false,
-    ): Promise<IClasseRO> {
+    async registerClasse(id: string, jwtUser: JwtUser, opposite = false): Promise<IClasseRO> {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.REGISTER_CLASSE_MEMBER,

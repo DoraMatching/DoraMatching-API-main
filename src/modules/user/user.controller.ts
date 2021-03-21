@@ -31,10 +31,7 @@ export class UserController {
         @Query() pagOpts: PaginateParams,
         @User() jwtUser: JwtUser,
     ): Promise<IPagination<IUserRO>> {
-        return this.userService.showAll(
-            { ...pagOpts, route: `${apiUrl}/users` },
-            jwtUser,
-        );
+        return this.userService.showAll({ ...pagOpts, route: `${apiUrl}/users` }, jwtUser);
     }
 
     @Auth()

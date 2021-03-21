@@ -25,9 +25,9 @@ export class PaginateParams {
 
     @ApiProperty({ enum: EnumOrder, default: EnumOrder.DESC })
     @IsEnum(EnumOrder, {
-        message: `order must be one of the following values: ${Object.keys(
-            EnumOrder,
-        ).join(', ')}`,
+        message: `order must be one of the following values: ${Object.keys(EnumOrder).join(
+            ', ',
+        )}`,
     })
     @IsOptional()
     readonly order?: EnumOrder = EnumOrder.DESC;

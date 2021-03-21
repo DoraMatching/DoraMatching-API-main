@@ -32,8 +32,7 @@ export default class Config {
         this.factorLeastSimilarLeastLiked = factorLeastSimilarLeastLiked || false;
         this.redisUrl = redisUrl || process.env.REDIS_URL || '127.0.0.1';
         this.redisPort =
-            redisPort ||
-            (process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379);
+            redisPort || (process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379);
         this.redisAuth = redisAuth || process.env.REDIS_AUTH || '';
     }
 }

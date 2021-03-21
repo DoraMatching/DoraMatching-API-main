@@ -69,19 +69,13 @@ export class CommentQuestionService extends BaseService<
             }
             return this.questionRepository.getQuestionById(question.id);
         } else
-            throw new HttpException(
-                `Question with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Question with id: ${id} not found`, HttpStatus.NOT_FOUND);
     }
 
     async findCommentById(id: string): Promise<CommentQuestionEntity> {
         const comment = await this.commentQuestionRepository.getCommentById(id);
         if (!comment)
-            throw new HttpException(
-                `Comment with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Comment with id: ${id} not found`, HttpStatus.NOT_FOUND);
         return comment;
     }
 
@@ -95,10 +89,7 @@ export class CommentQuestionService extends BaseService<
             this.findCommentById(commentId),
         ]);
         if (!question)
-            throw new HttpException(
-                `Question with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Question with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.COMMENT_QUESTION,
@@ -126,10 +117,7 @@ export class CommentQuestionService extends BaseService<
             this.findCommentById(commentId),
         ]);
         if (!question)
-            throw new HttpException(
-                `Question with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Question with id: ${id} not found`, HttpStatus.NOT_FOUND);
         if (!comment)
             throw new HttpException(
                 `Comment with id: ${commentId} not found`,

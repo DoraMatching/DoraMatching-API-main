@@ -7,9 +7,7 @@ import { QuestionRepository } from '@question/repositories';
 import { UserRepository } from '@user/repositories';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([PostRepository, QuestionRepository, UserRepository]),
-    ],
+    imports: [TypeOrmModule.forFeature([PostRepository, QuestionRepository, UserRepository])],
     providers: [HomeService],
     controllers: [HomeController],
 })

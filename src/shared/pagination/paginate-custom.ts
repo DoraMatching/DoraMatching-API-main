@@ -17,11 +17,7 @@ export function customPaginate<T>(
                 page <= 1
                     ? ''
                     : `${route}?page=${
-                          pPrevious <= 0
-                              ? 1
-                              : pPrevious > totalPages
-                              ? totalPages
-                              : pPrevious
+                          pPrevious <= 0 ? 1 : pPrevious > totalPages ? totalPages : pPrevious
                       }&limit=${limit}&order=${order}`
             }`,
             next: `${

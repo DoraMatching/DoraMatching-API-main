@@ -1,10 +1,5 @@
 import { apiUrl } from '@/config';
-import {
-    DeleteResultDTO,
-    FindOneParams,
-    IDeleteResultDTO,
-    PaginateParams,
-} from '@/shared';
+import { DeleteResultDTO, FindOneParams, IDeleteResultDTO, PaginateParams } from '@/shared';
 import { Auth } from '@/shared/auth';
 import {
     Body,
@@ -84,10 +79,7 @@ export class TopicController {
     })
     @ApiResponse({ type: TopicRO, status: 201 })
     @Post('topic')
-    createTopic(
-        @Body() data: CreateTopicDTO,
-        @User() jwtUser: JwtUser,
-    ): Promise<ITopicRO> {
+    createTopic(@Body() data: CreateTopicDTO, @User() jwtUser: JwtUser): Promise<ITopicRO> {
         return this.topicService.createTopic(data, jwtUser);
     }
 

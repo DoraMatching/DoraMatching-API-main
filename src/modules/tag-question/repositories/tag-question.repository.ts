@@ -43,9 +43,7 @@ export class TagQuestionRepository extends Repository<TagQuestionEntity> {
         }
     }
 
-    async findManyAndCreateIfNotExisted(
-        tagNames: string[],
-    ): Promise<TagQuestionEntity[]> {
+    async findManyAndCreateIfNotExisted(tagNames: string[]): Promise<TagQuestionEntity[]> {
         const tagPromises = tagNames.map(name => this.createIfNotExists(name));
         try {
             return await Promise.all(tagPromises);

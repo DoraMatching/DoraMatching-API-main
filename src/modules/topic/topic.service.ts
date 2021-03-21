@@ -34,11 +34,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
         super(topicRepository);
     }
 
-    async getAllClassesByTopicId(
-        pagOpts: PaginateParams,
-        topicId: string,
-        jwtUser: JwtUser,
-    ) {
+    async getAllClassesByTopicId(pagOpts: PaginateParams, topicId: string, jwtUser: JwtUser) {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.CLASSE,
@@ -99,10 +95,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     async getTopicById(id: string, jwtUser: JwtUser): Promise<ITopicRO> {
         const foundTopic = await this.topicRepository.getTopicById(id);
         if (!foundTopic)
-            throw new HttpException(
-                `Topic with id: ${id} not found!`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Topic with id: ${id} not found!`, HttpStatus.NOT_FOUND);
         else {
             const permission = grantPermission(
                 this.rolesBuilder,
@@ -161,10 +154,7 @@ export class TopicService extends BaseService<TopicEntity, TopicRepository> {
     ): Promise<ITopicRO> {
         const topic = await this.getTopicById(id, jwtUser);
         if (!topic)
-            throw new HttpException(
-                `Topic with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Topic with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.TOPIC,

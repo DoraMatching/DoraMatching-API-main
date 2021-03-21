@@ -18,10 +18,7 @@ import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { RecommenderService } from '../recommender/recommender.service';
 
 @Injectable()
-export class CommentPostService extends BaseService<
-    CommentPostEntity,
-    CommentPostRepository
-> {
+export class CommentPostService extends BaseService<CommentPostEntity, CommentPostRepository> {
     private readonly logger: Logger = new Logger(CommentPostService.name);
 
     constructor(
@@ -70,20 +67,13 @@ export class CommentPostService extends BaseService<
                 );
             }
             return this.postRepository.getPostById(post.id);
-        } else
-            throw new HttpException(
-                `Post with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+        } else throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
     }
 
     async findCommentById(id: string): Promise<CommentPostEntity> {
         const comment = await this.commentPostRepository.getCommentById(id);
         if (!comment)
-            throw new HttpException(
-                `Comment with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Comment with id: ${id} not found`, HttpStatus.NOT_FOUND);
         return comment;
     }
 
@@ -97,10 +87,7 @@ export class CommentPostService extends BaseService<
             this.findCommentById(commentId),
         ]);
         if (!post)
-            throw new HttpException(
-                `Post with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.COMMENT_POST,
@@ -128,10 +115,7 @@ export class CommentPostService extends BaseService<
             this.findCommentById(commentId),
         ]);
         if (!post)
-            throw new HttpException(
-                `Post with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         if (!comment)
             throw new HttpException(
                 `Comment with id: ${commentId} not found`,

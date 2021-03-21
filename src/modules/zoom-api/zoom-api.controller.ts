@@ -9,12 +9,12 @@ import { ZoomApiService } from './zoom-api.service';
 export class ZoomApiController {
     constructor(private readonly zoomApiService: ZoomApiService) {}
 
-    @Auth()
-    @Post('create-meeting')
-    createMeeting(
-        @Body() req: CreateZoomMeetingDTO,
-        @User() jwtUser: JwtUser,
-    ): Promise<ZoomApiRO> {
-        return this.zoomApiService.createMeeting(req, jwtUser);
-    }
+    // @Auth()
+    // @Post('create-meeting')
+    // createMeeting(
+    //     @Body() req: CreateZoomMeetingDTO,
+    //     @User() jwtUser: JwtUser,
+    // ): Promise<ZoomApiRO> {
+    //     return this.zoomApiService.createMeeting(req, jwtUser);
+    // }
 }

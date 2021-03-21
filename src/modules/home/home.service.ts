@@ -19,10 +19,7 @@ export class HomeService {
         private readonly rolesBuilder: RolesBuilder,
     ) {}
 
-    async getAll(
-        pagOpts: PaginateParams,
-        jwtUser: JwtUser,
-    ): Promise<IPagination<IHomeRO>> {
+    async getAll(pagOpts: PaginateParams, jwtUser: JwtUser): Promise<IPagination<IHomeRO>> {
         let items: IHomeRO[] = [];
         const counts: number[] = [];
         let nestedItemsCount = 0;
@@ -48,13 +45,7 @@ export class HomeService {
             null,
         );
 
-        if (
-            !(
-                userPermission.granted &&
-                questionPermission.granted &&
-                postPermission.granted
-            )
-        )
+        if (!(userPermission.granted && questionPermission.granted && postPermission.granted))
             throw new HttpException(
                 `You don't have permission for this!`,
                 HttpStatus.FORBIDDEN,
@@ -62,9 +53,7 @@ export class HomeService {
 
         if (postPermission.granted) {
             try {
-                const { entities, count } = await this.postRepository.getAllPosts(
-                    pagOpts,
-                );
+                const { entities, count } = await this.postRepository.getAllPosts(pagOpts);
                 if (entities.length > 0) {
                     const posts = postPermission.filter(entities);
                     nestedItemsCount += posts.length;
@@ -72,10 +61,7 @@ export class HomeService {
                 }
                 counts[0] = count;
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -91,18 +77,13 @@ export class HomeService {
                 }
                 counts[1] = count;
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
         if (userPermission.granted) {
             try {
-                const { entities, count } = await this.userRepository.getAllUsers(
-                    pagOpts,
-                );
+                const { entities, count } = await this.userRepository.getAllUsers(pagOpts);
                 if (entities.length > 0) {
                     const users = userPermission.filter(entities);
                     nestedItemsCount += users.length;
@@ -111,10 +92,7 @@ export class HomeService {
                 }
                 counts[2] = count;
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 

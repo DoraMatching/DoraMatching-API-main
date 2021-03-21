@@ -30,8 +30,7 @@ export class SearchService {
 
         if (users && scope.includes(SearchScopes.USER)) result.users = users;
         if (posts && scope.includes(SearchScopes.POST)) result.posts = posts;
-        if (questions && scope.includes(SearchScopes.QUESTION))
-            result.questions = questions;
+        if (questions && scope.includes(SearchScopes.QUESTION)) result.questions = questions;
         return result;
     }
 }

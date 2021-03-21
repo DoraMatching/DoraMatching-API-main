@@ -107,10 +107,7 @@ export class LessonRepository extends Repository<LessonEntity> {
         }
     }
 
-    getAllLesson({
-        startTime,
-        endTime,
-    }: TimeRangeQuery): SelectQueryBuilder<LessonEntity> {
+    getAllLesson({ startTime, endTime }: TimeRangeQuery): SelectQueryBuilder<LessonEntity> {
         return this.createQueryBuilder('lesson')
             .leftJoinAndSelect('lesson.classe', 'classe')
             .andWhere('lesson.startTime >= :startTime', {

@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-    ArrayMinSize,
-    ArrayUnique,
-    IsArray,
-    IsOptional,
-    IsString,
-} from 'class-validator';
+import { ArrayMinSize, ArrayUnique, IsArray, IsOptional, IsString } from 'class-validator';
 
 export enum SearchScopes {
     USER = 'USER',

@@ -41,10 +41,7 @@ export class PostController {
         @Query() pagOpts: PaginateParams,
         @User() jwtUser: JwtUser,
     ): Promise<IPagination<IPostRO>> {
-        return this.postService.getAllPosts(
-            { ...pagOpts, route: `${apiUrl}/posts` },
-            jwtUser,
-        );
+        return this.postService.getAllPosts({ ...pagOpts, route: `${apiUrl}/posts` }, jwtUser);
     }
 
     @Auth()
@@ -54,10 +51,7 @@ export class PostController {
     })
     @ApiResponse({ type: PostRO, status: 200 })
     @Get('post/:id')
-    getPostById(
-        @Param() { id }: FindOneParams,
-        @User() jwtUser: JwtUser,
-    ): Promise<IPostRO> {
+    getPostById(@Param() { id }: FindOneParams, @User() jwtUser: JwtUser): Promise<IPostRO> {
         return this.postService.getPostById(id, jwtUser);
     }
 

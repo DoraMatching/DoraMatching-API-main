@@ -192,9 +192,7 @@ export class UserService {
                         HttpStatus.INTERNAL_SERVER_ERROR,
                     );
                 }
-                return (await this.userRepository.findOne({ id })).toResponseObject(
-                    false,
-                );
+                return (await this.userRepository.findOne({ id })).toResponseObject(false);
             } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         } else
             throw new HttpException(
@@ -272,10 +270,7 @@ export class UserService {
                     repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
                         nodes {
                             name
-                            languages(
-                                first: 100
-                                orderBy: { field: SIZE, direction: DESC }
-                            ) {
+                            languages(first: 100, orderBy: { field: SIZE, direction: DESC }) {
                                 edges {
                                     size
                                     node {

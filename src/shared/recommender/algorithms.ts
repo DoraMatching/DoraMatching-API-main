@@ -27,8 +27,7 @@ const jaccardCoefficient = async function(
     const results3 = await client.sinter(user1LikedSet, user2DislikedSet);
     const results4 = await client.sinter(user1DislikedSet, user2LikedSet);
 
-    const similarity =
-        results1.length + results2.length - results3.length - results4.length;
+    const similarity = results1.length + results2.length - results3.length - results4.length;
     const ratedInCommon =
         results1.length + results2.length + results3.length + results4.length;
     const finalJaccardScore: number = similarity / ratedInCommon;
@@ -62,22 +61,13 @@ export const updateSimilarityFor = async function(
             return;
         }
         if (userId !== otherUserId) {
-            const result = await jaccardCoefficient(
-                client,
-                className,
-                userId,
-                otherUserId,
-            );
+            const result = await jaccardCoefficient(client, className, userId, otherUserId);
             await client.zadd(similarityZSet, result.toString(), otherUserId);
         }
     });
 };
 
-export const similaritySum = async function(
-    client: Redis,
-    simSet: string,
-    compSet: string,
-) {
+export const similaritySum = async function(client: Redis, simSet: string, compSet: string) {
     let similarSum = 0.0;
     const userIds = await client.smembers(compSet);
     await pMap(
@@ -131,16 +121,8 @@ export const updateRecommendationsFor = async function(
     const similarityZSet = similarityZSetKey(className, userId);
     const recommendedZSet = recommendedZSetKey(className, userId);
 
-    const mostSimilarUserIds = await client.zrevrange(
-        similarityZSet,
-        0,
-        nearestNeighbors - 1,
-    );
-    const leastSimilarUserIds = await client.zrange(
-        similarityZSet,
-        0,
-        nearestNeighbors - 1,
-    );
+    const mostSimilarUserIds = await client.zrevrange(similarityZSet, 0, nearestNeighbors - 1);
+    const leastSimilarUserIds = await client.zrange(similarityZSet, 0, nearestNeighbors - 1);
     mostSimilarUserIds.forEach(function(usrId) {
         setsToUnion.push(userLikedSetKey(className, usrId));
     });

@@ -18,7 +18,7 @@ export class ZoomApiService {
         return jwt.sign(payload, zoomApiSecret);
     }
 
-    async createMeeting(req: CreateZoomMeetingDTO, jwtUser: JwtUser): Promise<ZoomApiRO> {
+    async createMeeting(req: CreateZoomMeetingDTO): Promise<ZoomApiRO> {
         const payload = {
             topic: req.topic,
             type: 1,

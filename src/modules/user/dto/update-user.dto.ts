@@ -15,14 +15,7 @@ import {
 
 export type IUpdateUser = Omit<
     IUserModel,
-    | 'id'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'posts'
-    | 'questions'
-    | 'topics'
-    | 'classes'
-    | 'roles'
+    'id' | 'createdAt' | 'updatedAt' | 'posts' | 'questions' | 'topics' | 'classes' | 'roles'
 >;
 
 export class UpdateUserDTO implements IUpdateUser {

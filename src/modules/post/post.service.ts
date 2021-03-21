@@ -55,10 +55,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
             );
     }
 
-    async createPost(
-        { tags, ...data }: CreatePostDTO,
-        jwtUser: JwtUser,
-    ): Promise<IPostRO> {
+    async createPost({ tags, ...data }: CreatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.POST,
@@ -117,10 +114,7 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
                 const result = customPaginate<PostRO>(data, pagOpts);
                 return paginateFilter(result, permission);
             } catch ({ detail }) {
-                throw new HttpException(
-                    detail || 'OOPS!',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(detail || 'OOPS!', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else
             throw new HttpException(
@@ -154,17 +148,10 @@ export class PostService extends BaseService<PostEntity, PostRepository> {
         }
     }
 
-    async updatePostById(
-        id: string,
-        data: UpdatePostDTO,
-        jwtUser: JwtUser,
-    ): Promise<IPostRO> {
+    async updatePostById(id: string, data: UpdatePostDTO, jwtUser: JwtUser): Promise<IPostRO> {
         const post = await this.getPostById(id, jwtUser);
         if (!post)
-            throw new HttpException(
-                `Post with id: ${id} not found`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Post with id: ${id} not found`, HttpStatus.NOT_FOUND);
         const permission = grantPermission(
             this.rolesBuilder,
             AppResources.POST,

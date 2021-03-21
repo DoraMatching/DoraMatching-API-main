@@ -29,10 +29,7 @@ export class ClasseController {
 
     @Auth()
     @Post('classe')
-    createClasse(
-        @Body() data: CreateClasseDTO,
-        @User() jwtUser: JwtUser,
-    ): Promise<IClasseRO> {
+    createClasse(@Body() data: CreateClasseDTO, @User() jwtUser: JwtUser): Promise<IClasseRO> {
         return this.classeService.createClasse(data, jwtUser);
     }
 
