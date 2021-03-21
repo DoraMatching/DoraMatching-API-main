@@ -3,6 +3,7 @@ import { AppPermissionBuilder } from '@/shared';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
+import { ZoomApiService } from '@zoom-api/zoom-api.service';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateMeetingDTO } from './dto';
 import { MeetingRepository } from './repositories';
@@ -12,6 +13,7 @@ export class MeetingService {
     constructor(
         private readonly meetingRepository: MeetingRepository,
         private readonly trainerRepository: TrainerRepository,
+        private readonly zoomApiService: ZoomApiService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
     ) {}
@@ -32,14 +34,36 @@ export class MeetingService {
 
         if (permission.granted) {
             try {
+                const zoomMeeting = await this.zoomApiService.createMeeting(
+                    data,
+                    jwtUser,
+                );
+
+                const {
+                    hostEmail,
+                    id,
+                    uuid,
+                    status,
+                    startUrl,
+                    joinUrl,
+                    password,
+                } = zoomMeeting;
+
                 const newMeetings = this.meetingRepository.create({
                     ...data,
+                    hostEmail,
+                    status,
+                    startUrl,
+                    joinUrl,
+                    password,
+                    uuid,
+                    meetingId: id,
                     trainer,
                 });
                 return await this.meetingRepository.save(newMeetings);
             } catch (e) {
                 throw new HttpException(
-                    `Can't create meeting`,
+                    `Couldn't create meeting`,
                     HttpStatus.INTERNAL_SERVER_ERROR,
                 );
             }

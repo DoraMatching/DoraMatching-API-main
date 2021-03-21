@@ -19,6 +19,9 @@ export class ZoomApiRO implements IZoomApiRO {
     id: string;
 
     @Expose()
+    uuid: string;
+
+    @Expose()
     hostEmail: string;
 
     @Expose()

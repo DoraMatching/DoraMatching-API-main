@@ -19,6 +19,9 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
     topic: string;
 
     @Column({ type: 'text', nullable: true })
+    uuid: string;
+
+    @Column({ type: 'text', nullable: true })
     meetingId: string;
 
     @Column({ type: 'text', nullable: true })
@@ -47,6 +50,12 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
 
     @Column({ type: 'text', nullable: true })
     status: string;
+
+    @Column({ type: 'text', nullable: true })
+    startUrl: string;
+
+    @Column({ type: 'text', nullable: true })
+    joinUrl: string;
 
     @ManyToOne(
         () => TrainerEntity,

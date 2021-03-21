@@ -8,5 +8,6 @@ import { ZoomApiService } from './zoom-api.service';
     imports: [TypeOrmModule.forFeature([UserRepository])],
     controllers: [ZoomApiController],
     providers: [ZoomApiService],
+    exports: [ZoomApiService],
 })
 export class ZoomApiModule {}

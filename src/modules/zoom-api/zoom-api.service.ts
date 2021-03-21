@@ -36,7 +36,8 @@ export class ZoomApiService {
 
         try {
             const { data } = await Axios.post<ZoomApiRO>(
-                `https://api.zoom.us/v2/users/${req.hostEmail || jwtUser.email}/meetings`,
+                `https://api.zoom.us/v2/users/${req.hostEmail ||
+                    `tranphuquy19@gmail.com`}/meetings`,
                 payload,
                 {
                     headers,
