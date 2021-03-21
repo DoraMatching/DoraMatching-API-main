@@ -14,7 +14,7 @@ export class MeetingService {
         private readonly trainerRepository: TrainerRepository,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) { }
+    ) {}
 
     async createMeeting(data: CreateMeetingDTO, jwtUser: JwtUser) {
         const [trainer] = await Promise.all([
@@ -27,17 +27,21 @@ export class MeetingService {
             .setResourceName(AppResources.MEETING)
             .setAction('create')
             .setRequestUser(jwtUser)
-            .build().grant();
+            .build()
+            .grant();
 
         if (permission.granted) {
             try {
                 const newMeetings = this.meetingRepository.create({
                     ...data,
-                    trainer
+                    trainer,
                 });
                 return await this.meetingRepository.save(newMeetings);
             } catch (e) {
-                throw new HttpException(`Can't create meeting`, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(
+                    `Can't create meeting`,
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
             }
         } else
             throw new HttpException(
