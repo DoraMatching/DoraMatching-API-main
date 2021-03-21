@@ -204,7 +204,7 @@ roles
     // Resource MEETING
     .grant(AppRoles.TRAINER)
     .readOwn(AppResources.MEETING)
-    .createOwn(AppResources.MEETING)
+    .createAny(AppResources.MEETING)
     .updateOwn(AppResources.MEETING)
     .deleteOwn(AppResources.MEETING)
     .grant(AppRoles.ADMIN)

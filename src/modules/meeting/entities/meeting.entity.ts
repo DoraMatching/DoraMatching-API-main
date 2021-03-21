@@ -15,41 +15,44 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ type: 'text', nullable: false })
     topic: string;
 
     @Column({ type: 'text', nullable: true })
     meetingId: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     password: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     hostEmail: string;
 
-    @Column({ type: 'timestamptz' })
+    @Column({ type: 'timestamptz', nullable: true })
     startTime: Date;
 
-    @Column({ type: 'timestamptz' })
+    @Column({ type: 'timestamptz', nullable: true })
     endTime: Date;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true })
     duration: number;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true })
     totalMinutes: number;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true })
     participantsCount: number;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     source: string;
+
+    @Column({ type: 'text', nullable: true })
+    status: string;
 
     @ManyToOne(
         () => TrainerEntity,
         trainer => trainer.meetings,
     )
-    trainer: string;
+    trainer: TrainerEntity;
 
     @CreateDateColumn()
     createdAt: string;
