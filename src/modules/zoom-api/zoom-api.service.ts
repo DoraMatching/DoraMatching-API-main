@@ -22,10 +22,7 @@ export class ZoomApiService {
     transformMiddleware(data) {
         data = JSON.parse(data);
         if (data.error)
-            throw new HttpException(
-                `Couldn't create Zoom meeting room`,
-                HttpStatus.NOT_FOUND,
-            );
+            throw new HttpException(`Couldn't create Zoom meeting room`, HttpStatus.NOT_FOUND);
         data = camelcaseKey(data, { deep: true });
         return plainToClass(ZoomApiRO, data);
     }
@@ -51,13 +48,11 @@ export class ZoomApiService {
         try {
             const { data } = await Axios.post<ZoomApiRO>(
                 `https://api.zoom.us/v2/users/${req.hostEmail ||
-                `tranphuquy19@gmail.com`}/meetings`,
+                    `tranphuquy19@gmail.com`}/meetings`,
                 payload,
                 {
                     headers,
-                    transformResponse: [
-                        this.transformMiddleware
-                    ],
+                    transformResponse: [this.transformMiddleware],
                 },
             );
             return data;
@@ -77,12 +72,13 @@ export class ZoomApiService {
         this.logger.debug(headers.Authorization);
 
         try {
-            const { data } = await Axios.get<ZoomApiRO>(`https://api.zoom.us/v2/meetings/${meetingId}`, {
-                headers,
-                transformResponse: [
-                    this.transformMiddleware
-                ],
-            })
+            const { data } = await Axios.get<ZoomApiRO>(
+                `https://api.zoom.us/v2/meetings/${meetingId}`,
+                {
+                    headers,
+                    transformResponse: [this.transformMiddleware],
+                },
+            );
             return data;
         } catch ({ message }) {
             throw new HttpException(
@@ -103,7 +99,7 @@ export class ZoomApiService {
             const { data } = await Axios.get(`https://api.zoom.us/v2/past_meetings/${uuid}`, {
                 headers,
                 transformResponse: [
-                    (data) => {
+                    data => {
                         data = JSON.parse(data);
                         if (data.error)
                             throw new HttpException(
@@ -111,7 +107,8 @@ export class ZoomApiService {
                                 HttpStatus.NOT_FOUND,
                             );
                         return camelcaseKey(data, { deep: true });
-                    }]
+                    },
+                ],
             });
             data.status = 'ended';
             return data;

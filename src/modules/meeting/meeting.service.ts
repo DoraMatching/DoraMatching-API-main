@@ -18,7 +18,7 @@ export class MeetingService {
         private readonly zoomApiService: ZoomApiService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) { }
+    ) {}
 
     async getOwnMeeting(jwtUser: JwtUser) {
         const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
@@ -91,11 +91,29 @@ export class MeetingService {
     async updateMeeting(data: UpdateMeetingDTO, jwtUser: JwtUser) {
         const zoomMeeting = await Promise.any([
             this.zoomApiService.getMeeting(data.meetingId),
-            this.zoomApiService.getPastMeeting(data.uuid)
-        ])
-        const meeting = await this.meetingRepository.findOne({ where: { meetingId: data.meetingId } });
-        const { startTime, endTime, duration, totalMinutes, participantsCount, source, status } = zoomMeeting;
-        Object.assign(meeting, { startTime, endTime, duration, totalMinutes, participantsCount, source, status });
+            this.zoomApiService.getPastMeeting(data.uuid),
+        ]);
+        const meeting = await this.meetingRepository.findOne({
+            where: { meetingId: data.meetingId },
+        });
+        const {
+            startTime,
+            endTime,
+            duration,
+            totalMinutes,
+            participantsCount,
+            source,
+            status,
+        } = zoomMeeting;
+        Object.assign(meeting, {
+            startTime,
+            endTime,
+            duration,
+            totalMinutes,
+            participantsCount,
+            source,
+            status,
+        });
 
         return this.meetingRepository.save(meeting);
     }
