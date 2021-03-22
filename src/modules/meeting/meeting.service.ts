@@ -16,7 +16,17 @@ export class MeetingService {
         private readonly zoomApiService: ZoomApiService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) {}
+    ) { }
+
+    async getOwnMeeting(jwtUser: JwtUser) {
+        const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
+
+        if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+
+        const [meetings] = await Promise.all([this.meetingRepository.find({ where: { trainer: trainer.id }, order: { updatedAt: 'DESC' } })]);
+
+        return meetings;
+    }
 
     async createMeeting(data: CreateMeetingDTO, jwtUser: JwtUser) {
         const [trainer] = await Promise.all([
@@ -69,5 +79,9 @@ export class MeetingService {
                 `You don't have permission for this!`,
                 HttpStatus.FORBIDDEN,
             );
+    }
+
+    async updateMeeting() {
+
     }
 }
