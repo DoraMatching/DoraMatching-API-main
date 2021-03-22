@@ -1,6 +1,6 @@
 import { AppResources } from '@/app.roles';
 import { AppPermissionBuilder } from '@/shared';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import { ZoomApiService } from '@zoom-api/zoom-api.service';
@@ -10,13 +10,15 @@ import { MeetingRepository } from './repositories';
 
 @Injectable()
 export class MeetingService {
+    private readonly logger = new Logger(MeetingService.name);
+
     constructor(
         private readonly meetingRepository: MeetingRepository,
         private readonly trainerRepository: TrainerRepository,
         private readonly zoomApiService: ZoomApiService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) {}
+    ) { }
 
     async getOwnMeeting(jwtUser: JwtUser) {
         const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
@@ -86,5 +88,15 @@ export class MeetingService {
             );
     }
 
-    async updateMeeting(data: UpdateMeetingDTO, jwtUser: JwtUser) {}
+    async updateMeeting(data: UpdateMeetingDTO, jwtUser: JwtUser) {
+        const zoomMeeting = await Promise.any([
+            this.zoomApiService.getMeeting(data.meetingId),
+            this.zoomApiService.getPastMeeting(data.uuid)
+        ])
+        const meeting = await this.meetingRepository.findOne({ where: { meetingId: data.meetingId } });
+        const { startTime, endTime, duration, totalMinutes, participantsCount, source, status } = zoomMeeting;
+        Object.assign(meeting, { startTime, endTime, duration, totalMinutes, participantsCount, source, status });
+
+        return this.meetingRepository.save(meeting);
+    }
 }

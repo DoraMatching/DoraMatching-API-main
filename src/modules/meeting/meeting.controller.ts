@@ -1,5 +1,5 @@
 import { Auth } from '@/shared/auth';
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
 import { CreateMeetingDTO, UpdateMeetingDTO } from './dto';
@@ -23,7 +23,7 @@ export class MeetingController {
 
     @Auth()
     @Patch()
-    updateMeeting(@Query() data: UpdateMeetingDTO, @User() jwtUser: JwtUser) {
+    updateMeeting(@Body() data: UpdateMeetingDTO, @User() jwtUser: JwtUser) {
         return this.meetingService.updateMeeting(data, jwtUser);
     }
 }
