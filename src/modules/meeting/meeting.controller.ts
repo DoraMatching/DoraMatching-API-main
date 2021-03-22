@@ -1,8 +1,8 @@
 import { Auth } from '@/shared/auth';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { JwtUser } from '@user/dto';
 import { User } from '@user/user.decorator';
-import { CreateMeetingDTO } from './dto';
+import { CreateMeetingDTO, UpdateMeetingDTO } from './dto';
 import { MeetingService } from './meeting.service';
 
 @Controller('meeting')
@@ -19,5 +19,11 @@ export class MeetingController {
     @Get('own')
     getOwnMeeting(@User() jwtUser: JwtUser) {
         return this.meetingService.getOwnMeeting(jwtUser);
+    }
+
+    @Auth()
+    @Patch()
+    updateMeeting(@Query() data: UpdateMeetingDTO, @User() jwtUser: JwtUser) {
+        return this.meetingService.updateMeeting(data, jwtUser);
     }
 }

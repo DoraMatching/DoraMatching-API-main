@@ -5,7 +5,7 @@ import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import { ZoomApiService } from '@zoom-api/zoom-api.service';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { CreateMeetingDTO } from './dto';
+import { CreateMeetingDTO, UpdateMeetingDTO } from './dto';
 import { MeetingRepository } from './repositories';
 
 @Injectable()
@@ -16,14 +16,19 @@ export class MeetingService {
         private readonly zoomApiService: ZoomApiService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) { }
+    ) {}
 
     async getOwnMeeting(jwtUser: JwtUser) {
         const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
 
         if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 
-        const [meetings] = await Promise.all([this.meetingRepository.find({ where: { trainer: trainer.id }, order: { updatedAt: 'DESC' } })]);
+        const [meetings] = await Promise.all([
+            this.meetingRepository.find({
+                where: { trainer: trainer.id },
+                order: { updatedAt: 'DESC' },
+            }),
+        ]);
 
         return meetings;
     }
@@ -81,7 +86,5 @@ export class MeetingService {
             );
     }
 
-    async updateMeeting() {
-
-    }
+    async updateMeeting(data: UpdateMeetingDTO, jwtUser: JwtUser) {}
 }

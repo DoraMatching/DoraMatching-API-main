@@ -1,5 +1,5 @@
 import { zoomApiKey, zoomApiSecret } from '@/config';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtUser } from '@user/dto';
 import Axios from 'axios';
 import camelcaseKey from 'camelcase-keys';
@@ -9,6 +9,8 @@ import { CreateZoomMeetingDTO, ZoomApiRO } from './dto';
 
 @Injectable()
 export class ZoomApiService {
+    private readonly logger = new Logger(ZoomApiService.name);
+
     generateZoomToken(): string {
         const payload = {
             iss: zoomApiKey,
@@ -33,6 +35,8 @@ export class ZoomApiService {
         const headers = {
             Authorization: `Bearer ${this.generateZoomToken()}`,
         };
+
+        this.logger.debug(headers.Authorization);
 
         try {
             const { data } = await Axios.post<ZoomApiRO>(
