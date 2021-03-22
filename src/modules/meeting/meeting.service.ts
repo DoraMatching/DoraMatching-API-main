@@ -89,13 +89,17 @@ export class MeetingService {
     }
 
     async updateMeeting(data: UpdateMeetingDTO, jwtUser: JwtUser) {
-        const zoomMeeting = await Promise.any([
+        const promises = [
             this.zoomApiService.getMeeting(data.meetingId),
             this.zoomApiService.getPastMeeting(data.uuid),
-        ]);
+        ].map(p => p.catch(() => {}));
+
+        const [zoomMeeting, zoomPassMeeting] = await Promise.all(promises);
+
         const meeting = await this.meetingRepository.findOne({
             where: { meetingId: data.meetingId },
         });
+
         const {
             startTime,
             endTime,
@@ -104,7 +108,7 @@ export class MeetingService {
             participantsCount,
             source,
             status,
-        } = zoomMeeting;
+        } = zoomMeeting || zoomPassMeeting;
         Object.assign(meeting, {
             startTime,
             endTime,

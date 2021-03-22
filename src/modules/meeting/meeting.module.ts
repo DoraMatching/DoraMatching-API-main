@@ -6,6 +6,7 @@ import { MeetingController } from './meeting.controller';
 import { MeetingService } from './meeting.service';
 import { MeetingRepository } from './repositories';
 import { ZoomApiModule } from '../zoom-api/zoom-api.module';
+import { MeetingGateway } from './meeting.gateway';
 
 @Module({
     imports: [
@@ -13,6 +14,6 @@ import { ZoomApiModule } from '../zoom-api/zoom-api.module';
         ZoomApiModule,
     ],
     controllers: [MeetingController],
-    providers: [MeetingService],
+    providers: [MeetingService, MeetingGateway],
 })
 export class MeetingModule {}
