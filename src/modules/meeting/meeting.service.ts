@@ -6,6 +6,7 @@ import { JwtUser } from '@user/dto';
 import { ZoomApiService } from '@zoom-api/zoom-api.service';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
 import { CreateMeetingDTO, UpdateMeetingDTO } from './dto';
+import { MeetingGateway } from './meeting.gateway';
 import { MeetingRepository } from './repositories';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class MeetingService {
         private readonly meetingRepository: MeetingRepository,
         private readonly trainerRepository: TrainerRepository,
         private readonly zoomApiService: ZoomApiService,
+        private readonly meetingGateway: MeetingGateway,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
     ) {}
@@ -74,6 +76,7 @@ export class MeetingService {
                     meetingId: id,
                     trainer,
                 });
+                this.meetingGateway.server.emit(`msgToClient2`, newMeetings);
                 return await this.meetingRepository.save(newMeetings);
             } catch (e) {
                 throw new HttpException(
