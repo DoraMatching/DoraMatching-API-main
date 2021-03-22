@@ -18,7 +18,7 @@ export class MeetingEntity extends BaseEntity implements IMeetingModel {
     @Column({ type: 'text', nullable: false })
     topic: string;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ type: 'text', nullable: true }) // Zoom Meeting UUID
     uuid: string;
 
     @Column({ type: 'text', nullable: true })
