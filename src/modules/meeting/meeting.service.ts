@@ -76,7 +76,10 @@ export class MeetingService {
                     meetingId: id,
                     trainer,
                 });
-                this.meetingGateway.server.emit(`msgToClient2`, newMeetings);
+                this.meetingGateway.server.emit(`msgToClient`, {
+                    command: 'NEW_MEETING',
+                    payload: newMeetings,
+                });
                 return await this.meetingRepository.save(newMeetings);
             } catch (e) {
                 throw new HttpException(
