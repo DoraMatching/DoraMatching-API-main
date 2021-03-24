@@ -61,8 +61,10 @@ export class MeetingService {
 
         if (permission.granted) {
             try {
-                if (classe) data.topic = classe.topic.name;
-                data.agenda = classe.name;
+                if (classe) {
+                    data.topic = classe.topic.name;
+                    data.agenda = classe.name;
+                }
 
                 const zoomMeeting = await this.zoomApiService.createMeeting(data);
 
