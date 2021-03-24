@@ -11,7 +11,12 @@ import { MeetingRepository } from './repositories';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserRepository, MeetingRepository, TrainerRepository, ClasseRepository]),
+        TypeOrmModule.forFeature([
+            UserRepository,
+            MeetingRepository,
+            TrainerRepository,
+            ClasseRepository,
+        ]),
         ZoomApiModule,
     ],
     controllers: [MeetingController],

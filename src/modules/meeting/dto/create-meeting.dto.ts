@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 import { IMeetingModel } from './meeting.model';
 
 export type ICreateMeetingDTO = Pick<
@@ -9,7 +9,7 @@ export type ICreateMeetingDTO = Pick<
 
 export class CreateMeetingDTO implements ICreateMeetingDTO {
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     topic: string;
 

@@ -1,14 +1,13 @@
 import { AppResources } from '@/app.roles';
 import { AppPermissionBuilder } from '@/shared';
+import { ClasseEntity } from '@classe/entities';
+import { ClasseRepository } from '@classe/repositories';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { TopicRepository } from '@topic/repositories';
+import { TrainerEntity } from '@trainer/entities';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
 import { ZoomApiService } from '@zoom-api/zoom-api.service';
 import { InjectRolesBuilder, RolesBuilder } from 'nest-access-control';
-import { ClasseEntity } from '../classe/entities';
-import { ClasseRepository } from '../classe/repositories';
-import { TrainerEntity } from '../trainer/entities';
 import { CreateMeetingDTO, UpdateMeetingDTO } from './dto';
 import { MeetingGateway } from './meeting.gateway';
 import { MeetingRepository } from './repositories';
@@ -43,11 +42,13 @@ export class MeetingService {
     }
 
     async createMeeting(data: CreateMeetingDTO, jwtUser: JwtUser) {
-        const promises: Array<Promise<TrainerEntity | ClasseEntity>> = [this.trainerRepository.getTrainerByUserId(jwtUser.id)];
+        const promises: Array<Promise<TrainerEntity | ClasseEntity>> = [
+            this.trainerRepository.getTrainerByUserId(jwtUser.id),
+        ];
 
-        if(data.classeId) promises.push(this.classeRepository.getClasseById(data.classeId));
+        if (data.classeId) promises.push(this.classeRepository.getClasseById(data.classeId));
 
-        const [trainer, classe] : Array<any>= await Promise.all(promises);
+        const [trainer, classe]: Array<any> = await Promise.all(promises);
         if (!trainer) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 
         const permission = new AppPermissionBuilder()
@@ -60,7 +61,7 @@ export class MeetingService {
 
         if (permission.granted) {
             try {
-                if(classe) data.topic = classe.topic.name;
+                if (classe) data.topic = classe.topic.name;
                 data.agenda = classe.name;
 
                 const zoomMeeting = await this.zoomApiService.createMeeting(data);
