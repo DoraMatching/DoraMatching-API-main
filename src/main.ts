@@ -6,11 +6,13 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 const port = process.env.PORT || 8080;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.use(helmet());
     app.useGlobalPipes(
@@ -21,6 +23,7 @@ async function bootstrap() {
             validationError: { target: false },
         }),
     );
+    app.useStaticAssets(join(__dirname, '..', 'public'));
 
     if (environment === 'development') {
         app.enableCors();
