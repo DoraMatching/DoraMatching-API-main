@@ -6,6 +6,7 @@ export interface IZoomApiRO {
     topic: string;
     type: number;
     status: string;
+    agenda: string;
     timezone: string;
     createdAt: string;
     startUrl: string;
@@ -20,6 +21,9 @@ export class ZoomApiRO implements IZoomApiRO {
 
     @Expose()
     uuid: string;
+
+    @Expose()
+    agenda: string;
 
     @Expose()
     hostEmail: string;
