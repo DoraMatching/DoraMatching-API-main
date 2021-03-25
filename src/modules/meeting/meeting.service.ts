@@ -91,7 +91,7 @@ export class MeetingService {
                     meetingId: id,
                     trainer,
                 });
-                scheduler(moment().add(10, 'seconds').toDate(), () => {
+                scheduler(moment().add(3, 'seconds').toDate(), () => {
                     this.meetingGateway.server.emit(`msgToClient`, {
                         command: 'NEW_MEETING',
                         payload: newMeetings,
