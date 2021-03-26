@@ -80,7 +80,7 @@ export class MeetingService {
                     password,
                 } = zoomMeeting;
 
-                const newMeetings = this.meetingRepository.create({
+                const newMeeting = this.meetingRepository.create({
                     ...data,
                     hostEmail,
                     status,
@@ -98,11 +98,11 @@ export class MeetingService {
                     () => {
                         this.meetingGateway.server.emit(`msgToClient`, {
                             command: 'NEW_MEETING',
-                            payload: newMeetings,
+                            payload: newMeeting,
                         });
                     },
                 );
-                return await this.meetingRepository.save(newMeetings);
+                return await this.meetingRepository.save(newMeeting);
             } catch (e) {
                 throw new HttpException(
                     `Couldn't create meeting`,
