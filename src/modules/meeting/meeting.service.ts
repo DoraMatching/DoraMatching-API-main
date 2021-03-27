@@ -96,7 +96,7 @@ export class MeetingService {
                         .add(3, 'seconds')
                         .toDate(),
                     () => {
-                        this.meetingGateway.server.emit(`msgToClient`, {
+                        this.meetingGateway.server.emit(`user1`, {
                             command: 'NEW_MEETING',
                             payload: newMeeting,
                         });

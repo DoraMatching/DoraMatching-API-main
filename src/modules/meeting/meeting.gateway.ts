@@ -29,7 +29,17 @@ export class MeetingGateway
     }
 
     @SubscribeMessage('msgToServer')
-    handleMessage(client: any, payload: any): void {
-        this.server.emit('msgToClient2', payload);
+    handleMessage(client: any, { room, text }: any): void {
+        this.server.to(room).emit('msgToClient', text);
+    }
+
+    @SubscribeMessage('join_room')
+    joinRoom(client: any, payload: any): void {
+        client.join(payload);
+    }
+
+    @SubscribeMessage('leave_room')
+    leaveRoom(client: any, payload: any): void {
+        client.leave(payload);
     }
 }
