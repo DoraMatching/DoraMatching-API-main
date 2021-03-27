@@ -1,8 +1,8 @@
-import { TrainerModel } from '@trainer/dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ITopicModel } from '@topic/dto';
+import { TrainerModel } from '@trainer/dto';
 import { UserModel } from '@user/dto';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 
 export interface ITopicRO extends ITopicModel {
     id: string;
@@ -10,6 +10,7 @@ export interface ITopicRO extends ITopicModel {
 
 export class TopicRO implements ITopicRO {
     @ApiProperty()
+    @IsUUID()
     @IsNotEmpty()
     id: string;
 
