@@ -1,6 +1,7 @@
 import { ClasseRepository } from '@classe/repositories';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TraineeRepository } from '@trainee/repositories';
 import { TrainerRepository } from '@trainer/repositories';
 import { UserRepository } from '@user/repositories';
 import { ZoomApiModule } from '@zoom-api/zoom-api.module';
@@ -16,6 +17,7 @@ import { MeetingRepository } from './repositories';
             MeetingRepository,
             TrainerRepository,
             ClasseRepository,
+            TraineeRepository,
         ]),
         ZoomApiModule,
     ],
