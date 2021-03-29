@@ -50,5 +50,6 @@ export class MeetingGateway
     async loadRoom(client: any, userId: any): Promise<void> {
         const trainee = await this.traineeRepository.getTraineeByUserId(userId);
         trainee.classes.map(classe => client.join(classe.id));
+        client.join(userId);
     }
 }

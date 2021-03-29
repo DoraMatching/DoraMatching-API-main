@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
 import { IMeetingModel } from './meeting.model';
 
 export type ICreateMeetingDTO = Pick<
@@ -37,4 +37,14 @@ export class CreateMeetingDTO implements ICreateMeetingDTO {
     @IsOptional()
     @IsString()
     hostEmail: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsDate()
+    schedule: Date;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    lessonName: string;
 }

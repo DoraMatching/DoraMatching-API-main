@@ -213,7 +213,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             try {
                 const [_newLesson,] = await Promise.all([
                     this.lessonRepository.save(newLesson),
-                    this.meetingService.createMeeting({ classeId: classe.id }, jwtUser)
+                    this.meetingService.createMeeting({ classeId: classe.id, schedule: newLesson.startTime, lessonName: newLesson.name }, jwtUser)
                 ])
                 classe.lessons.push(_newLesson);
                 await this.classeRepository.save(classe);
