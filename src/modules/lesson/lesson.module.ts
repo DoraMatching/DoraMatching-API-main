@@ -1,5 +1,6 @@
 import { ClasseRepository } from '@classe/repositories';
 import { LessonRepository } from '@lesson/repositories';
+import { MeetingModule } from '@meeting/meeting.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TrainerRepository } from '@trainer/repositories';
@@ -15,6 +16,7 @@ import { LessonService } from './lesson.service';
             LessonRepository,
             UserRepository,
         ]),
+        MeetingModule
     ],
     providers: [LessonService],
     controllers: [LessonController],

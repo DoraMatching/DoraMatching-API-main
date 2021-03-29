@@ -27,7 +27,7 @@ export class ZoomApiService {
         return plainToClass(ZoomApiRO, data);
     }
 
-    async createMeeting(req: CreateZoomMeetingDTO): Promise<ZoomApiRO> {
+    async createMeeting(req: Partial<CreateZoomMeetingDTO>): Promise<ZoomApiRO> {
         const payload = {
             topic: req.topic,
             type: 1,

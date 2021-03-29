@@ -6,7 +6,7 @@ import {
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams,
+    PaginateParams
 } from '@/shared';
 import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
@@ -14,6 +14,7 @@ import { CreateLessonDTO, ILessonRO, LessonRO, UpdateLessonDTO } from '@lesson/d
 import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
+import { MeetingService } from '@meeting/meeting.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
@@ -30,6 +31,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         private readonly trainerRepository: TrainerRepository,
         private readonly classeRepository: ClasseRepository,
         private readonly lessonRepository: LessonRepository,
+        private readonly meetingService: MeetingService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -209,7 +211,10 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             const newLesson = this.lessonRepository.create(data);
             this.lessonsValidation(newLesson, lessonsInScope);
             try {
-                const _newLesson = await this.lessonRepository.save(newLesson);
+                const [_newLesson,] = await Promise.all([
+                    this.lessonRepository.save(newLesson),
+                    this.meetingService.createMeeting({ classeId: classe.id }, jwtUser)
+                ])
                 classe.lessons.push(_newLesson);
                 await this.classeRepository.save(classe);
                 return this.classeRepository.getClasseById(classeId);

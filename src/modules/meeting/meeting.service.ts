@@ -43,7 +43,7 @@ export class MeetingService {
         return meetings;
     }
 
-    async createMeeting(data: CreateMeetingDTO, jwtUser: JwtUser) {
+    async createMeeting(data: Partial<CreateMeetingDTO>, jwtUser: JwtUser) {
         const promises: Array<Promise<TrainerEntity | ClasseEntity>> = [
             this.trainerRepository.getTrainerByUserId(jwtUser.id),
         ];
