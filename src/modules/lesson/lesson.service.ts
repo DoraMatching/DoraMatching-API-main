@@ -1,6 +1,6 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons';
-import { mailAddress } from '@/config';
+import { feUrl, mailAddress } from '@/config';
 import {
     customPaginate,
     grantPermission,
@@ -214,16 +214,27 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             const newLesson = this.lessonRepository.create(data);
             this.lessonsValidation(newLesson, lessonsInScope);
             try {
+                //#region sendMail
                 const mails = [];
                 classe.members.forEach(member => {
-                    return this.mailerService.sendMail({
+                    const mailContent = {
                         to: member.user.email,
                         from: mailAddress,
-                        subject: `You got ${classe.name}'s lesson: ${newLesson.name}`,
+                        subject: `You got a new ${classe.name}'s lesson: ${newLesson.name}`,
                         template: `new-lesson`,
-                    });
+                        context: {
+                            header: `New lesson - ${newLesson.name}`,
+                            content: `You got a new lesson ${_moment(newLesson.startTime).calendar()} in ${classe.name} class by ${classe.trainer.user.name}`,
+                            btnLink: `${feUrl}/classes/${classe.id}`,
+                            btnAction: `Go to class`
+                        },
+                    }
+                    const mail = this.mailerService.sendMail(mailContent);
+                    mails.push(mail);
                 });
-                const [_newLesson] = await Promise.all([
+                //#endregion sendMail
+
+                const [_newLesson,] = await Promise.all([
                     this.lessonRepository.save(newLesson),
                     this.meetingService.createMeeting(
                         {
@@ -233,6 +244,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                         },
                         jwtUser,
                     ),
+                    ...mails
                 ]);
                 classe.lessons.push(_newLesson);
                 await this.classeRepository.save(classe);

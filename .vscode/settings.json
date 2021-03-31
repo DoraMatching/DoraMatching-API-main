@@ -5,6 +5,7 @@
         "accesscontrol",
         "camelcase",
         "doramatching",
+        "endregion",
         "nestjs",
         "postgres",
         "prebuild",
