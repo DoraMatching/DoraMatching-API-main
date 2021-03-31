@@ -26,7 +26,7 @@ export class MeetingService {
         private readonly classeRepository: ClasseRepository,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
-    ) { }
+    ) {}
 
     async getOwnMeeting(jwtUser: JwtUser) {
         const trainer = await this.trainerRepository.getTrainerByUserId(jwtUser.id);
@@ -93,18 +93,20 @@ export class MeetingService {
                 });
                 scheduler(
                     data.schedule ||
-                    moment()
-                        .add(3, 'seconds')
-                        .toDate(),
+                        moment()
+                            .add(3, 'seconds')
+                            .toDate(),
                     () => {
                         this.meetingGateway.server.to(classe.id).emit(`msgToClient`, {
                             command: 'NEW_MEETING',
                             payload: newMeeting,
                         });
-                        this.meetingGateway.server.to(classe.trainer.user.id).emit(`msgToClient`, {
-                            command: 'START_MEETING',
-                            payload: newMeeting
-                        });
+                        this.meetingGateway.server
+                            .to(classe.trainer.user.id)
+                            .emit(`msgToClient`, {
+                                command: 'START_MEETING',
+                                payload: newMeeting,
+                            });
                     },
                 );
                 return await this.meetingRepository.save(newMeeting);
@@ -125,7 +127,7 @@ export class MeetingService {
         const promises = [
             this.zoomApiService.getMeeting(data.meetingId),
             this.zoomApiService.getPastMeeting(data.uuid),
-        ].map(p => p.catch(() => { }));
+        ].map(p => p.catch(() => {}));
 
         const [zoomMeeting, zoomPassMeeting] = await Promise.all(promises);
 

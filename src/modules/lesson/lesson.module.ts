@@ -16,7 +16,7 @@ import { LessonService } from './lesson.service';
             LessonRepository,
             UserRepository,
         ]),
-        MeetingModule
+        MeetingModule,
     ],
     providers: [LessonService],
     controllers: [LessonController],

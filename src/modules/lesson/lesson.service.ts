@@ -1,12 +1,13 @@
 import { AppResources } from '@/app.roles';
 import { BaseService } from '@/commons';
+import { mailAddress } from '@/config';
 import {
     customPaginate,
     grantPermission,
     IDeleteResultDTO,
     IPagination,
     paginateFilter,
-    PaginateParams
+    PaginateParams,
 } from '@/shared';
 import { IClasseRO } from '@classe/dto';
 import { ClasseRepository } from '@classe/repositories';
@@ -15,6 +16,7 @@ import { LessonEntity } from '@lesson/entities';
 import { LessonRepository } from '@lesson/repositories';
 import { TimeRangeQuery } from '@lesson/time-range.params';
 import { MeetingService } from '@meeting/meeting.service';
+import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TrainerRepository } from '@trainer/repositories';
 import { JwtUser } from '@user/dto';
@@ -32,6 +34,7 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
         private readonly classeRepository: ClasseRepository,
         private readonly lessonRepository: LessonRepository,
         private readonly meetingService: MeetingService,
+        private readonly mailerService: MailerService,
         @InjectRolesBuilder()
         private readonly rolesBuilder: RolesBuilder,
     ) {
@@ -211,10 +214,26 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             const newLesson = this.lessonRepository.create(data);
             this.lessonsValidation(newLesson, lessonsInScope);
             try {
-                const [_newLesson,] = await Promise.all([
+                const mails = [];
+                classe.members.forEach(member => {
+                    return this.mailerService.sendMail({
+                        to: member.user.email,
+                        from: mailAddress,
+                        subject: `You got ${classe.name}'s lesson: ${newLesson.name}`,
+                        template: `new-lesson`,
+                    });
+                });
+                const [_newLesson] = await Promise.all([
                     this.lessonRepository.save(newLesson),
-                    this.meetingService.createMeeting({ classeId: classe.id, schedule: newLesson.startTime, lessonName: newLesson.name }, jwtUser)
-                ])
+                    this.meetingService.createMeeting(
+                        {
+                            classeId: classe.id,
+                            schedule: newLesson.startTime,
+                            lessonName: newLesson.name,
+                        },
+                        jwtUser,
+                    ),
+                ]);
                 classe.lessons.push(_newLesson);
                 await this.classeRepository.save(classe);
                 return this.classeRepository.getClasseById(classeId);

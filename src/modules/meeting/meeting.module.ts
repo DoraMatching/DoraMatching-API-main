@@ -23,6 +23,6 @@ import { MeetingRepository } from './repositories';
     ],
     controllers: [MeetingController],
     providers: [MeetingService, MeetingGateway],
-    exports: [MeetingGateway, MeetingService]
+    exports: [MeetingGateway, MeetingService],
 })
 export class MeetingModule {}
