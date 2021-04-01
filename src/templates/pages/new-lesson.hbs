@@ -156,6 +156,12 @@
             color: #ffffff;
         }
 
+        .btn.btn-secondary {
+            border-radius: 5px;
+            background: #71aef3;
+            color: #ffffff;
+        }
+
         .btn.btn-white {
             border-radius: 5px;
             background: #ffffff;
@@ -364,13 +370,6 @@
                         </table>
                     </td>
                 </tr><!-- end tr -->
-                <!-- <tr>
-					<td valign="middle" class="hero bg_white" style="padding: 3em 0 2em 0;">
-						<img src="images/email.png" alt=""
-							style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;">
-					</td>
-				</tr> -->
-                <!-- end tr -->
                 <tr>
                     <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
                         <table>
@@ -379,7 +378,22 @@
                                     <div class="text" style="padding: 0 2.5em; text-align: center;">
                                         <h2>{{header}}</h2>
                                         <h3>{{content}}</h3>
-                                        <p><a href="{{btnLink}}" class="btn btn-primary">{{btnAction}}</a></p>
+                                    </div>
+                                    <div class="text"
+                                        style="padding: 0 1em; text-align: left;border: 1px solid; border-radius: 3px;color: #000;font-size: 15px;">
+                                        <p><b>Class</b>: {{classeName}}</p>
+                                        <p><b>Topic</b>: {{topic}}</p>
+                                        <p><b>Agenda</b>: {{agenda}}</p>
+                                        <p><b>Trainer</b>: {{trainer}}</p>
+                                        <p><b>Duration</b>: {{duration}}</p>
+                                        <p><b>Provider</b>: Zoom</p>
+                                        <p><b>Meeting ID</b>: {{meetingId}}</p>
+                                    </div>
+                                    <div class="text" style="padding: 0 2.5em; text-align: center;">
+                                        <p>
+                                            <a href="{{btnLink1}}" class="btn btn-primary">{{btnAction1}}</a>
+                                            <a href="{{btnLink2}}" class="btn btn-secondary">{{btnAction2}}</a>
+                                        </p>
                                     </div>
                                 </td>
                             </tr>

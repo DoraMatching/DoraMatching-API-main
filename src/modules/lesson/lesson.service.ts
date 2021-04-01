@@ -214,6 +214,18 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
             const newLesson = this.lessonRepository.create(data);
             this.lessonsValidation(newLesson, lessonsInScope);
             try {
+                const [_newLesson, _newMeeting] = await Promise.all([
+                    this.lessonRepository.save(newLesson),
+                    this.meetingService.createMeeting(
+                        {
+                            classeId: classe.id,
+                            schedule: newLesson.startTime,
+                            lessonName: newLesson.name,
+                        },
+                        jwtUser,
+                    ),
+                ]);
+
                 //#region sendMail
                 const mails = [];
                 classe.members.forEach(member => {
@@ -224,30 +236,29 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                         template: `new-lesson`,
                         context: {
                             header: `New lesson - ${newLesson.name}`,
-                            content: `You got a new lesson ${_moment(newLesson.startTime).calendar()} in ${classe.name} class by ${classe.trainer.user.name}`,
-                            btnLink: `${feUrl}/classes/${classe.id}`,
-                            btnAction: `Go to class`
+                            content: `You got a new lesson ${_moment(
+                                newLesson.startTime,
+                            ).calendar()} in ${classe.name} class`,
+                            btnLink1: `${feUrl}/classes/${classe.id}`,
+                            btnAction1: `Go to class`,
+                            btnLink2: `${_newMeeting.joinUrl}`,
+                            btnAction2: `Join meeting now`,
+                            classeName: classe.name,
+                            topic: _newMeeting.topic,
+                            agenda: _newMeeting.agenda,
+                            meetingId: _newMeeting.meetingId,
+                            duration: `${_newLesson.duration} (minutes)`,
+                            trainer: `${_newMeeting.trainer.user.name} (${_newMeeting.trainer
+                                .user.email || `doramatching.community@gmail.com`})`,
                         },
-                    }
+                    };
                     const mail = this.mailerService.sendMail(mailContent);
                     mails.push(mail);
                 });
                 //#endregion sendMail
 
-                const [_newLesson,] = await Promise.all([
-                    this.lessonRepository.save(newLesson),
-                    this.meetingService.createMeeting(
-                        {
-                            classeId: classe.id,
-                            schedule: newLesson.startTime,
-                            lessonName: newLesson.name,
-                        },
-                        jwtUser,
-                    ),
-                    ...mails
-                ]);
                 classe.lessons.push(_newLesson);
-                await this.classeRepository.save(classe);
+                await Promise.all([this.classeRepository.save(classe), ...mails]);
                 return this.classeRepository.getClasseById(classeId);
             } catch ({ detail }) {
                 throw new HttpException(
