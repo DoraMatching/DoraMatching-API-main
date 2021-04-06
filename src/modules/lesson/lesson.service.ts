@@ -255,6 +255,31 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                     const mail = this.mailerService.sendMail(mailContent);
                     mails.push(mail);
                 });
+                const trainerMailContent = {
+                    to: classe.trainer.user.email,
+                    from: mailAddress,
+                    subject: `You just created a new lesson: ${newLesson.name}`,
+                    template: `new-lesson`,
+                    context: {
+                        header: `New lesson - ${newLesson.name}`,
+                        content: `Your lesson will be start ${_moment(
+                            newLesson.startTime,
+                        ).calendar()} in ${classe.name} class`,
+                        btnLink1: `${feUrl}/classes/${classe.id}`,
+                        btnAction1: `Go to class`,
+                        btnLink2: `${_newMeeting.startUrl}`,
+                        btnAction2: `Start your meeting`,
+                        classeName: classe.name,
+                        topic: _newMeeting.topic,
+                        agenda: _newMeeting.agenda,
+                        meetingId: _newMeeting.meetingId,
+                        duration: `${_newLesson.duration} (minutes)`,
+                        trainer: `${_newMeeting.trainer.user.name} (${_newMeeting.trainer
+                            .user.email || `doramatching.community@gmail.com`})`,
+                    },
+                }
+                const mailToTrainer = this.mailerService.sendMail(trainerMailContent);
+                mails.push(mailToTrainer);
                 //#endregion sendMail
 
                 classe.lessons.push(_newLesson);
