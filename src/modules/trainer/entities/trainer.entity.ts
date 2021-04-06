@@ -1,5 +1,5 @@
-import { MeetingEntity } from '@/modules/meeting/entities';
 import { ClasseEntity } from '@classe/entities';
+import { MeetingEntity } from '@meeting/entities';
 import { TopicEntity } from '@topic/entities';
 import { ITrainerModel } from '@trainer/dto';
 import { UserEntity } from '@user/entities';

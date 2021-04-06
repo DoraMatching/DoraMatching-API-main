@@ -1,4 +1,4 @@
-import { TrainerEntity } from '@/modules/trainer/entities';
+import { TrainerEntity } from '@trainer/entities';
 import {
     BaseEntity,
     Column,

@@ -1,12 +1,12 @@
+import { Body, Controller, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
     ITagPredictionRO,
     RequestTagPredictDTO,
     RequestTagQueryDTO,
     TagPredictionRO,
-} from '@/modules/tag-predict/dto';
-import { TagPredictService } from '@/modules/tag-predict/tag-predict.service';
-import { Body, Controller, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+} from '@tag-predict/dto';
+import { TagPredictService } from '@tag-predict/tag-predict.service';
 
 @ApiTags('machine-learning-features')
 @Controller('tag-predict')

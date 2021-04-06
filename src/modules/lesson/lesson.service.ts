@@ -274,10 +274,10 @@ export class LessonService extends BaseService<LessonEntity, LessonRepository> {
                         agenda: _newMeeting.agenda,
                         meetingId: _newMeeting.meetingId,
                         duration: `${_newLesson.duration} (minutes)`,
-                        trainer: `${_newMeeting.trainer.user.name} (${_newMeeting.trainer
-                            .user.email || `doramatching.community@gmail.com`})`,
+                        trainer: `${_newMeeting.trainer.user.name} (${_newMeeting.trainer.user
+                            .email || `doramatching.community@gmail.com`})`,
                     },
-                }
+                };
                 const mailToTrainer = this.mailerService.sendMail(trainerMailContent);
                 mails.push(mailToTrainer);
                 //#endregion sendMail
