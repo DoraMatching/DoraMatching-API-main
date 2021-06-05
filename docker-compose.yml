@@ -1,0 +1,43 @@
+version : '3'
+
+# To install: sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+# To start:     $ docker-compose up -d
+# To tear-down: $ docker-compose down --volumes
+# Approve permission (pgadmin): sudo chown -R 5050:5050 ./.docker/pgadmin/data
+
+services:
+  postgres:
+    container_name: dora_pgsql
+    image: postgres
+    environment:
+      POSTGRES_DB: doramatching
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-11231123}
+      PGDATA: /data/postgres
+    volumes:
+       - ./.docker/postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: dora_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-tranphuquy19@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-11231123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - ./.docker/pgadmin/data:/var/lib/pgadmin
+       - ./.docker/pgadmin/servers.json:/pgadmin4/servers.json
+    ports:
+      - "5433:80"
+    restart: unless-stopped
+
+  redis:
+      image: redis:alpine
+      container_name: dora_redis
+      ports:
+        - 6379:6379
+      volumes:
+        - ./.docker/redis/data:/data
