@@ -1,5 +1,7 @@
+import { Auth } from '@/shared';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { User } from '@user/user.decorator';
 import { RecommenderService } from './recommender.service';
 
 @ApiTags('machine-learning-features')
@@ -14,6 +16,12 @@ export class RecommenderController {
 
     @Get('for')
     recommendFor(@Query('userId') userId: string) {
+        return this.recommenderService.recommendFor(userId);
+    }
+
+    @Auth()
+    @Get('my')
+    async myRecommends(@User() { id: userId }) {
         return this.recommenderService.recommendFor(userId);
     }
 }
