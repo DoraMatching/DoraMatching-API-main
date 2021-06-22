@@ -22,10 +22,12 @@ const jaccardCoefficient = async function(
     const user2LikedSet = userLikedSetKey(className, userId2);
     const user2DislikedSet = userDislikedSetKey(className, userId2);
 
-    const results1 = await client.sinter(user1LikedSet, user2LikedSet);
-    const results2 = await client.sinter(user1DislikedSet, user2DislikedSet);
-    const results3 = await client.sinter(user1LikedSet, user2DislikedSet);
-    const results4 = await client.sinter(user1DislikedSet, user2LikedSet);
+    const [results1, results2, results3, results4] = await Promise.all([
+        client.sinter(user1LikedSet, user2LikedSet),
+        client.sinter(user1DislikedSet, user2DislikedSet),
+        client.sinter(user1LikedSet, user2DislikedSet),
+        client.sinter(user1DislikedSet, user2LikedSet),
+    ]);
 
     const similarity = results1.length + results2.length - results3.length - results4.length;
     const ratedInCommon =
